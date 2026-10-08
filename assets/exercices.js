@@ -1,29 +1,42 @@
+/* Vérification et répétition procédurale : les corrections restent consultables
+   avant de passer à la variante suivante. */
 (() => {
+  'use strict';
   const root = document.querySelector('[data-interactive-exercises]');
   if (!root) return;
 
   const slides = Array.from(root.querySelectorAll('.exercise-block'));
-  const stepButtons = Array.from(root.querySelectorAll('[data-step]'));
-  const previousButton = root.querySelector('[data-nav="previous"]');
-  const nextButton = root.querySelector('[data-nav="next"]');
+  const steps = Array.from(root.querySelectorAll('[data-step]'));
+  const prev = root.querySelector('[data-nav="previous"]');
+  const next = root.querySelector('[data-nav="next"]');
   const progressFill = root.querySelector('#exercise-progress-fill');
   const progressLabel = root.querySelector('#exercise-progress-label');
   const scoreText = root.querySelector('#exercise-score');
+  const slug = root.dataset.chapter || 'fonctions';
+  const generator = window.ExerciseVariants;
+  const renderer = window.ExerciseRenderer;
   const completed = new Set();
+  const states = slides.map(slide => ({
+    cycle: 0,
+    pending: null,
+    original: {
+      title: slide.querySelector('.exercise-head h2')?.textContent || 'Exercice',
+      level: slide.querySelector('.exercise-kicker')?.textContent || 'Entraînement'
+    }
+  }));
   let current = 0;
 
-  const normalise = value => value
+  const normalise = value => String(value)
     .trim()
     .toLowerCase()
     .replace(/,/g, '.')
     .replace(/\s+/g, '')
     .replace(/[−–—]/g, '-');
 
-  function isControlCorrect(control) {
+  function isCorrect(control) {
     const expected = (control.dataset.expect || '').split('|').map(normalise);
     const actual = normalise(control.value);
     if (!actual) return false;
-
     if (control.dataset.type === 'number') {
       const parsed = Number(actual);
       if (!Number.isFinite(parsed)) return false;
@@ -33,21 +46,19 @@
         return Number.isFinite(target) && Math.abs(parsed - target) <= tolerance;
       });
     }
-
     return expected.includes(actual);
   }
 
   function revealAnswers(form) {
     form.querySelectorAll('.answer-row').forEach(row => {
       const controls = Array.from(row.querySelectorAll('[data-expect]'));
-      let correctCount = 0;
-      let answeredCount = 0;
-
+      let right = 0;
+      let answered = 0;
       controls.forEach(control => {
-        // Évaluer la réponse de l'élève AVANT de la remplacer par le corrigé.
-        const wasCorrect = isControlCorrect(control);
-        if (wasCorrect) correctCount += 1;
-        if (control.value.trim()) answeredCount += 1;
+        // Capturer la tentative de l'élève AVANT d'afficher la solution.
+        const wasCorrect = isCorrect(control);
+        if (wasCorrect) right++;
+        if (control.value.trim()) answered++;
 
         const answer = (control.dataset.expect || '').split('|')[0].trim();
         if (control.tagName === 'SELECT') {
@@ -61,153 +72,172 @@
             : answer.replace(/;/g, ' ; ');
           control.readOnly = true;
         }
-
         control.classList.toggle('answer-was-correct', wasCorrect);
         control.classList.toggle('answer-was-wrong', !wasCorrect);
       });
 
-      const allCorrect = controls.length > 0 && correctCount === controls.length;
+      const allRight = controls.length > 0 && right === controls.length;
       row.classList.remove('is-correct', 'is-wrong');
       row.classList.add('is-revealed');
-      row.classList.toggle('was-correct', allCorrect);
-      row.classList.toggle('was-wrong', !allCorrect);
-
+      row.classList.toggle('was-correct', allRight);
+      row.classList.toggle('was-wrong', !allRight);
       const status = row.querySelector('.answer-status');
       if (status) {
-        if (allCorrect) {
-          status.textContent = '✓ Tu avais juste. Solution affichée.';
-        } else if (answeredCount === 0) {
-          status.textContent = '✗ Non répondu. Solution affichée.';
-        } else if (controls.length > 1) {
-          status.textContent = '✗ ' + correctCount + '/' + controls.length
-            + ' réponses justes avant correction. Solutions affichées.';
-        } else {
-          status.textContent = '✗ Ta réponse était fausse. Solution affichée.';
-        }
+        status.textContent = allRight
+          ? '✓ Tu avais juste. Solution affichée.'
+          : answered === 0
+            ? '✗ Non répondu. Solution affichée.'
+            : controls.length > 1
+              ? '✗ ' + right + '/' + controls.length + ' juste(s) avant correction. Solutions affichées.'
+              : '✗ Ta réponse était fausse. Solution affichée.';
       }
     });
   }
 
-  function updateRow(row) {
+  function markRow(row) {
     const controls = Array.from(row.querySelectorAll('[data-expect]'));
     const hasEmpty = controls.some(control => !control.value.trim());
-    const correct = controls.length > 0 && controls.every(isControlCorrect);
-    const status = row.querySelector('.answer-status');
-
+    const correct = controls.length > 0 && controls.every(isCorrect);
     row.classList.toggle('is-correct', correct);
     row.classList.toggle('is-wrong', !correct && !hasEmpty);
-
-    if (status) {
-      if (correct) {
-        status.textContent = 'Correct ✓';
-      } else if (hasEmpty) {
-        status.textContent = 'Réponse à compléter.';
-      } else {
-        status.textContent = 'À revoir. Essaie encore.';
-      }
-    }
+    const status = row.querySelector('.answer-status');
+    if (status) status.textContent = correct ? 'Correct ✓'
+      : hasEmpty ? 'Réponse à compléter.' : 'À revoir. Essaie encore.';
     return correct;
   }
 
   function updateProgress() {
-    const done = completed.size;
-    const total = slides.length;
-    const percent = total ? (done / total) * 100 : 0;
-    if (progressFill) progressFill.style.width = percent + '%';
+    const total = slides.length, done = completed.size;
+    if (progressFill) progressFill.style.width = (total ? 100 * done / total : 0) + '%';
     if (progressLabel) progressLabel.textContent = done + ' / ' + total + ' exercices validés';
     if (scoreText) scoreText.textContent = done + '/' + total;
-    stepButtons.forEach((button, index) => {
+    steps.forEach((button, index) => {
       button.classList.toggle('is-complete', completed.has(index));
       button.setAttribute('aria-label', 'Exercice ' + (index + 1) + (completed.has(index) ? ', validé' : ''));
     });
   }
 
-  function showSlide(index, moveFocus = false) {
+  function showSlide(index, focus = false) {
     current = Math.max(0, Math.min(slides.length - 1, index));
-    slides.forEach((slide, slideIndex) => {
-      const active = slideIndex === current;
+    slides.forEach((slide, i) => {
+      const active = i === current;
       slide.hidden = !active;
       slide.classList.toggle('is-active', active);
     });
-    stepButtons.forEach((button, buttonIndex) => {
-      const active = buttonIndex === current;
+    steps.forEach((button, i) => {
+      const active = i === current;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-current', active ? 'step' : 'false');
     });
-    if (previousButton) previousButton.disabled = current === 0;
-    if (nextButton) {
-      nextButton.disabled = current === slides.length - 1;
-      nextButton.textContent = current === slides.length - 1 ? 'Fin de la série' : 'Exercice suivant →';
+    if (prev) prev.disabled = current === 0;
+    if (next) {
+      next.disabled = current === slides.length - 1;
+      next.textContent = current === slides.length - 1 ? 'Fin de la série' : 'Exercice suivant →';
     }
     const slide = slides[current];
     history.replaceState(null, '', '#' + slide.id);
-    if (moveFocus) {
+    if (focus) {
       const heading = slide.querySelector('h2');
       if (heading) {
-        heading.setAttribute('tabindex', '-1');
+        heading.tabIndex = -1;
         heading.focus();
       }
     }
   }
 
-  slides.forEach((slide, index) => {
+  function queueVariant(index, form, button) {
+    if (!generator || !renderer) return false;
+    const state = states[index];
+    state.cycle++;
+    state.pending = generator.generate(slug, index, state.cycle, state.original);
+    button.hidden = false;
+    button.textContent = 'Nouvelle variante ↻';
+    return true;
+  }
+
+  function activateVariant(index) {
+    const state = states[index];
+    if (!state.pending || !renderer) return;
+
+    // Remplacer seulement l'exercice : la navigation et les scores restent intacts.
+    const template = document.createElement('template');
+    template.innerHTML = renderer.makeExercise(state.pending, index).trim();
+    const slide = template.content.firstElementChild;
+    if (!slide || slide.id !== 'exercice-' + (index + 1)) {
+      throw new Error('Impossible de construire la variante ' + (index + 1));
+    }
+    const kicker = slide.querySelector('.exercise-kicker');
+    if (kicker) kicker.textContent += ' · variante ' + (state.cycle + 1);
+    slides[index].replaceWith(slide);
+    slides[index] = slide;
+    state.pending = null;
+    completed.delete(index);
+    updateProgress();
+    wireSlide(slide, index);
+    showSlide(index, true);
+  }
+
+  function wireSlide(slide, index) {
     const form = slide.querySelector('.exercise-form');
-    const reset = slide.querySelector('[data-action="reset"]');
-    const correction = slide.querySelector('details.check');
     if (!form) return;
+    const reset = form.querySelector('[data-action="reset"]');
+    const correction = form.querySelector('details.check');
+    const actions = form.querySelector('.exercise-actions');
+    let variant = form.querySelector('[data-action="new-variant"]');
+    if (!variant && actions) {
+      variant = document.createElement('button');
+      variant.type = 'button';
+      variant.className = 'button variant-refresh';
+      variant.dataset.action = 'new-variant';
+      variant.textContent = 'Nouvelle variante ↻';
+      variant.hidden = true;
+      actions.append(variant);
+    }
+    if (variant) variant.addEventListener('click', () => activateVariant(index));
 
     if (correction) {
       correction.addEventListener('toggle', () => {
         if (!correction.open || form.dataset.revealed === 'true') return;
         form.dataset.revealed = 'true';
         revealAnswers(form);
+        const ready = variant && queueVariant(index, form, variant);
         const summary = form.querySelector('.exercise-feedback');
-        if (summary) summary.textContent = 'Les bonnes réponses sont affichées dans les cases. Clique sur Effacer pour recommencer sans aide.';
+        if (summary) summary.textContent = 'Les solutions sont affichées en vert ou rouge selon ta réponse. '
+          + (ready ? 'Tu peux passer à une nouvelle variante sans gagner de point.' : 'Efface pour recommencer.');
       });
     }
 
     form.addEventListener('submit', event => {
       event.preventDefault();
+      const summary = form.querySelector('.exercise-feedback');
       if (form.dataset.revealed === 'true') {
-        const summary = form.querySelector('.exercise-feedback');
-        if (summary) summary.textContent = 'Le corrigé est affiché : clique sur Effacer pour reprendre et vérifier tes propres réponses.';
+        if (summary) summary.textContent = 'Le corrigé est affiché : efface les réponses ou essaie une nouvelle variante.';
         return;
       }
       const rows = Array.from(form.querySelectorAll('.answer-row'));
-      const results = rows.map(updateRow);
-      const allCorrect = results.length > 0 && results.every(Boolean);
-      const summary = form.querySelector('.exercise-feedback');
-
-      if (allCorrect) {
-        if (form.dataset.revealed === 'true' && !completed.has(index)) {
-          if (summary) summary.textContent = 'Réponses correctes, mais le corrigé a été consulté : cet essai ne compte pas pour le score. Clique sur Effacer pour recommencer sans aide.';
-        } else {
-          completed.add(index);
-          if (summary) summary.textContent = 'Exercice validé. Tu peux passer au suivant.';
-        }
-      } else {
-        completed.delete(index);
-        const correctCount = results.filter(Boolean).length;
-        if (summary) summary.textContent = correctCount + ' réponse(s) correcte(s) sur ' + results.length + '.';
-      }
+      const results = rows.map(markRow);
+      const correctCount = results.filter(Boolean).length;
+      const allCorrect = results.length > 0 && correctCount === rows.length;
+      if (allCorrect) completed.add(index);
+      else completed.delete(index);
       updateProgress();
+
+      const ready = variant && queueVariant(index, form, variant);
+      if (summary) summary.textContent = (allCorrect
+        ? 'Exercice validé. Bravo ! '
+        : correctCount + ' réponse(s) correcte(s) sur ' + rows.length + '. Tu peux corriger ton essai. ')
+        + (ready ? 'Une nouvelle variante avec de nouvelles valeurs est prête.' : '');
     });
 
-    form.addEventListener('input', event => {
+    const onChange = event => {
       const row = event.target.closest('.answer-row');
       if (!row) return;
       row.classList.remove('is-correct', 'is-wrong', 'is-revealed');
       const status = row.querySelector('.answer-status');
       if (status) status.textContent = '';
-    });
-
-    form.addEventListener('change', event => {
-      const row = event.target.closest('.answer-row');
-      if (!row) return;
-      row.classList.remove('is-correct', 'is-wrong', 'is-revealed');
-      const status = row.querySelector('.answer-status');
-      if (status) status.textContent = '';
-    });
+    };
+    form.addEventListener('input', onChange);
+    form.addEventListener('change', onChange);
 
     if (reset) {
       reset.addEventListener('click', () => {
@@ -215,28 +245,28 @@
         delete form.dataset.revealed;
         if (correction) correction.open = false;
         completed.delete(index);
+        states[index].pending = null;
+        if (variant) variant.hidden = true;
         form.querySelectorAll('[data-expect]').forEach(control => {
           control.readOnly = false;
           control.disabled = false;
           control.classList.remove('answer-was-correct', 'answer-was-wrong');
         });
-        form.querySelectorAll('.answer-row').forEach(row => row.classList.remove('is-correct', 'is-wrong', 'is-revealed', 'was-correct', 'was-wrong'));
-        form.querySelectorAll('.answer-status').forEach(status => status.textContent = '');
+        form.querySelectorAll('.answer-row').forEach(row => row.classList.remove(
+          'is-correct', 'is-wrong', 'is-revealed', 'was-correct', 'was-wrong'));
+        form.querySelectorAll('.answer-status').forEach(status => { status.textContent = ''; });
         const summary = form.querySelector('.exercise-feedback');
         if (summary) summary.textContent = '';
         updateProgress();
       });
     }
-  });
+  }
 
-  stepButtons.forEach((button, index) => {
-    button.addEventListener('click', () => showSlide(index, true));
-  });
-  if (previousButton) previousButton.addEventListener('click', () => showSlide(current - 1, true));
-  if (nextButton) nextButton.addEventListener('click', () => showSlide(current + 1, true));
-
-  const hashMatch = window.location.hash.match(/^#exercice-(\d+)$/);
-  const initial = hashMatch ? Number(hashMatch[1]) - 1 : 0;
+  slides.forEach((slide, index) => wireSlide(slide, index));
+  steps.forEach((button, index) => button.addEventListener('click', () => showSlide(index, true)));
+  if (prev) prev.addEventListener('click', () => showSlide(current - 1, true));
+  if (next) next.addEventListener('click', () => showSlide(current + 1, true));
+  const hash = location.hash.match(/^#exercice-(\d+)$/);
   updateProgress();
-  showSlide(Number.isInteger(initial) ? initial : 0, false);
+  showSlide(hash ? Number(hash[1]) - 1 : 0);
 })();
