@@ -145,13 +145,13 @@
     }
   }
 
-  function queueVariant(index, form, button) {
+  function queueVariant(index, form, button, force = false) {
     if (!generator || !renderer) return false;
     const state = states[index];
     // Ne pas consommer une autre variante lors de la simple ouverture du corrigé :
     // l'élève doit voir "variante 2" après la première soumission, même s'il
     // consulte ensuite l'explication détaillée.
-    if (!state.pending) {
+    if (force || !state.pending) {
       state.cycle++;
       state.pending = generator.generate(slug, index, state.cycle, state.original);
     }
@@ -227,7 +227,9 @@
       else completed.delete(index);
       updateProgress();
 
-      const ready = variant && queueVariant(index, form, variant);
+      // Chaque clic sur Vérifier prépare un nouveau tirage, même si un
+      // précédent était en attente ; ouvrir le corrigé ne consomme rien.
+      const ready = variant && queueVariant(index, form, variant, true);
       if (summary) summary.textContent = (allCorrect
         ? 'Exercice validé. Bravo ! '
         : correctCount + ' réponse(s) correcte(s) sur ' + rows.length + '. Tu peux corriger ton essai. ')
