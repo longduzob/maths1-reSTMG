@@ -297,22 +297,75 @@
   background: var(--error-soft);
 }
 
-/* Le corrigé est visible dans les bulles, distinct des réponses validées. */
-.answer-row.is-revealed {
-  border-color: #aaa6d8;
-  background: #f3f1fc;
+/* La couleur indique la justesse de la réponse AVANT la révélation.
+   Les champs contiennent désormais les bonnes réponses du corrigé. */
+.answer-row.is-revealed.was-correct {
+  border-color: #79b99b;
+  background: var(--success-soft);
 }
 
-.answer-row.is-revealed input,
-.answer-row.is-revealed select {
-  border-color: #8a84c8;
-  background: white;
-  color: #30266b;
-  font-weight: 750;
+.answer-row.is-revealed.was-wrong {
+  border-color: #dda0a3;
+  background: var(--error-soft);
 }
 
-.answer-row.is-revealed .answer-status {
-  color: #4c4186;
+.answer-row.is-revealed input.answer-was-correct,
+.answer-row.is-revealed select.answer-was-correct {
+  border: 2px solid var(--success);
+  background: #e3f5ea;
+  color: #13523a;
+  font-weight: 800;
+}
+
+.answer-row.is-revealed input.answer-was-wrong,
+.answer-row.is-revealed select.answer-was-wrong {
+  border: 2px solid var(--error);
+  background: #ffe5e5;
+  color: #81262d;
+  font-weight: 800;
+}
+
+.answer-row.is-revealed input[readonly],
+.answer-row.is-revealed select:disabled {
+  opacity: 1;
+  cursor: default;
+  -webkit-text-fill-color: currentColor;
+}
+
+.answer-row.is-revealed.was-correct .answer-status {
+  color: var(--success);
+}
+
+.answer-row.is-revealed.was-wrong .answer-status {
+  color: var(--error);
+}
+
+.correction-legend {
+  margin: 13px 0 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.correction-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.correction-legend .legend-dot {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.correction-legend .legend-dot.wrong {
+  background: var(--error);
 }
 
 .answer-status {
