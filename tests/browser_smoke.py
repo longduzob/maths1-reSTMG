@@ -119,8 +119,12 @@ def main():
 
             # Les réponses à choix, les intervalles et les virgules sont pris en charge.
             page.locator('[data-step="2"]').click()
+            # Deux antécédents restent corrects même dans l'ordre inverse.
+            page.locator('#exercice-3 input[data-type="unordered-list"]').fill('3 ; 1')
+            page.locator('#exercice-3 button[type="submit"]').click()
+            assert 'is-correct' in page.locator('#exercice-3 .answer-row:has(input[data-type="unordered-list"])').get_attribute('class')
             page.locator('#exercice-3 details.check summary').click()
-            expect(page.locator('#exercice-3 input[data-expect="1;3|1,3"]')).to_have_value('1 ; 3')
+            expect(page.locator('#exercice-3 input[data-type="unordered-list"][data-expect="1;3"]')).to_have_value('1 ; 3')
             expect(page.locator('#exercice-3 select[data-expect="]1;3["]')).to_have_value(']1 ; 3[')
             expect(page.locator('#exercice-3 select.answer-was-wrong')).to_have_count(1)
             expect(page.locator('#exercice-3 select[data-expect="]1;3["]')).to_be_disabled()
@@ -196,6 +200,16 @@ def main():
                 page.locator('#exercice-2 button[type="submit"]').click()
                 expect(page.locator('#exercice-2 [data-action="new-variant"]')).to_be_visible()
                 expect(page.locator('#exercise-score')).to_have_text('1/8')
+
+            # Régression exécutée dans le navigateur, et pas uniquement dans Node.
+            assert page.evaluate("""() => {
+                const match = window.ExerciseVariants.matchesAnswer;
+                return match('0,833','0.8333','number','0.000051','3')
+                    && !match('0,834','0.8333','number','0.000051','3')
+                    && match('2/4','0.5','number')
+                    && match('5 ; 3','3;5','unordered-list')
+                    && !match('3 ; 3','3;5','unordered-list');
+            }""")
 
             # Questions actives et lecture accessible dans les 16 cours.
             lesson_slugs = ['fonctions', 'second-degre', 'suites',
