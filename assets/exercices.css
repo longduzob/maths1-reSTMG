@@ -620,3 +620,37 @@
 .exercise-category-nav a:hover { border-color: var(--exercise); }
 .exercise-page .lesson-card:hover { border-color: var(--exercise); }
 .exercise-page .lesson-card .course-code, .exercise-page .lesson-card .read-link { color: var(--exercise); }
+
+/* Répétition procédurale : la validation reste visible jusqu'au nouveau tirage. */
+.exercise-page .variant-refresh {
+  min-height: 44px;
+  border: 2px solid #1f7257;
+  border-radius: 10px;
+  background: #e4f4eb;
+  color: #164c39;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+.exercise-page .variant-refresh:hover,
+.exercise-page .variant-refresh:focus-visible {
+  background: #d3eede;
+  border-color: #164c39;
+}
+.exercise-page .variant-graph {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 330px;
+  margin-block: 18px 8px;
+  border: 1px solid #d4e4dc;
+  border-radius: 12px;
+  background: #fbfdfc;
+}
+.exercise-page .exercise-feedback {
+  min-height: 26px;
+  line-height: 1.65;
+}
+@media print {
+  .variant-refresh { display: none !important; }
+}
