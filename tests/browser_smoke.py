@@ -189,6 +189,18 @@ def main():
             expect(page.locator('#exercise-score')).to_have_text('1/9')
             page.locator('#exercice-1 [data-action="reset"]').click()
             expect(page.locator('#exercice-1 .coaching-bridge')).to_be_hidden()
+            # Une réussite efface le compteur d'échecs précédent.
+            first = page.locator('#exercice-1 input[data-expect]')
+            first.first.fill('99999')
+            page.locator('#exercice-1 button[type="submit"]').click()
+            expect(page.locator('#exercice-1 .coaching-bridge')).to_be_hidden()
+            for field in first.all():
+                field.fill(field.get_attribute('data-expect'))
+            page.locator('#exercice-1 button[type="submit"]').click()
+            first.first.fill('99999')
+            page.locator('#exercice-1 button[type="submit"]').click()
+            expect(page.locator('#exercice-1 .coaching-bridge')).to_be_hidden()
+
 
             # Sur les 9 exercices, l'indice n° 3 suit deux tirages successifs.
             page.goto(base + 'exercices/fonctions.html')
