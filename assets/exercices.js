@@ -259,8 +259,10 @@
         feedback.hidden = false;
         if (failures >= 2) bridge.hidden = false;
       } else {
+        failures = 0;
         feedback.hidden = true;
         bridge.hidden = true;
+        bridge.open = false;
       }
     });
     form.addEventListener('reset', () => {
