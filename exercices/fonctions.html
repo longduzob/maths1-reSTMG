@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Exercices corrigés du chapitre 1 de Première STMG : fonctions, lectures graphiques, droites, taux de variation et balayage.">
+  <meta name="theme-color" content="#f8f7f3">
+  <title>Exercices · Chapitre 1 | Maths · Première STMG</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="../assets/cours.css">
+  <link rel="stylesheet" href="../assets/exercices.css">
+</head>
+<body class="exercise-page">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="Maths, accueil"><span class="brand-mark" aria-hidden="true">m<span>.</span></span><span>maths<span class="brand-dot">.</span></span></a>
+      <nav class="main-nav" aria-label="Navigation principale"><a href="../index.html">Accueil</a><a href="../lecons.html">Leçons</a><a href="../exercices.html" aria-current="page">Exercices</a></nav>
+      <span class="level-badge">1<sup>re</sup> STMG</span>
+    </div>
+  </header>
+
+  <main id="contenu" class="container lesson-page" tabindex="-1">
+    <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="../exercices.html">Tous les exercices</a><span>/</span><span aria-current="page">Chapitre 01</span></nav>
+
+    <header class="lesson-heading">
+      <p class="eyebrow">CHAPITRE 01 / S’ENTRAÎNER</p>
+      <h1>Fonctions, droites et lectures graphiques</h1>
+      <p class="lead">Une série progressive pour vérifier les bases du chapitre avant de passer à la suite.</p>
+    </header>
+
+    <div class="lesson-layout">
+      <article class="lesson-content">
+        <section class="exercise-intro" aria-label="Conseil de travail">
+          <p><strong>Conseil :</strong> cherche chaque exercice avant d’ouvrir la correction. Les exercices 1 à 3 consolident les bases, les exercices 4 à 7 demandent davantage de méthode, et les deux derniers mélangent plusieurs idées.</p>
+          <span class="exercise-count">9 exercices</span>
+        </section>
+
+        <section class="exercise-block" id="exercice-1">
+          <div class="exercise-head"><span class="exercise-number">01</span><h2>Images et antécédents</h2><span class="difficulty">Bases</span></div>
+          <p>On considère la fonction <strong>f(x) = 3x − 5</strong>.</p>
+          <ol>
+            <li>Calculer f(−2), f(0) et f(4).</li>
+            <li>Déterminer l’antécédent de 10.</li>
+            <li>Déterminer l’antécédent de −5.</li>
+          </ol>
+          <details class="hint"><summary>Voir une indication</summary><p>Pour une image, remplace x par la valeur donnée. Pour un antécédent, résous une équation de la forme f(x) = nombre.</p></details>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>f(−2) = 3 × (−2) − 5 = −11 ; f(0) = −5 ; f(4) = 12 − 5 = 7.</p>
+            <p>Pour l’antécédent de 10 : 3x − 5 = 10, donc 3x = 15 et <strong>x = 5</strong>.</p>
+            <p>Pour l’antécédent de −5 : 3x − 5 = −5, donc 3x = 0 et <strong>x = 0</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-2">
+          <div class="exercise-head"><span class="exercise-number">02</span><h2>Modéliser un tarif</h2><span class="difficulty">Bases</span></div>
+          <p>Une entreprise facture une location <strong>18 € de frais fixes</strong> puis <strong>6 € par heure</strong>. On note C(t) le prix, en euros, pour t heures, avec t ∈ [0 ; 10].</p>
+          <ol>
+            <li>Écrire C(t).</li>
+            <li>Calculer le prix pour 4 heures.</li>
+            <li>Combien d’heures peut-on louer pour 60 € ?</li>
+            <li>Interpréter les nombres 18 et 6 dans la formule.</li>
+          </ol>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>La formule est <strong>C(t) = 18 + 6t</strong>.</p>
+            <p>C(4) = 18 + 6 × 4 = <strong>42 €</strong>.</p>
+            <p>18 + 6t = 60 ⇔ 6t = 42 ⇔ <strong>t = 7</strong>. On peut louer pendant 7 heures.</p>
+            <p>18 représente les frais fixes ; 6 est le prix ajouté pour chaque heure de location.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-3">
+          <div class="exercise-head"><span class="exercise-number">03</span><h2>Lire une courbe</h2><span class="difficulty">Bases</span></div>
+          <p>La courbe ci-dessous représente une fonction g sur [0 ; 4].</p>
+          <figure class="exercise-graph">
+            <svg viewBox="0 0 600 320" role="img" aria-labelledby="exo-graph-title exo-graph-desc">
+              <title id="exo-graph-title">Courbe de g sur l’intervalle 0 à 4</title>
+              <desc id="exo-graph-desc">La courbe passe par 0,3 ; 1,0 ; 2,-1 ; 3,0 ; 4,3.</desc>
+              <g stroke="#e5e1ed"><path d="M90 70H520M90 120H520M90 170H520M90 270H520M190 40V290M290 40V290M390 40V290M490 40V290"/></g>
+              <g stroke="#656372" stroke-width="1.5"><path d="M60 220H545M90 295V30"/></g>
+              <path d="M90 70 Q290 470 490 70" fill="none" stroke="#246453" stroke-width="3"/>
+              <g fill="#246453"><circle cx="190" cy="220" r="5"/><circle cx="290" cy="270" r="5"/><circle cx="390" cy="220" r="5"/></g>
+              <g fill="#252436" font-size="14" font-family="Arial, sans-serif"><text x="74" y="239">0</text><text x="186" y="240">1</text><text x="286" y="240">2</text><text x="386" y="240">3</text><text x="486" y="240">4</text><text x="60" y="275">−1</text><text x="70" y="175">1</text><text x="70" y="125">2</text><text x="70" y="75">3</text><text x="549" y="225">x</text><text x="95" y="27">y</text></g>
+            </svg>
+          </figure>
+          <ol>
+            <li>Lire g(0) et g(2).</li>
+            <li>Donner les antécédents de 0.</li>
+            <li>Quel est le minimum de g ? Pour quelle valeur de x est-il atteint ?</li>
+            <li>Résoudre graphiquement g(x) &lt; 0.</li>
+          </ol>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>On lit <strong>g(0) = 3</strong> et <strong>g(2) = −1</strong>.</p>
+            <p>La courbe coupe l’axe des abscisses en x = 1 et x = 3 : les antécédents de 0 sont donc <strong>1 et 3</strong>.</p>
+            <p>Le minimum vaut <strong>−1</strong> et il est atteint pour <strong>x = 2</strong>.</p>
+            <p>La courbe est sous l’axe des abscisses entre 1 et 3 : <strong>x ∈ ]1 ; 3[</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-4">
+          <div class="exercise-head"><span class="exercise-number">04</span><h2>Trouver l’équation d’une droite</h2><span class="difficulty">Méthode</span></div>
+          <p>Une droite passe par A(1 ; 5) et B(4 ; 14).</p>
+          <ol>
+            <li>Calculer son coefficient directeur.</li>
+            <li>Déterminer son ordonnée à l’origine.</li>
+            <li>Donner l’expression de la fonction affine h représentée par cette droite.</li>
+            <li>Calculer h(10).</li>
+          </ol>
+          <details class="hint"><summary>Voir une indication</summary><p>Commence par a = (y<sub>B</sub> − y<sub>A</sub>)/(x<sub>B</sub> − x<sub>A</sub>), puis utilise les coordonnées de A dans y = ax + b.</p></details>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>a = (14 − 5)/(4 − 1) = 9/3 = <strong>3</strong>.</p>
+            <p>Avec A(1 ; 5) : 5 = 3 × 1 + b, donc <strong>b = 2</strong>.</p>
+            <p>Ainsi <strong>h(x) = 3x + 2</strong>. Enfin h(10) = 30 + 2 = <strong>32</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-5">
+          <div class="exercise-head"><span class="exercise-number">05</span><h2>Comparer deux tarifs</h2><span class="difficulty">Méthode</span></div>
+          <p>Deux offres de location sont données par :</p>
+          <div class="formula">A(t) = 20 + 9t &nbsp;&nbsp;&nbsp; et &nbsp;&nbsp;&nbsp; B(t) = 14t</div>
+          <p>où t est une durée en heures.</p>
+          <ol>
+            <li>Calculer les deux prix pour 2 heures.</li>
+            <li>Déterminer la durée pour laquelle les deux offres coûtent le même prix.</li>
+            <li>À partir de quelle durée l’offre A est-elle au plus aussi chère que l’offre B ?</li>
+          </ol>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>A(2) = 20 + 18 = <strong>38 €</strong> et B(2) = 28 € : pour 2 heures, B est moins chère.</p>
+            <p>20 + 9t = 14t ⇔ 20 = 5t ⇔ <strong>t = 4</strong>. Les deux offres valent alors 56 €.</p>
+            <p>A(t) ≤ B(t) ⇔ 20 + 9t ≤ 14t ⇔ 20 ≤ 5t ⇔ <strong>t ≥ 4</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-6">
+          <div class="exercise-head"><span class="exercise-number">06</span><h2>Taux de variation</h2><span class="difficulty">Méthode</span></div>
+          <p>On considère la fonction q(x) = x<sup>2</sup>.</p>
+          <ol>
+            <li>Calculer le taux de variation de q entre 2 et 5.</li>
+            <li>Calculer le taux de variation de q entre 5 et 6.</li>
+            <li>Que montrent ces deux résultats ?</li>
+          </ol>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>Entre 2 et 5 : (q(5) − q(2))/(5 − 2) = (25 − 4)/3 = 21/3 = <strong>7</strong>.</p>
+            <p>Entre 5 et 6 : (36 − 25)/(6 − 5) = <strong>11</strong>.</p>
+            <p>Les deux taux sont différents. La pente moyenne dépend donc de l’intervalle : q n’est pas une fonction affine.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-7">
+          <div class="exercise-head"><span class="exercise-number">07</span><h2>Signe et variations d’une fonction affine</h2><span class="difficulty">Méthode</span></div>
+          <p>On considère p(x) = −2x + 8 sur l’intervalle [0 ; 6].</p>
+          <ol>
+            <li>La fonction p est-elle croissante ou décroissante ? Justifier.</li>
+            <li>Résoudre p(x) = 0.</li>
+            <li>Résoudre p(x) ≥ 0 sur [0 ; 6].</li>
+          </ol>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>Le coefficient directeur vaut −2, qui est négatif : <strong>p est décroissante</strong>.</p>
+            <p>−2x + 8 = 0 ⇔ −2x = −8 ⇔ <strong>x = 4</strong>.</p>
+            <p>−2x + 8 ≥ 0 ⇔ −2x ≥ −8. En divisant par −2, on inverse le sens de l’inégalité : x ≤ 4. Sur [0 ; 6], la solution est <strong>[0 ; 4]</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-8">
+          <div class="exercise-head"><span class="exercise-number">08</span><h2>Grandeurs inversement proportionnelles</h2><span class="difficulty">Approfondir</span></div>
+          <p>Pour parcourir 240 km à vitesse constante v, la durée du trajet est donnée par <strong>t(v) = 240/v</strong>, avec v &gt; 0.</p>
+          <ol>
+            <li>Calculer la durée du trajet à 60 km/h, 80 km/h et 120 km/h.</li>
+            <li>Que devient la durée lorsque la vitesse est doublée de 60 à 120 km/h ?</li>
+            <li>La fonction t est-elle affine ? Justifier simplement.</li>
+          </ol>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>t(60) = 240/60 = <strong>4 h</strong> ; t(80) = <strong>3 h</strong> ; t(120) = <strong>2 h</strong>.</p>
+            <p>Quand la vitesse double de 60 à 120 km/h, la durée est divisée par deux, de 4 h à 2 h.</p>
+            <p>La fonction n’est pas affine : elle est de la forme 240/v, et non av + b. Le produit v × t reste constant et vaut 240.</p>
+          </details>
+        </section>
+
+        <section class="exercise-block" id="exercice-9">
+          <div class="exercise-head"><span class="exercise-number">09</span><h2>Encadrer une solution par balayage</h2><span class="difficulty">Approfondir</span></div>
+          <p>On cherche à encadrer la solution positive de x<sup>2</sup> = 5 au centième.</p>
+          <ol>
+            <li>Calculer 2,23<sup>2</sup> et 2,24<sup>2</sup>.</li>
+            <li>Comparer ces deux résultats à 5.</li>
+            <li>En déduire un encadrement de √5 au centième.</li>
+          </ol>
+          <details class="hint"><summary>Voir une indication</summary><p>La fonction carré est croissante pour les nombres positifs : si a² &lt; 5 &lt; b², alors a &lt; √5 &lt; b.</p></details>
+          <details class="check"><summary>Afficher la correction</summary>
+            <p>2,23<sup>2</sup> = <strong>4,9729</strong> et 2,24<sup>2</sup> = <strong>5,0176</strong>.</p>
+            <p>On a donc 4,9729 &lt; 5 &lt; 5,0176.</p>
+            <div class="formula">2,23 &lt; √5 &lt; 2,24</div>
+            <p>C’est un encadrement au centième. Pour être plus précis, on pourrait recommencer avec un pas de 0,001.</p>
+          </details>
+        </section>
+
+        <section class="score-guide" aria-labelledby="bilan-title">
+          <h2 id="bilan-title">Bilan rapide</h2>
+          <ul>
+            <li><strong>Exercices 1 à 3 réussis :</strong> les bases sont en place.</li>
+            <li><strong>Exercices 4 à 7 réussis :</strong> les méthodes principales du chapitre sont maîtrisées.</li>
+            <li><strong>Exercices 8 et 9 réussis :</strong> tu sais aussi mobiliser les notions dans une situation moins directe.</li>
+          </ul>
+        </section>
+
+        <nav class="course-pagination" aria-label="Navigation liée au chapitre">
+          <a href="../cours/fonctions.html">← Revoir la leçon du chapitre 1</a>
+          <a href="../exercices.html">Retour aux exercices</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner"><p><strong>maths.</strong> Comprendre, puis pratiquer.</p><p>Première STMG · Chapitre 01</p></div>
+  </footer>
+</body>
+</html>
