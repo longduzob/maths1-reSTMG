@@ -69,6 +69,41 @@ def main():
             expect(page.locator('#exercice-1')).to_be_visible()
             page.locator('#exercice-1 details.check summary').click()
             assert page.locator('#exercice-1 details.check').evaluate('(el) => el.open')
+            expect(page.locator('#exercice-1 .answer-row.is-revealed')).to_have_count(5)
+            for control, expected in zip(first_inputs.all(), values):
+                expect(control).to_have_value(expected)
+            expect(page.locator('#exercise-score')).to_have_text('1/9')
+
+            # Afficher le corrigé remplit aussi les formules, sans augmenter le score.
+            page.locator('[data-step="1"]').click()
+            page.locator('#exercice-2 details.check summary').click()
+            expect(page.locator('#exercice-2 .answer-row.is-revealed')).to_have_count(3)
+            second_inputs = page.locator('#exercice-2 input[data-expect]')
+            for control, expected in zip(second_inputs.all(), ['18', '6', '42', '7']):
+                expect(control).to_have_value(expected)
+            page.locator('#exercice-2 button[type="submit"]').click()
+            expect(page.locator('#exercise-score')).to_have_text('1/9')
+            page.locator('#exercice-2 [data-action="reset"]').click()
+            expect(page.locator('#exercice-2 details.check')).not_to_have_attribute('open', '')
+            for control in second_inputs.all():
+                expect(control).to_have_value('')
+            for control, value in zip(second_inputs.all(), ['18', '6', '42', '7']):
+                control.fill(value)
+            page.locator('#exercice-2 button[type="submit"]').click()
+            expect(page.locator('#exercise-score')).to_have_text('2/9')
+
+            # Les réponses à choix, les intervalles et les virgules sont pris en charge.
+            page.locator('[data-step="2"]').click()
+            page.locator('#exercice-3 details.check summary').click()
+            expect(page.locator('#exercice-3 input[data-expect="1;3|1,3"]')).to_have_value('1 ; 3')
+            expect(page.locator('#exercice-3 select[data-expect="]1;3["]')).to_have_value(']1 ; 3[')
+            expect(page.locator('#exercise-score')).to_have_text('2/9')
+            page.locator('[data-step="8"]').click()
+            page.locator('#exercice-9 details.check summary').click()
+            last_inputs = page.locator('#exercice-9 input[data-expect]')
+            for control, expected in zip(last_inputs.all(), ['4,9729', '5,0176', '2,23', '2,24']):
+                expect(control).to_have_value(expected)
+            expect(page.locator('#exercise-score')).to_have_text('2/9')
             page.goto(base + 'lecons.html')
             expect(page.locator('.lesson-card:visible')).to_have_count(16)
             page.locator('#course-search').fill('derivee')
