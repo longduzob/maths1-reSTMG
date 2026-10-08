@@ -154,6 +154,10 @@ body.lesson-immersive[data-domain="reperes"] {
   gap: clamp(20px, 2.5vw, 30px);
   align-items: start;
 }
+/* Sans JS le sommaire reste cache : le contenu prend toute la largeur. */
+.lesson-immersive .lesson-layout:has(.lesson-toc[hidden]) {
+  grid-template-columns: minmax(0, 1fr);
+}
 .lesson-immersive .lesson-toc {
   border: 1px solid #dcd9e7;
   border-radius: 20px;
