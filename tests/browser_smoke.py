@@ -24,7 +24,8 @@ def main():
     thread.start()
     base = f'http://127.0.0.1:{server.server_port}/{quote(ROOT.name)}/'
     errors, failed_responses = [], []
-    paths = (sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))\n             + sorted((ROOT / 'exercices').glob('*.html')))
+    paths = (sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))
+             + sorted((ROOT / 'exercices').glob('*.html')))
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch()
