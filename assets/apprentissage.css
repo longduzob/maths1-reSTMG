@@ -1,0 +1,549 @@
+/* Parcours d'apprentissage accessible — complement de cours.css.
+   Les codes couleurs sont systematiquement accompagnes de titres lisibles. */
+body.lesson-immersive {
+  --learn-accent: #5541ae;
+  --learn-accent-dark: #46308d;
+  --learn-accent-soft: #f0ebff;
+  --learn-bg: #f8f6fd;
+  --learn-ink: #242640;
+  --learn-muted: #51586a;
+  --learn-shadow: 0 14px 35px rgba(45, 39, 86, .045);
+  background: #f8f8fb;
+}
+body.lesson-immersive[data-domain="statistiques"] {
+  --learn-accent: #0c746b;
+  --learn-accent-dark: #09594f;
+  --learn-accent-soft: #e6f6f1;
+  --learn-bg: #f6fbf9;
+}
+body.lesson-immersive[data-domain="probabilites"] {
+  --learn-accent: #99517b;
+  --learn-accent-dark: #75365e;
+  --learn-accent-soft: #fcebf4;
+  --learn-bg: #fff7fb;
+}
+body.lesson-immersive[data-domain="reperes"] {
+  --learn-accent: #2a649b;
+  --learn-accent-dark: #214c79;
+  --learn-accent-soft: #eaf4ff;
+  --learn-bg: #f5faff;
+}
+.lesson-immersive .lesson-page { padding-top: 22px; }
+.lesson-immersive .lesson-heading {
+  max-width: none;
+  position: relative;
+  isolation: isolate;
+  margin: 26px 0 18px;
+  padding: clamp(24px, 4vw, 44px);
+  background:
+    radial-gradient(circle at 100% 0%, var(--learn-accent-soft) 0%, transparent 44%),
+    linear-gradient(116deg, #ffffff, var(--learn-bg));
+  border: 1px solid #e3dfef;
+  border-left: 6px solid var(--learn-accent);
+  border-radius: 24px;
+  box-shadow: var(--learn-shadow);
+  overflow: hidden;
+}
+.lesson-immersive .lesson-heading::before {
+  content: "";
+  position: absolute;
+  right: -45px;
+  bottom: -115px;
+  width: 255px;
+  height: 255px;
+  border: 2px solid var(--learn-accent);
+  border-radius: 50%;
+  opacity: .12;
+  pointer-events: none;
+  z-index: -1;
+}
+.lesson-immersive .lesson-heading::after {
+  content: "";
+  position: absolute;
+  right: 50px;
+  bottom: -82px;
+  width: 160px;
+  height: 160px;
+  border: 2px dashed var(--learn-accent);
+  border-radius: 50%;
+  opacity: .12;
+  pointer-events: none;
+  z-index: -1;
+}
+.lesson-immersive .lesson-heading .eyebrow {
+  color: var(--learn-accent-dark);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+.lesson-immersive .lesson-heading h1 {
+  max-width: 800px;
+  margin: 16px 0 13px;
+  font-size: clamp(30px, 3.9vw, 50px);
+  letter-spacing: -1.3px;
+  color: var(--learn-ink);
+  line-height: 1.14;
+}
+.lesson-immersive .lesson-heading .lead {
+  max-width: 735px;
+  color: var(--learn-muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+.learning-path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 24px;
+  align-items: center;
+}
+.learning-path span {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 11px;
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--learn-accent-dark);
+  background: #fff;
+  border: 1px solid #d8d5e3;
+  border-radius: 999px;
+}
+.learning-path span b {
+  display: inline-grid;
+  place-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--learn-accent-soft);
+  color: var(--learn-accent-dark);
+}
+.lesson-reading-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 22px;
+  color: var(--learn-muted);
+  font-size: 12px;
+}
+.lesson-reading-controls > span { margin-right: 5px; font-weight: 650; }
+.lesson-reading-controls button {
+  background: #fff;
+  color: var(--learn-accent-dark);
+  border: 1px solid #d0cde0;
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 9px 17px;
+  font-size: 13px;
+  font-weight: 720;
+}
+.lesson-reading-controls button:hover { border-color: var(--learn-accent); }
+.lesson-reading-controls button[aria-pressed="true"] {
+  background: var(--learn-accent);
+  color: white;
+  border-color: var(--learn-accent);
+}
+.lesson-reading-controls .research-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 650;
+  color: var(--learn-accent-dark);
+}
+.lesson-immersive .lesson-layout {
+  grid-template-columns: 214px minmax(0, 1fr);
+  gap: clamp(20px, 2.5vw, 30px);
+  align-items: start;
+}
+.lesson-immersive .lesson-toc {
+  border: 1px solid #dcd9e7;
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--learn-shadow);
+  padding: 24px 16px;
+}
+.lesson-immersive .lesson-toc h2 {
+  color: var(--learn-accent-dark);
+  font-size: 14px;
+  letter-spacing: -.1px;
+}
+.lesson-immersive .lesson-toc nav a {
+  display: block;
+  border-left: 3px solid transparent;
+  padding: 8px 9px;
+  border-radius: 4px 8px 8px 4px;
+  line-height: 1.5;
+  color: #4a5165;
+  font-size: 12px;
+}
+.lesson-immersive .lesson-toc nav a:hover,
+.lesson-immersive .lesson-toc nav a[aria-current="location"] {
+  border-left-color: var(--learn-accent);
+  background: var(--learn-accent-soft);
+  color: var(--learn-accent-dark);
+  font-weight: 750;
+}
+.lesson-immersive .print-button {
+  border: 1px solid #d0cde0;
+  color: var(--learn-accent-dark);
+  width: 100%;
+  min-height: 44px;
+}
+.lesson-immersive .lesson-content {
+  background: #fff;
+  border: 1px solid #e2deeb;
+  border-radius: 22px;
+  box-shadow: var(--learn-shadow);
+  padding: clamp(22px, 3.7vw, 44px);
+  font-size: 16px;
+  color: #303446;
+  line-height: 1.85;
+}
+.lesson-immersive .lesson-content p,
+.lesson-immersive .lesson-content li { max-width: 84ch; }
+.lesson-immersive .lesson-content p { margin: 13px 0; }
+.lesson-immersive .lesson-content > h2 {
+  margin: 44px 0 20px;
+  font-size: clamp(21px, 2.3vw, 27px);
+  line-height: 1.38;
+  padding: 12px 12px 14px 19px;
+  border-left: 5px solid var(--learn-accent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, var(--learn-accent-soft), rgba(255,255,255,0));
+  color: var(--learn-ink);
+  scroll-margin-top: 28px;
+}
+.lesson-immersive .lesson-content h3 {
+  font-size: 18px;
+  color: #25283b;
+}
+.lesson-immersive .lesson-content > p > strong { color: var(--learn-accent-dark); }
+.lesson-immersive .lesson-content .objectives {
+  border: 1px solid #b9dced;
+  border-left: 5px solid #236c96;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #eaf6fd, #f6fbff);
+  padding: 22px 24px;
+  margin: 0 0 28px;
+}
+.lesson-immersive .lesson-content .objectives h2 {
+  color: #174e73;
+  font-size: 20px;
+  margin: 0 0 12px;
+}
+.lesson-immersive .lesson-content .objectives h2::before {
+  content: "◎ ";
+  font-weight: 750;
+}
+.lesson-immersive .lesson-content .objectives .prerequisites {
+  background: #fff;
+  padding: 10px 13px;
+  border-radius: 8px;
+  border: 1px solid #c4deed;
+  font-size: 13px;
+  color: #3c5161;
+}
+.lesson-immersive .lesson-content .formula {
+  position: relative;
+  display: block;
+  border: 1px solid #d5c8f1;
+  border-left: 5px solid #6843ae;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #f3ecff, #fcfaff);
+  color: #352253;
+  padding: 21px 24px 18px;
+  margin: 24px 0;
+  font-size: 1.12em;
+  line-height: 1.9;
+  overflow-x: auto;
+  overflow-wrap: anywhere;
+}
+.lesson-immersive .lesson-content .formula::before {
+  content: "FORMULE · À RETENIR";
+  display: block;
+  font: 800 11px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #58368e;
+  letter-spacing: 1.1px;
+  margin: 0 0 12px;
+}
+.lesson-immersive .lesson-content .example,
+.lesson-immersive .lesson-content .warning,
+.lesson-immersive .lesson-content .callout,
+.lesson-immersive .lesson-content .recap {
+  position: relative;
+  border-radius: 16px;
+  margin: 27px 0;
+  padding: 22px 24px;
+  border-left-width: 5px;
+  border-left-style: solid;
+}
+.lesson-immersive .lesson-content .example {
+  background: #edf9f3;
+  border-color: #b6dec8;
+  border-left-color: #157553;
+}
+.lesson-immersive .lesson-content .example::before {
+  content: "● EXEMPLE GUIDÉ";
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  color: #0d654a;
+  margin-bottom: 9px;
+}
+.lesson-immersive .lesson-content .warning {
+  background: #fff8e9;
+  border-color: #ead6a5;
+  border-left-color: #a96510;
+}
+.lesson-immersive .lesson-content .warning::before {
+  content: "▲ POINT DE VIGILANCE";
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  color: #855012;
+  margin-bottom: 9px;
+}
+.lesson-immersive .lesson-content .callout {
+  background: #f1f0ff;
+  border-color: #d6cdf4;
+  border-left-color: #5d50b9;
+}
+.lesson-immersive .lesson-content .recap {
+  background: #f6f3ff;
+  border-color: #d8cff5;
+  border-left-color: #6850aa;
+}
+.lesson-immersive .lesson-content .recap h2 { color: #4b337f; }
+.lesson-immersive .lesson-content .check {
+  background: #fafffc;
+  border: 1px solid #b7ddc9;
+  border-radius: 12px;
+}
+.lesson-immersive .lesson-content .check summary {
+  color: #155f49;
+  font-weight: 750;
+}
+.lesson-immersive .lesson-content .check[open] { background: #f4fcf7; }
+.lesson-immersive .lesson-content .figure svg {
+  background: #fcfbff;
+  border-color: #d8d0e4;
+}
+.lesson-immersive .lesson-content .figure figcaption {
+  color: #505969;
+  font-size: 13px;
+  border-left: 3px solid var(--learn-accent);
+  padding-left: 12px;
+}
+.lesson-immersive .lesson-content .table-wrap {
+  border: 1px solid #ded8e7;
+  border-radius: 10px;
+}
+.lesson-immersive .lesson-content table { width: 100%; border-collapse: collapse; }
+.lesson-immersive .lesson-content th { background: #f2f0f9; color: #34314f; }
+.lesson-immersive .lesson-content tbody tr:nth-child(even) { background: #fcfbfe; }
+.lesson-immersive .course-pagination a {
+  background: white;
+  border-radius: 12px;
+}
+.lesson-immersive .course-pagination a:hover {
+  border-color: var(--learn-accent);
+  color: var(--learn-accent-dark);
+}
+/* Etayage facultatif : rendre l'aide accessible sans surcharger la page. */
+.support-scaffold {
+  border: 1px solid #bfdcd4;
+  border-left: 5px solid #16726c;
+  border-radius: 15px;
+  background: #f0faf7;
+  margin: 24px 0 34px;
+  padding: 0 20px;
+}
+.support-scaffold summary {
+  cursor: pointer;
+  padding: 17px 0;
+  color: #105b55;
+  font-size: 15px;
+  font-weight: 800;
+}
+.support-scaffold summary::marker { color: #0b7467; }
+.support-scaffold[open] { padding-bottom: 19px; }
+.support-scaffold > p { color: #3d5753; }
+.support-scaffold ol { counter-reset: scaffold; list-style: none; padding: 0 !important; }
+.support-scaffold li {
+  display: flex;
+  gap: 13px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px dashed #c9dcd6;
+}
+.support-scaffold li:last-child { border-bottom: none; }
+.support-scaffold li::before {
+  counter-increment: scaffold;
+  content: counter(scaffold);
+  display: grid;
+  place-content: center;
+  flex: 0 0 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #d6efe6;
+  color: #145c4c;
+  font-size: 12px;
+  font-weight: 850;
+}
+/* Rappel actif : question presentee, choix masque sans JavaScript,
+   solution en details toujours disponible. */
+.study-quiz {
+  background: linear-gradient(130deg, #f4f8ff, #fbf9ff);
+  border: 1px solid #b9cceb;
+  border-left: 5px solid #376aa4;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 34px 0;
+}
+.study-quiz .study-eyebrow {
+  color: #22578e;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+.study-quiz h3 {
+  color: #1e466f !important;
+  margin: 10px 0 !important;
+  font-size: 20px !important;
+}
+.study-quiz .study-question { font-weight: 650; }
+.study-quiz fieldset {
+  border: none;
+  padding: 0;
+  margin: 14px 0;
+  min-width: 0;
+}
+.study-quiz legend { font-weight: 700; margin-bottom: 10px; }
+.study-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 10px;
+}
+.study-choices label {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #bdc9da;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  min-width: 0;
+  line-height: 1.5;
+}
+.study-choices label:has(input:checked) {
+  border-color: #426d9f;
+  box-shadow: inset 0 0 0 1px #426d9f;
+  background: #eef5ff;
+}
+.study-choices input { flex: 0 0 auto; margin-top: 4px; accent-color: #315f8a; }
+.study-quiz .study-submit {
+  background: #235d95;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 750;
+}
+.study-quiz .study-submit:hover { background: #184777; }
+.study-quiz .study-feedback {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.study-quiz .study-feedback:empty { display: none; }
+.study-quiz .study-feedback[data-result="correct"] {
+  background: #e2f5e9;
+  color: #155b3d;
+  border-color: #afd8c0;
+}
+.study-quiz .study-feedback[data-result="retry"] {
+  background: #fff4e1;
+  color: #794513;
+  border-color: #e7cca2;
+}
+.study-solution { margin-top: 12px; border-top: 1px solid #cbd6e8; padding-top: 12px; }
+.study-solution summary { cursor: pointer; color: #245588; font-size: 14px; font-weight: 750; }
+.study-solution[open] p { margin: 10px 0 0 !important; }
+.study-review {
+  background: #f7f4ff;
+  border: 1px solid #ddd3f2;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 28px 0;
+}
+.study-review h3 { margin: 0 0 8px !important; color: #50368a !important; }
+.study-review > p { color: #49516b; font-size: 14px; }
+.study-review ol { display: grid; gap: 12px; margin-bottom: 0 !important; padding-left: 22px !important; }
+.study-review li::marker { color: #5942ad; font-weight: 900; }
+.study-review .review-cta {
+  display: inline-flex;
+  background: #5541ae;
+  color: #fff !important;
+  text-decoration: none;
+  padding: 11px 17px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 750;
+  margin-top: 17px;
+}
+.study-review .review-cta:hover { background: #42308e; }
+body.reading-large .lesson-content { font-size: 19px; line-height: 1.94; }
+body.reading-large .lesson-content .study-quiz { font-size: 18px; }
+body.reading-large .lesson-content .study-choices label { font-size: 17px; }
+body.reading-large .lesson-content .study-quiz .study-feedback { font-size: 16px; }
+body.reading-focus .lesson-layout { grid-template-columns: minmax(0, 1fr); }
+body.reading-focus .lesson-toc { display: none; }
+body.reading-focus .lesson-content { max-width: 880px; margin-inline: auto; width: 100%; }
+@media (max-width: 960px) {
+  .lesson-immersive .lesson-layout { grid-template-columns: 190px minmax(0, 1fr); }
+  .lesson-immersive .lesson-content { padding: 26px; }
+}
+@media (max-width: 740px) {
+  .lesson-immersive .lesson-layout { grid-template-columns: minmax(0, 1fr); }
+  .lesson-immersive .lesson-toc { position: static; max-height: none; }
+  .lesson-immersive .lesson-heading { margin-top: 20px; }
+  .lesson-immersive .lesson-content { padding: 24px; }
+}
+@media (max-width: 520px) {
+  .lesson-immersive .lesson-heading { padding: 25px 20px; border-radius: 17px; border-left-width: 4px; }
+  .lesson-immersive .lesson-heading h1 { letter-spacing: -.8px; }
+  .lesson-immersive .lesson-content { padding: 22px 17px; font-size: 16px; line-height: 1.75; }
+  .lesson-immersive .lesson-content > h2 { margin-top: 35px; padding-left: 14px; }
+  .lesson-immersive .lesson-content .objectives, .lesson-immersive .lesson-content .example,
+  .lesson-immersive .lesson-content .warning, .lesson-immersive .lesson-content .callout,
+  .lesson-immersive .lesson-content .recap, .study-quiz, .study-review { padding: 20px 17px; }
+  .lesson-immersive .lesson-content .formula { padding: 18px 15px; }
+  .learning-path { gap: 7px; }
+  .learning-path span { padding: 7px 9px; }
+  body.reading-large .lesson-content { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lesson-immersive * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+@media print {
+  .lesson-immersive .site-header, .lesson-immersive .site-footer,
+  .lesson-immersive .lesson-toc, .lesson-reading-controls, .learning-path,
+  .study-quiz form, .study-solution, .study-review .review-cta { display: none !important; }
+  .lesson-immersive .lesson-heading { padding: 0; border: none; background: white; box-shadow: none; }
+  .lesson-immersive .lesson-content { border: 0; box-shadow: none; padding: 0; }
+  .lesson-immersive .lesson-content > h2 { background: #eee; }
+  .lesson-immersive .lesson-content .formula, .study-review,
+  .lesson-immersive .lesson-content .example { break-inside: avoid; }
+  .support-scaffold:not([open]) > *:not(summary) { display: block !important; }
+  .support-scaffold summary { display: none; }
+}
