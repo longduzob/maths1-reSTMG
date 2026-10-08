@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Exercices corrigés du chapitre 1 de Première STMG : fonctions, lectures graphiques, droites, taux de variation et balayage.">
+  <meta name="description" content="Exercices interactifs du chapitre 1 de Première STMG : fonctions, lectures graphiques, droites, taux de variation et balayage.">
   <meta name="theme-color" content="#f8f7f3">
-  <title>Exercices · Chapitre 1 | Maths · Première STMG</title>
+  <title>Exercices interactifs · Chapitre 1 | Maths · Première STMG</title>
   <link rel="stylesheet" href="../assets/styles.css">
   <link rel="stylesheet" href="../assets/cours.css">
   <link rel="stylesheet" href="../assets/exercices.css">
+  <script src="../assets/exercices.js" defer></script>
 </head>
 <body class="exercise-page">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -20,193 +21,273 @@
     </div>
   </header>
 
-  <main id="contenu" class="container lesson-page" tabindex="-1">
+  <main id="contenu" class="container interactive-exercise-page" tabindex="-1" data-interactive-exercises>
     <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="../exercices.html">Tous les exercices</a><span>/</span><span aria-current="page">Chapitre 01</span></nav>
 
-    <header class="lesson-heading">
-      <p class="eyebrow">CHAPITRE 01 / S’ENTRAÎNER</p>
+    <header class="lesson-heading exercise-heading">
+      <p class="eyebrow">CHAPITRE 01 / PARCOURS INTERACTIF</p>
       <h1>Fonctions, droites et lectures graphiques</h1>
-      <p class="lead">Une série progressive pour vérifier les bases du chapitre avant de passer à la suite.</p>
+      <p class="lead">Un exercice à la fois : tu réponds, tu vérifies, puis tu avances dans la série.</p>
     </header>
 
-    <div class="lesson-layout">
-      <article class="lesson-content">
-        <section class="exercise-intro" aria-label="Conseil de travail">
-          <p><strong>Conseil :</strong> cherche chaque exercice avant d’ouvrir la correction. Les exercices 1 à 3 consolident les bases, les exercices 4 à 7 demandent davantage de méthode, et les deux derniers mélangent plusieurs idées.</p>
-          <span class="exercise-count">9 exercices</span>
-        </section>
+    <section class="exercise-progress" aria-label="Progression dans la série">
+      <div class="exercise-progress-top">
+        <strong id="exercise-progress-label">0 / 9 exercices validés</strong>
+        <span class="score-chip">Score <span id="exercise-score">0/9</span></span>
+      </div>
+      <div class="progress-track" aria-hidden="true"><span id="exercise-progress-fill"></span></div>
+      <nav class="exercise-stepper" aria-label="Choisir un exercice">
+        <button type="button" data-step="0" aria-label="Exercice 1">1</button>
+        <button type="button" data-step="1" aria-label="Exercice 2">2</button>
+        <button type="button" data-step="2" aria-label="Exercice 3">3</button>
+        <button type="button" data-step="3" aria-label="Exercice 4">4</button>
+        <button type="button" data-step="4" aria-label="Exercice 5">5</button>
+        <button type="button" data-step="5" aria-label="Exercice 6">6</button>
+        <button type="button" data-step="6" aria-label="Exercice 7">7</button>
+        <button type="button" data-step="7" aria-label="Exercice 8">8</button>
+        <button type="button" data-step="8" aria-label="Exercice 9">9</button>
+      </nav>
+    </section>
 
-        <section class="exercise-block" id="exercice-1">
-          <div class="exercise-head"><span class="exercise-number">01</span><h2>Images et antécédents</h2><span class="difficulty">Bases</span></div>
-          <p>On considère la fonction <strong>f(x) = 3x − 5</strong>.</p>
-          <ol>
-            <li>Calculer f(−2), f(0) et f(4).</li>
-            <li>Déterminer l’antécédent de 10.</li>
-            <li>Déterminer l’antécédent de −5.</li>
-          </ol>
-          <details class="hint"><summary>Voir une indication</summary><p>Pour une image, remplace x par la valeur donnée. Pour un antécédent, résous une équation de la forme f(x) = nombre.</p></details>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>f(−2) = 3 × (−2) − 5 = −11 ; f(0) = −5 ; f(4) = 12 − 5 = 7.</p>
-            <p>Pour l’antécédent de 10 : 3x − 5 = 10, donc 3x = 15 et <strong>x = 5</strong>.</p>
-            <p>Pour l’antécédent de −5 : 3x − 5 = −5, donc 3x = 0 et <strong>x = 0</strong>.</p>
-          </details>
-        </section>
+    <noscript><p class="catalog-notice">JavaScript est désactivé : les énoncés et corrections restent lisibles, mais la vérification automatique des réponses n’est pas disponible.</p></noscript>
 
-        <section class="exercise-block" id="exercice-2">
-          <div class="exercise-head"><span class="exercise-number">02</span><h2>Modéliser un tarif</h2><span class="difficulty">Bases</span></div>
-          <p>Une entreprise facture une location <strong>18 € de frais fixes</strong> puis <strong>6 € par heure</strong>. On note C(t) le prix, en euros, pour t heures, avec t ∈ [0 ; 10].</p>
-          <ol>
-            <li>Écrire C(t).</li>
-            <li>Calculer le prix pour 4 heures.</li>
-            <li>Combien d’heures peut-on louer pour 60 € ?</li>
-            <li>Interpréter les nombres 18 et 6 dans la formule.</li>
-          </ol>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>La formule est <strong>C(t) = 18 + 6t</strong>.</p>
-            <p>C(4) = 18 + 6 × 4 = <strong>42 €</strong>.</p>
-            <p>18 + 6t = 60 ⇔ 6t = 42 ⇔ <strong>t = 7</strong>. On peut louer pendant 7 heures.</p>
-            <p>18 représente les frais fixes ; 6 est le prix ajouté pour chaque heure de location.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-3">
-          <div class="exercise-head"><span class="exercise-number">03</span><h2>Lire une courbe</h2><span class="difficulty">Bases</span></div>
-          <p>La courbe ci-dessous représente une fonction g sur [0 ; 4].</p>
-          <figure class="exercise-graph">
-            <svg viewBox="0 0 600 320" role="img" aria-labelledby="exo-graph-title exo-graph-desc">
-              <title id="exo-graph-title">Courbe de g sur l’intervalle 0 à 4</title>
-              <desc id="exo-graph-desc">La courbe passe par 0,3 ; 1,0 ; 2,-1 ; 3,0 ; 4,3.</desc>
-              <g stroke="#e5e1ed"><path d="M90 70H520M90 120H520M90 170H520M90 270H520M190 40V290M290 40V290M390 40V290M490 40V290"/></g>
-              <g stroke="#656372" stroke-width="1.5"><path d="M60 220H545M90 295V30"/></g>
-              <path d="M90 70 Q290 470 490 70" fill="none" stroke="#246453" stroke-width="3"/>
-              <g fill="#246453"><circle cx="190" cy="220" r="5"/><circle cx="290" cy="270" r="5"/><circle cx="390" cy="220" r="5"/></g>
-              <g fill="#252436" font-size="14" font-family="Arial, sans-serif"><text x="74" y="239">0</text><text x="186" y="240">1</text><text x="286" y="240">2</text><text x="386" y="240">3</text><text x="486" y="240">4</text><text x="60" y="275">−1</text><text x="70" y="175">1</text><text x="70" y="125">2</text><text x="70" y="75">3</text><text x="549" y="225">x</text><text x="95" y="27">y</text></g>
-            </svg>
-          </figure>
-          <ol>
-            <li>Lire g(0) et g(2).</li>
-            <li>Donner les antécédents de 0.</li>
-            <li>Quel est le minimum de g ? Pour quelle valeur de x est-il atteint ?</li>
-            <li>Résoudre graphiquement g(x) &lt; 0.</li>
-          </ol>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>On lit <strong>g(0) = 3</strong> et <strong>g(2) = −1</strong>.</p>
-            <p>La courbe coupe l’axe des abscisses en x = 1 et x = 3 : les antécédents de 0 sont donc <strong>1 et 3</strong>.</p>
-            <p>Le minimum vaut <strong>−1</strong> et il est atteint pour <strong>x = 2</strong>.</p>
-            <p>La courbe est sous l’axe des abscisses entre 1 et 3 : <strong>x ∈ ]1 ; 3[</strong>.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-4">
-          <div class="exercise-head"><span class="exercise-number">04</span><h2>Trouver l’équation d’une droite</h2><span class="difficulty">Méthode</span></div>
-          <p>Une droite passe par A(1 ; 5) et B(4 ; 14).</p>
-          <ol>
-            <li>Calculer son coefficient directeur.</li>
-            <li>Déterminer son ordonnée à l’origine.</li>
-            <li>Donner l’expression de la fonction affine h représentée par cette droite.</li>
-            <li>Calculer h(10).</li>
-          </ol>
-          <details class="hint"><summary>Voir une indication</summary><p>Commence par a = (y<sub>B</sub> − y<sub>A</sub>)/(x<sub>B</sub> − x<sub>A</sub>), puis utilise les coordonnées de A dans y = ax + b.</p></details>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>a = (14 − 5)/(4 − 1) = 9/3 = <strong>3</strong>.</p>
-            <p>Avec A(1 ; 5) : 5 = 3 × 1 + b, donc <strong>b = 2</strong>.</p>
-            <p>Ainsi <strong>h(x) = 3x + 2</strong>. Enfin h(10) = 30 + 2 = <strong>32</strong>.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-5">
-          <div class="exercise-head"><span class="exercise-number">05</span><h2>Comparer deux tarifs</h2><span class="difficulty">Méthode</span></div>
-          <p>Deux offres de location sont données par :</p>
-          <div class="formula">A(t) = 20 + 9t &nbsp;&nbsp;&nbsp; et &nbsp;&nbsp;&nbsp; B(t) = 14t</div>
-          <p>où t est une durée en heures.</p>
-          <ol>
-            <li>Calculer les deux prix pour 2 heures.</li>
-            <li>Déterminer la durée pour laquelle les deux offres coûtent le même prix.</li>
-            <li>À partir de quelle durée l’offre A est-elle au plus aussi chère que l’offre B ?</li>
-          </ol>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>A(2) = 20 + 18 = <strong>38 €</strong> et B(2) = 28 € : pour 2 heures, B est moins chère.</p>
-            <p>20 + 9t = 14t ⇔ 20 = 5t ⇔ <strong>t = 4</strong>. Les deux offres valent alors 56 €.</p>
-            <p>A(t) ≤ B(t) ⇔ 20 + 9t ≤ 14t ⇔ 20 ≤ 5t ⇔ <strong>t ≥ 4</strong>.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-6">
-          <div class="exercise-head"><span class="exercise-number">06</span><h2>Taux de variation</h2><span class="difficulty">Méthode</span></div>
-          <p>On considère la fonction q(x) = x<sup>2</sup>.</p>
-          <ol>
-            <li>Calculer le taux de variation de q entre 2 et 5.</li>
-            <li>Calculer le taux de variation de q entre 5 et 6.</li>
-            <li>Que montrent ces deux résultats ?</li>
-          </ol>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>Entre 2 et 5 : (q(5) − q(2))/(5 − 2) = (25 − 4)/3 = 21/3 = <strong>7</strong>.</p>
-            <p>Entre 5 et 6 : (36 − 25)/(6 − 5) = <strong>11</strong>.</p>
-            <p>Les deux taux sont différents. La pente moyenne dépend donc de l’intervalle : q n’est pas une fonction affine.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-7">
-          <div class="exercise-head"><span class="exercise-number">07</span><h2>Signe et variations d’une fonction affine</h2><span class="difficulty">Méthode</span></div>
-          <p>On considère p(x) = −2x + 8 sur l’intervalle [0 ; 6].</p>
-          <ol>
-            <li>La fonction p est-elle croissante ou décroissante ? Justifier.</li>
-            <li>Résoudre p(x) = 0.</li>
-            <li>Résoudre p(x) ≥ 0 sur [0 ; 6].</li>
-          </ol>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>Le coefficient directeur vaut −2, qui est négatif : <strong>p est décroissante</strong>.</p>
-            <p>−2x + 8 = 0 ⇔ −2x = −8 ⇔ <strong>x = 4</strong>.</p>
-            <p>−2x + 8 ≥ 0 ⇔ −2x ≥ −8. En divisant par −2, on inverse le sens de l’inégalité : x ≤ 4. Sur [0 ; 6], la solution est <strong>[0 ; 4]</strong>.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-8">
-          <div class="exercise-head"><span class="exercise-number">08</span><h2>Grandeurs inversement proportionnelles</h2><span class="difficulty">Approfondir</span></div>
-          <p>Pour parcourir 240 km à vitesse constante v, la durée du trajet est donnée par <strong>t(v) = 240/v</strong>, avec v &gt; 0.</p>
-          <ol>
-            <li>Calculer la durée du trajet à 60 km/h, 80 km/h et 120 km/h.</li>
-            <li>Que devient la durée lorsque la vitesse est doublée de 60 à 120 km/h ?</li>
-            <li>La fonction t est-elle affine ? Justifier simplement.</li>
-          </ol>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>t(60) = 240/60 = <strong>4 h</strong> ; t(80) = <strong>3 h</strong> ; t(120) = <strong>2 h</strong>.</p>
-            <p>Quand la vitesse double de 60 à 120 km/h, la durée est divisée par deux, de 4 h à 2 h.</p>
-            <p>La fonction n’est pas affine : elle est de la forme 240/v, et non av + b. Le produit v × t reste constant et vaut 240.</p>
-          </details>
-        </section>
-
-        <section class="exercise-block" id="exercice-9">
-          <div class="exercise-head"><span class="exercise-number">09</span><h2>Encadrer une solution par balayage</h2><span class="difficulty">Approfondir</span></div>
-          <p>On cherche à encadrer la solution positive de x<sup>2</sup> = 5 au centième.</p>
-          <ol>
-            <li>Calculer 2,23<sup>2</sup> et 2,24<sup>2</sup>.</li>
-            <li>Comparer ces deux résultats à 5.</li>
-            <li>En déduire un encadrement de √5 au centième.</li>
-          </ol>
-          <details class="hint"><summary>Voir une indication</summary><p>La fonction carré est croissante pour les nombres positifs : si a² &lt; 5 &lt; b², alors a &lt; √5 &lt; b.</p></details>
-          <details class="check"><summary>Afficher la correction</summary>
-            <p>2,23<sup>2</sup> = <strong>4,9729</strong> et 2,24<sup>2</sup> = <strong>5,0176</strong>.</p>
-            <p>On a donc 4,9729 &lt; 5 &lt; 5,0176.</p>
-            <div class="formula">2,23 &lt; √5 &lt; 2,24</div>
-            <p>C’est un encadrement au centième. Pour être plus précis, on pourrait recommencer avec un pas de 0,001.</p>
-          </details>
-        </section>
-
-        <section class="score-guide" aria-labelledby="bilan-title">
-          <h2 id="bilan-title">Bilan rapide</h2>
-          <ul>
-            <li><strong>Exercices 1 à 3 réussis :</strong> les bases sont en place.</li>
-            <li><strong>Exercices 4 à 7 réussis :</strong> les méthodes principales du chapitre sont maîtrisées.</li>
-            <li><strong>Exercices 8 et 9 réussis :</strong> tu sais aussi mobiliser les notions dans une situation moins directe.</li>
-          </ul>
-        </section>
-
-        <nav class="course-pagination" aria-label="Navigation liée au chapitre">
-          <a href="../cours/fonctions.html">← Revoir la leçon du chapitre 1</a>
-          <a href="../exercices.html">Retour aux exercices</a>
-        </nav>
+    <section class="exercise-stage" aria-live="polite">
+      <article class="exercise-block is-active" id="exercice-1">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">01</span><div><p class="exercise-kicker">Fonctions · Bases</p><h2>Images et antécédents</h2></div></div>
+            <p>On considère la fonction <strong>f(x) = 3x − 5</strong>.</p>
+            <ol>
+              <li>Calculer f(−2), f(0) et f(4).</li>
+              <li>Déterminer l’antécédent de 10.</li>
+              <li>Déterminer l’antécédent de −5.</li>
+            </ol>
+            <details class="hint"><summary>Indice</summary><p>Pour une image, remplace x dans la formule. Pour un antécédent, résous une équation.</p></details>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="answer-grid three">
+              <label class="answer-row"><span>f(−2)</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="-11" aria-label="f de moins 2"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>f(0)</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="-5" aria-label="f de 0"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>f(4)</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="7" aria-label="f de 4"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <label class="answer-row"><span>Antécédent de 10</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="5"><small class="answer-status" aria-live="polite"></small></label>
+            <label class="answer-row"><span>Antécédent de −5</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="0"><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>f(−2) = −11, f(0) = −5 et f(4) = 7. Pour f(x) = 10 : 3x − 5 = 10, donc x = 5. Pour f(x) = −5 : 3x − 5 = −5, donc x = 0.</p></details>
+          </form>
+        </div>
       </article>
+
+      <article class="exercise-block" id="exercice-2">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">02</span><div><p class="exercise-kicker">Modélisation · Bases</p><h2>Construire un tarif</h2></div></div>
+            <p>Une entreprise facture une location <strong>18 € de frais fixes</strong> puis <strong>6 € par heure</strong>. On note C(t) le prix pour t heures.</p>
+            <ol><li>Compléter la formule de C(t).</li><li>Calculer le prix pour 4 heures.</li><li>Déterminer la durée correspondant à 60 €.</li></ol>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="formula-builder answer-row">
+              <span>C(t) =</span>
+              <input inputmode="decimal" autocomplete="off" data-type="number" data-expect="18" aria-label="Frais fixes">
+              <span>+</span>
+              <input inputmode="decimal" autocomplete="off" data-type="number" data-expect="6" aria-label="Prix par heure">
+              <span>t</span>
+              <small class="answer-status" aria-live="polite"></small>
+            </div>
+            <label class="answer-row"><span>Prix pour 4 h, en €</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="42"><small class="answer-status" aria-live="polite"></small></label>
+            <label class="answer-row"><span>Durée pour 60 €, en h</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="7"><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>C(t) = 18 + 6t. Pour 4 h : C(4) = 42 €. Pour 60 € : 18 + 6t = 60, donc t = 7 h.</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-3">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">03</span><div><p class="exercise-kicker">Graphique · Bases</p><h2>Lire une courbe</h2></div></div>
+            <p>Observe la courbe de g sur [0 ; 4], puis réponds sans utiliser de formule.</p>
+            <figure class="exercise-graph">
+              <svg viewBox="0 0 600 320" role="img" aria-labelledby="exo-graph-title exo-graph-desc">
+                <title id="exo-graph-title">Courbe de g sur l’intervalle 0 à 4</title>
+                <desc id="exo-graph-desc">La courbe passe par 0,3 ; 1,0 ; 2,-1 ; 3,0 ; 4,3.</desc>
+                <g stroke="#e5e1ed"><path d="M90 70H520M90 120H520M90 170H520M90 270H520M190 40V290M290 40V290M390 40V290M490 40V290"/></g>
+                <g stroke="#656372" stroke-width="1.5"><path d="M60 220H545M90 295V30"/></g>
+                <path d="M90 70 Q290 470 490 70" fill="none" stroke="#246453" stroke-width="3"/>
+                <g fill="#246453"><circle cx="190" cy="220" r="5"/><circle cx="290" cy="270" r="5"/><circle cx="390" cy="220" r="5"/></g>
+                <g fill="#252436" font-size="14" font-family="Arial, sans-serif"><text x="74" y="239">0</text><text x="186" y="240">1</text><text x="286" y="240">2</text><text x="386" y="240">3</text><text x="486" y="240">4</text><text x="60" y="275">−1</text><text x="70" y="175">1</text><text x="70" y="125">2</text><text x="70" y="75">3</text><text x="549" y="225">x</text><text x="95" y="27">y</text></g>
+              </svg>
+            </figure>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes lectures</h3>
+            <div class="answer-grid two">
+              <label class="answer-row"><span>g(0)</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="3"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>g(2)</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="-1"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <label class="answer-row"><span>Antécédents de 0</span><input autocomplete="off" placeholder="ex. 1 ; 3" data-expect="1;3|1,3"><small class="answer-status" aria-live="polite"></small></label>
+            <div class="answer-grid two">
+              <label class="answer-row"><span>Minimum de g</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="-1"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>Atteint pour x =</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="2"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <label class="answer-row"><span>Solutions de g(x) &lt; 0</span><select data-expect="]1;3["><option value="">Choisir…</option><option>[1 ; 3]</option><option>]1 ; 3[</option><option>[0 ; 1] ∪ [3 ; 4]</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>g(0) = 3, g(2) = −1. Les antécédents de 0 sont 1 et 3. Le minimum vaut −1, atteint en x = 2. La courbe est sous l’axe pour x ∈ ]1 ; 3[.</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-4">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">04</span><div><p class="exercise-kicker">Droites · Méthode</p><h2>Déterminer une fonction affine</h2></div></div>
+            <p>Une droite passe par <strong>A(1 ; 5)</strong> et <strong>B(4 ; 14)</strong>.</p>
+            <ol><li>Calculer son coefficient directeur a.</li><li>Déterminer son ordonnée à l’origine b.</li><li>Calculer h(10).</li></ol>
+            <details class="hint"><summary>Indice</summary><p>Utilise a = (y<sub>B</sub> − y<sub>A</sub>)/(x<sub>B</sub> − x<sub>A</sub>), puis remplace les coordonnées d’un point dans y = ax + b.</p></details>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="answer-grid two">
+              <label class="answer-row"><span>a =</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="3"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>b =</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="2"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <div class="formula-builder answer-row"><span>h(x) =</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="3" aria-label="Coefficient de x"><span>x +</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="2" aria-label="Ordonnée à l'origine"><small class="answer-status" aria-live="polite"></small></div>
+            <label class="answer-row"><span>h(10)</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="32"><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>a = (14 − 5)/(4 − 1) = 3. Puis 5 = 3 × 1 + b, donc b = 2. Ainsi h(x) = 3x + 2 et h(10) = 32.</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-5">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">05</span><div><p class="exercise-kicker">Comparaison · Méthode</p><h2>Comparer deux tarifs</h2></div></div>
+            <p>Deux offres de location sont données par :</p>
+            <div class="formula">A(t) = 20 + 9t &nbsp;&nbsp; et &nbsp;&nbsp; B(t) = 14t</div>
+            <ol><li>Calculer les deux prix pour 2 h.</li><li>Trouver la durée d’égalité.</li><li>Déterminer quand A est au plus aussi chère que B.</li></ol>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="answer-grid two">
+              <label class="answer-row"><span>A(2), en €</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="38"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>B(2), en €</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="28"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <label class="answer-row"><span>Durée d’égalité, en h</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="4"><small class="answer-status" aria-live="polite"></small></label>
+            <label class="answer-row"><span>A(t) ≤ B(t) lorsque</span><select data-expect="t>=4"><option value="">Choisir…</option><option value="t<4">t &lt; 4</option><option value="t<=4">t ≤ 4</option><option value="t>=4">t ≥ 4</option><option value="t>4">t &gt; 4</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>A(2) = 38 €, B(2) = 28 €. Les offres sont égales pour t = 4 h. L’inégalité 20 + 9t ≤ 14t donne t ≥ 4.</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-6">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">06</span><div><p class="exercise-kicker">Variation · Méthode</p><h2>Calculer un taux de variation</h2></div></div>
+            <p>On considère <strong>q(x) = x<sup>2</sup></strong>.</p>
+            <ol><li>Calculer le taux de variation entre 2 et 5.</li><li>Calculer celui entre 5 et 6.</li><li>Interpréter la différence.</li></ol>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="answer-grid two">
+              <label class="answer-row"><span>Entre 2 et 5</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="7"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>Entre 5 et 6</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="11"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <label class="answer-row"><span>Conclusion</span><select data-expect="non-affine"><option value="">Choisir…</option><option value="affine">q est affine</option><option value="non-affine">q n’est pas affine : la pente moyenne change</option><option value="constante">q est constante</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>Entre 2 et 5 : (25 − 4)/(5 − 2) = 7. Entre 5 et 6 : (36 − 25)/(6 − 5) = 11. Les pentes moyennes diffèrent : q n’est pas affine.</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-7">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">07</span><div><p class="exercise-kicker">Signe · Méthode</p><h2>Étudier une fonction affine</h2></div></div>
+            <p>On considère <strong>p(x) = −2x + 8</strong> sur [0 ; 6].</p>
+            <ol><li>Donner le sens de variation de p.</li><li>Résoudre p(x) = 0.</li><li>Résoudre p(x) ≥ 0 sur [0 ; 6].</li></ol>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <label class="answer-row"><span>Sens de variation</span><select data-expect="decroissante"><option value="">Choisir…</option><option value="croissante">Croissante</option><option value="decroissante">Décroissante</option><option value="constante">Constante</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <label class="answer-row"><span>Solution de p(x) = 0</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="4"><small class="answer-status" aria-live="polite"></small></label>
+            <label class="answer-row"><span>Solutions de p(x) ≥ 0</span><select data-expect="[0;4]"><option value="">Choisir…</option><option value="[0;4]">[0 ; 4]</option><option value="[4;6]">[4 ; 6]</option><option value="]0;4[">]0 ; 4[</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>Le coefficient directeur −2 est négatif : p est décroissante. p(x) = 0 pour x = 4. Sur [0 ; 6], p(x) ≥ 0 pour x ∈ [0 ; 4].</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-8">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">08</span><div><p class="exercise-kicker">Modèle · Approfondir</p><h2>Inversement proportionnel</h2></div></div>
+            <p>Pour parcourir 240 km à vitesse constante v, la durée est <strong>t(v) = 240/v</strong>, avec v &gt; 0.</p>
+            <ol><li>Calculer les durées à 60, 80 et 120 km/h.</li><li>Observer l’effet d’un doublement de la vitesse.</li><li>Identifier la nature du modèle.</li></ol>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="answer-grid three">
+              <label class="answer-row"><span>t(60), en h</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="4"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>t(80), en h</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="3"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>t(120), en h</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="2"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <label class="answer-row"><span>Quand la vitesse double de 60 à 120</span><select data-expect="divisee-par-deux"><option value="">Choisir…</option><option value="double">La durée double</option><option value="divisee-par-deux">La durée est divisée par deux</option><option value="ne-change-pas">La durée ne change pas</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <label class="answer-row"><span>Le modèle t(v) est</span><select data-expect="inverse"><option value="">Choisir…</option><option value="affine">affine</option><option value="inverse">inversement proportionnel</option><option value="constant">constant</option></select><small class="answer-status" aria-live="polite"></small></label>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>t(60) = 4 h, t(80) = 3 h et t(120) = 2 h. Doubler la vitesse de 60 à 120 divise la durée par deux. Le modèle est inversement proportionnel.</p></details>
+          </form>
+        </div>
+      </article>
+
+      <article class="exercise-block" id="exercice-9">
+        <div class="exercise-workspace">
+          <section class="exercise-statement">
+            <div class="exercise-head"><span class="exercise-number">09</span><div><p class="exercise-kicker">Balayage · Approfondir</p><h2>Encadrer √5</h2></div></div>
+            <p>On cherche à encadrer la solution positive de <strong>x<sup>2</sup> = 5</strong> au centième.</p>
+            <ol><li>Calculer 2,23² et 2,24².</li><li>Comparer les deux valeurs à 5.</li><li>En déduire l’encadrement.</li></ol>
+            <details class="hint"><summary>Indice</summary><p>Pour des nombres positifs, la fonction carré est croissante.</p></details>
+          </section>
+          <form class="exercise-form" novalidate>
+            <h3>Tes réponses</h3>
+            <div class="answer-grid two">
+              <label class="answer-row"><span>2,23²</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="4.9729" data-tolerance="0.00001"><small class="answer-status" aria-live="polite"></small></label>
+              <label class="answer-row"><span>2,24²</span><input inputmode="decimal" autocomplete="off" data-type="number" data-expect="5.0176" data-tolerance="0.00001"><small class="answer-status" aria-live="polite"></small></label>
+            </div>
+            <div class="interval-builder answer-row">
+              <input inputmode="decimal" autocomplete="off" data-type="number" data-expect="2.23" aria-label="Borne inférieure">
+              <span>&lt; √5 &lt;</span>
+              <input inputmode="decimal" autocomplete="off" data-type="number" data-expect="2.24" aria-label="Borne supérieure">
+              <small class="answer-status" aria-live="polite"></small>
+            </div>
+            <div class="exercise-actions"><button class="button button-primary" type="submit">Vérifier</button><button class="button button-secondary" type="button" data-action="reset">Effacer</button></div>
+            <p class="exercise-feedback" aria-live="polite"></p>
+            <details class="check"><summary>Voir la correction détaillée</summary><p>2,23² = 4,9729 et 2,24² = 5,0176. Ainsi 4,9729 &lt; 5 &lt; 5,0176, donc <strong>2,23 &lt; √5 &lt; 2,24</strong>.</p></details>
+          </form>
+        </div>
+      </article>
+    </section>
+
+    <nav class="exercise-linear-nav" aria-label="Navigation entre les exercices">
+      <button class="button button-secondary" type="button" data-nav="previous">← Exercice précédent</button>
+      <span class="nav-help">Tu peux aussi utiliser les numéros en haut.</span>
+      <button class="button button-primary" type="button" data-nav="next">Exercice suivant →</button>
+    </nav>
+
+    <div class="exercise-links">
+      <a href="../cours/fonctions.html">← Revoir la leçon du chapitre 1</a>
+      <a href="../exercices.html">Retour à tous les exercices</a>
     </div>
   </main>
 
