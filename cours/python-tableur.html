@@ -7,6 +7,7 @@ if capital &gt;= 240:
 else:
     message = "Seuil non atteint"
 print(message)</code></pre><p>L’indentation délimite les blocs. <code>and</code>, <code>or</code> et <code>not</code> traduisent « et », « ou », « non ». Pour tester l’intervalle [0 ; 1], on peut écrire <code>0 &lt;= p &lt;= 1</code>. Un test qui porte sur des décimaux calculés doit tenir compte des arrondis de la machine.</p>
+<div class="example"><h3>Suivre une affectation sans calcul compliqué</h3><p>Si <code>stock = 8</code>, puis <code>stock = stock + 3</code>, la variable contient désormais <strong>11</strong>. Le signe <code>=</code> signifie ici « stocker une nouvelle valeur », pas « poser une équation ».</p></div>
 <h2>2. Fonctions : entrées, sortie et réutilisation</h2><p>Une fonction regroupe des instructions. Ses paramètres sont les entrées ; <code>return</code> transmet le résultat. <code>print</code> affiche un texte mais ne remplace pas le retour d’une valeur.</p><pre><code>def valeur_finale(initiale, taux):
     return initiale * (1 + taux)
 
