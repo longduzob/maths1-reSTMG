@@ -76,7 +76,7 @@ def load_functions(page: Page) -> dict:
 
 
 def main():
-    paths = sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))
+    paths = (sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))\n             + sorted((ROOT / 'exercices').glob('*.html')))
     pages = {path.resolve(): Page(path.read_text(encoding='utf-8')) for path in paths}
     assert {p.stem for p in (ROOT / 'cours').glob('*.html')} == set(COURSES)
     links_checked = 0
@@ -113,6 +113,10 @@ def main():
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(catalog.links)
     sources = pages[(ROOT / 'programme.html').resolve()]
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(sources.links)
+    exercises = pages[(ROOT / 'exercices' / 'fonctions.html').resolve()]
+    assert exercises.classes['exercise-block'] == 9
+    assert exercises.classes['check'] == 9
+    assert '../cours/fonctions.html' in exercises.links
     print(f'STATIC OK: {len(pages)} HTML pages; 16 lessons; {links_checked} local links; {snippets} Python blocks compiled.')
 
     def funcs(slug):
