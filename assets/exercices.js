@@ -37,6 +37,30 @@
     return expected.includes(actual);
   }
 
+  function revealAnswers(form) {
+    form.querySelectorAll('[data-expect]').forEach(control => {
+      const answer = (control.dataset.expect || '').split('|')[0].trim();
+      if (!answer) return;
+
+      if (control.tagName === 'SELECT') {
+        const match = Array.from(control.options)
+          .find(option => normalise(option.value) === normalise(answer));
+        if (match) control.value = match.value;
+      } else if (control.dataset.type === 'number') {
+        control.value = answer.replace(/\./g, ',');
+      } else {
+        control.value = answer.replace(/;/g, ' ; ');
+      }
+    });
+
+    form.querySelectorAll('.answer-row').forEach(row => {
+      row.classList.remove('is-correct', 'is-wrong', 'is-revealed');
+      row.classList.add('is-revealed');
+      const status = row.querySelector('.answer-status');
+      if (status) status.textContent = 'Réponse du corrigé';
+    });
+  }
+
   function updateRow(row) {
     const controls = Array.from(row.querySelectorAll('[data-expect]'));
     const hasEmpty = controls.some(control => !control.value.trim());
@@ -102,7 +126,18 @@
   slides.forEach((slide, index) => {
     const form = slide.querySelector('.exercise-form');
     const reset = slide.querySelector('[data-action="reset"]');
+    const correction = slide.querySelector('details.check');
     if (!form) return;
+
+    if (correction) {
+      correction.addEventListener('toggle', () => {
+        if (!correction.open) return;
+        form.dataset.revealed = 'true';
+        revealAnswers(form);
+        const summary = form.querySelector('.exercise-feedback');
+        if (summary) summary.textContent = 'Les bonnes réponses sont affichées dans les cases. Clique sur Effacer pour recommencer sans aide.';
+      });
+    }
 
     form.addEventListener('submit', event => {
       event.preventDefault();
@@ -112,8 +147,12 @@
       const summary = form.querySelector('.exercise-feedback');
 
       if (allCorrect) {
-        completed.add(index);
-        if (summary) summary.textContent = 'Exercice validé. Tu peux passer au suivant.';
+        if (form.dataset.revealed === 'true' && !completed.has(index)) {
+          if (summary) summary.textContent = 'Réponses correctes, mais le corrigé a été consulté : cet essai ne compte pas pour le score. Clique sur Effacer pour recommencer sans aide.';
+        } else {
+          completed.add(index);
+          if (summary) summary.textContent = 'Exercice validé. Tu peux passer au suivant.';
+        }
       } else {
         completed.delete(index);
         const correctCount = results.filter(Boolean).length;
@@ -125,7 +164,7 @@
     form.addEventListener('input', event => {
       const row = event.target.closest('.answer-row');
       if (!row) return;
-      row.classList.remove('is-correct', 'is-wrong');
+      row.classList.remove('is-correct', 'is-wrong', 'is-revealed');
       const status = row.querySelector('.answer-status');
       if (status) status.textContent = '';
     });
@@ -133,7 +172,7 @@
     form.addEventListener('change', event => {
       const row = event.target.closest('.answer-row');
       if (!row) return;
-      row.classList.remove('is-correct', 'is-wrong');
+      row.classList.remove('is-correct', 'is-wrong', 'is-revealed');
       const status = row.querySelector('.answer-status');
       if (status) status.textContent = '';
     });
@@ -141,8 +180,10 @@
     if (reset) {
       reset.addEventListener('click', () => {
         form.reset();
+        delete form.dataset.revealed;
+        if (correction) correction.open = false;
         completed.delete(index);
-        form.querySelectorAll('.answer-row').forEach(row => row.classList.remove('is-correct', 'is-wrong'));
+        form.querySelectorAll('.answer-row').forEach(row => row.classList.remove('is-correct', 'is-wrong', 'is-revealed'));
         form.querySelectorAll('.answer-status').forEach(status => status.textContent = '');
         const summary = form.querySelector('.exercise-feedback');
         if (summary) summary.textContent = '';
