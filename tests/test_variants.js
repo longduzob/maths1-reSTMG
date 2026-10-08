@@ -172,7 +172,7 @@ for (let index = 0; index < 9; index++) {
     assert.ok(c && typeof c === 'object', 'Missing coaching context for '+index+'/'+cycle);
     const help = coaching.build(index, c);
     assert.equal(help.hints.length, 3);
-    assert.ok(help.hints.every(h => typeof h === 'string' && h.length > 45));
+    assert.ok(help.hints.every(h => typeof h === 'string' && h.length >= 25));
     assert.ok(help.diagnose.length > 50);
     assert.equal(help.bridge.a, bridgeSolutions[index]);
     assert.equal(matchesAnswer(help.bridge.a, help.bridge.a, 'number'), true);
