@@ -42,6 +42,12 @@ def main():
                     assert response.status == 200, name
                     expect(page.locator('h1')).to_be_visible()
                     assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), (name, width, 'horizontal overflow')
+                    if name.startswith('exercices/'):
+                        expected = 9 if name == 'exercices/fonctions.html' else 8
+                        expect(page.locator('.exercise-block')).to_have_count(expected)
+                        expect(page.locator('.exercise-stepper button')).to_have_count(expected)
+                        expect(page.locator('#exercice-1')).to_be_visible()
+                        expect(page.locator('#exercice-2')).to_be_hidden()
                     if name.startswith('cours/'):
                         expect(page.locator('.lesson-toc')).to_be_visible()
                         expect(page.locator('.lesson-content')).to_be_visible()
@@ -121,6 +127,31 @@ def main():
             for control, expected in zip(last_inputs.all(), ['4,9729', '5,0176', '2,23', '2,24']):
                 expect(control).to_have_value(expected)
             expect(page.locator('#exercise-score')).to_have_text('2/9')
+            # Tous les nouveaux parcours : valider, consulter, recommencer.
+            extra_slugs = ['second-degre','suites','suites-arithmetiques','suites-geometriques','derivees','variations','statistiques-deux-variables','probabilites-conditionnelles','bernoulli','variables-aleatoires','calcul','evolutions','logique','statistiques-descriptives','python-tableur']
+            for slug in extra_slugs:
+                page.goto(base + f'exercices/{slug}.html')
+                expect(page.locator('.exercise-block')).to_have_count(8)
+                first = page.locator('#exercice-1 [data-expect]')
+                assert first.count() >= 2, slug
+                for control in first.all():
+                    value = control.get_attribute('data-expect').split('|')[0]
+                    if control.evaluate('(el) => el.tagName === "SELECT"'):
+                        control.select_option(value=value)
+                    else:
+                        control.fill(value)
+                page.locator('#exercice-1 button[type="submit"]').click()
+                expect(page.locator('#exercise-score')).to_have_text('1/8')
+                page.locator('#exercice-1 details.check summary').click()
+                expect(page.locator('#exercice-1 .answer-row.was-correct')).to_have_count(first.count())
+                page.locator('[data-nav="next"]').click()
+                expect(page.locator('#exercice-2')).to_be_visible()
+                page.locator('#exercice-2 details.check summary').click()
+                expect(page.locator('#exercice-2 .answer-row.was-wrong')).not_to_have_count(0)
+                expect(page.locator('#exercise-score')).to_have_text('1/8')
+                page.locator('#exercice-2 [data-action="reset"]').click()
+                expect(page.locator('#exercice-2 .answer-row.is-revealed')).to_have_count(0)
+
             page.goto(base + 'lecons.html')
             expect(page.locator('.lesson-card:visible')).to_have_count(16)
             page.locator('#course-search').fill('derivee')
