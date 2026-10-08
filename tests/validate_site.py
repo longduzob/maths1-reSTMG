@@ -4,6 +4,7 @@ Only Python's standard library is required. Does not request external URLs.
 """
 from __future__ import annotations
 import ast
+import json
 import csv
 import math
 import re
@@ -114,10 +115,50 @@ def main():
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(catalog.links)
     sources = pages[(ROOT / 'programme.html').resolve()]
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(sources.links)
-    exercises = pages[(ROOT / 'exercices' / 'fonctions.html').resolve()]
-    assert exercises.classes['exercise-block'] == 9
-    assert exercises.classes['check'] == 9
-    assert '../cours/fonctions.html' in exercises.links
+    exercises_catalog = pages[(ROOT / 'exercices.html').resolve()]
+    assert exercises_catalog.classes['lesson-card'] == len(COURSES)
+    assert {f'exercices/{slug}.html' for slug in COURSES}.issubset(exercises_catalog.links)
+    count_exercises = 0
+    for slug in COURSES:
+        page = pages[(ROOT / 'exercices' / f'{slug}.html').resolve()]
+        assert f'../cours/{slug}.html' in page.links, slug
+        lesson = pages[(ROOT / 'cours' / f'{slug}.html').resolve()]
+        assert f'../exercices/{slug}.html' in lesson.links, slug
+
+        if slug == 'fonctions':
+            assert page.classes['exercise-block'] == 9
+            assert page.classes['check'] == 9
+            count_exercises += 9
+            continue
+
+        source = (ROOT / 'exercices' / f'{slug}.html').read_text(encoding='utf-8')
+        match = re.search(r'<script type="application/json" id="exercise-data">([\s\S]*?)</script>', source)
+        assert match, (slug, 'missing exercise JSON')
+        info = json.loads(match.group(1))
+        assert info['slug'] == slug
+        assert len(info['exercises']) == 8, (slug, len(info['exercises']))
+        assert '../assets/exercices-renderer.js' in page.links, slug
+        assert '../assets/exercices.js' in page.links, slug
+
+        for number, exercise in enumerate(info['exercises'], start=1):
+            assert exercise['title'] and exercise['statement'], (slug, number, 'missing text')
+            assert len(exercise['tasks']) >= 1, (slug, number, 'missing tasks')
+            assert exercise['correction'] and all(exercise['correction']), (slug, number, 'correction')
+            assert len(exercise['fields']) >= 2, (slug, number, 'answers')
+            for field in exercise['fields']:
+                assert field['label'] and field['answer'], (slug, number, 'empty answer')
+                if 'options' in field:
+                    assert field['answer'] in field['options'], (slug, number, 'missing select value')
+                else:
+                    try:
+                        assert math.isfinite(float(field['answer'].replace(',', '.')))
+                    except ValueError:
+                        assert field.get('type') == 'text', (slug, number, field)
+
+        count_exercises += len(info['exercises'])
+
+    assert count_exercises == 129, count_exercises
+    print(f'EXERCISES OK: {len(COURSES)} chapters; {count_exercises} exercises validated.')
     print(f'STATIC OK: {len(pages)} HTML pages; 16 lessons; {links_checked} local links; {snippets} Python blocks compiled.')
 
     def funcs(slug):
