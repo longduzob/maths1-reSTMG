@@ -70,21 +70,36 @@ def main():
             page.locator('#exercice-1 details.check summary').click()
             assert page.locator('#exercice-1 details.check').evaluate('(el) => el.open')
             expect(page.locator('#exercice-1 .answer-row.is-revealed')).to_have_count(5)
+            expect(page.locator('#exercice-1 input.answer-was-correct')).to_have_count(5)
+            expect(page.locator('#exercice-1 .answer-row.was-correct')).to_have_count(5)
             for control, expected in zip(first_inputs.all(), values):
                 expect(control).to_have_value(expected)
             expect(page.locator('#exercise-score')).to_have_text('1/9')
 
             # Afficher le corrigé remplit aussi les formules, sans augmenter le score.
             page.locator('[data-step="1"]').click()
+            second_inputs = page.locator('#exercice-2 input[data-expect]')
+            # Mélange de réponses justes, fausses et une réponse absente.
+            second_inputs.nth(0).fill('18')
+            second_inputs.nth(1).fill('99')
+            second_inputs.nth(2).fill('42')
             page.locator('#exercice-2 details.check summary').click()
             expect(page.locator('#exercice-2 .answer-row.is-revealed')).to_have_count(3)
-            second_inputs = page.locator('#exercice-2 input[data-expect]')
+            expect(page.locator('#exercice-2 input.answer-was-correct')).to_have_count(2)
+            expect(page.locator('#exercice-2 input.answer-was-wrong')).to_have_count(2)
+            expect(page.locator('#exercice-2 .answer-row.was-correct')).to_have_count(1)
+            expect(page.locator('#exercice-2 .answer-row.was-wrong')).to_have_count(2)
+            first_color = second_inputs.nth(0).evaluate('(el) => getComputedStyle(el).backgroundColor')
+            wrong_color = second_inputs.nth(1).evaluate('(el) => getComputedStyle(el).backgroundColor')
+            assert first_color != wrong_color, 'Les bulles vertes et rouges doivent être visibles.'
             for control, expected in zip(second_inputs.all(), ['18', '6', '42', '7']):
                 expect(control).to_have_value(expected)
             page.locator('#exercice-2 button[type="submit"]').click()
             expect(page.locator('#exercise-score')).to_have_text('1/9')
             page.locator('#exercice-2 [data-action="reset"]').click()
             expect(page.locator('#exercice-2 details.check')).not_to_have_attribute('open', '')
+            expect(page.locator('#exercice-2 input.answer-was-correct')).to_have_count(0)
+            expect(page.locator('#exercice-2 input.answer-was-wrong')).to_have_count(0)
             for control in second_inputs.all():
                 expect(control).to_have_value('')
             for control, value in zip(second_inputs.all(), ['18', '6', '42', '7']):
@@ -97,6 +112,8 @@ def main():
             page.locator('#exercice-3 details.check summary').click()
             expect(page.locator('#exercice-3 input[data-expect="1;3|1,3"]')).to_have_value('1 ; 3')
             expect(page.locator('#exercice-3 select[data-expect="]1;3["]')).to_have_value(']1 ; 3[')
+            expect(page.locator('#exercice-3 select.answer-was-wrong')).to_have_count(1)
+            expect(page.locator('#exercice-3 select[data-expect="]1;3["]')).to_be_disabled()
             expect(page.locator('#exercise-score')).to_have_text('2/9')
             page.locator('[data-step="8"]').click()
             page.locator('#exercice-9 details.check summary').click()
