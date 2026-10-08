@@ -152,6 +152,7 @@
   function activateVariant(index) {
     const state = states[index];
     if (!state.pending || !renderer) return;
+    const coachingContext = state.pending.coachingContext;
 
     // Remplacer seulement l'exercice : la navigation et les scores restent intacts.
     const template = document.createElement('template');
@@ -167,94 +168,16 @@
     state.pending = null;
     completed.delete(index);
     updateProgress();
-    wireSlide(slide, index);
+    wireSlide(slide, index, coachingContext);
     showSlide(index, true);
   }
 
   // Prototype pédagogique limité au chapitre Fonctions.
-  const coaching = [
-    {
-      hints: [
-        ['Une image se calcule en remplaçant x. Un antécédent se trouve en résolvant une équation.',
-         'Pour f(a), remplace chaque x par a. Pour trouver x, pose f(x) égal au nombre donné.',
-         'Si f(x) = 3x − 5, alors f(4) = 3 × 4 − 5. Pour l’antécédent de 10 : 3x − 5 = 10.'],
-        ['Lis bien la différence entre une image et un antécédent.',
-         'L’image est le résultat de la formule ; l’antécédent est la valeur de départ.',
-         'Vérifie chaque résultat en remplaçant x dans la formule de l’énoncé.']
-      ],
-      diagnose: 'Pour une image, remplace x dans la formule. Pour un antécédent, pose une équation puis isole x.',
-      bridge: {q:'Pour f(x) = 2x + 1, combien vaut f(3) ?', a:'7',
-        help:'Remplace x par 3 : 2 × 3 + 1 = 7.'}
-    },
-    {
-      hints:['Repère les frais fixes et le prix par heure.',
-        'Le coût total est frais fixes + (prix horaire × durée).',
-        'Pour retrouver une durée, retire les frais fixes du total, puis divise par le prix horaire.'],
-      diagnose:'Si tu as inversé les deux coefficients, souviens-toi que les frais fixes ne sont pas multipliés par la durée.',
-      bridge:{q:'Un tarif comprend 5 € fixes et 2 € par heure. Combien pour 3 h ?',a:'11',
-        help:'5 + 2 × 3 = 11 €.'}
-    },
-    {
-      hints:['Sur un graphique, l’abscisse se lit horizontalement et l’ordonnée verticalement.',
-        'Une image se lit sur l’axe vertical. Un antécédent se lit sur l’axe horizontal.',
-        'Les zéros sont les intersections avec l’axe horizontal ; le minimum est le point le plus bas.'],
-      diagnose:'Attention à ne pas confondre l’abscisse x et l’ordonnée g(x). Pour g(x) < 0, cherche la partie sous l’axe horizontal.',
-      bridge:{q:'Si une courbe passe par le point (2 ; 5), quelle est l’image de 2 ?',a:'5',
-        help:'Au point (2 ; 5), l’abscisse est 2 et l’ordonnée est 5.'}
-    },
-    {
-      hints:['Une droite non verticale se modélise par y = ax + b.',
-        'Le coefficient directeur vaut (yB − yA)/(xB − xA).',
-        'Calcule a, puis remplace x et y par les coordonnées d’un point pour trouver b.'],
-      diagnose:'Si le coefficient directeur est faux, vérifie que les soustractions utilisent le même ordre pour les deux points.',
-      bridge:{q:'Une droite passe par (0 ; 2) et (1 ; 5). Quel est son coefficient directeur ?',a:'3',
-        help:'(5 − 2)/(1 − 0) = 3.'}
-    },
-    {
-      hints:['Comparer deux tarifs, c’est comparer deux expressions pour la même durée.',
-        'Pour l’égalité, résous A(t) = B(t).',
-        'Pour savoir quand A est moins chère, résous A(t) ≤ B(t), en tenant compte du sens de l’inégalité.'],
-      diagnose:'Ne confonds pas le point d’égalité et les durées pour lesquelles un tarif est moins cher.',
-      bridge:{q:'Si A(t) = 10 + 2t et B(t) = 4t, à quelle durée les tarifs sont-ils égaux ?',a:'5',
-        help:'10 + 2t = 4t, donc 10 = 2t et t = 5.'}
-    },
-    {
-      hints:['Le taux de variation compare une variation verticale à une variation horizontale.',
-        'Calcule (f(b) − f(a))/(b − a).',
-        'Écris séparément les deux différences avant d’effectuer la division.'],
-      diagnose:'Vérifie le signe des deux différences : un taux de variation peut être négatif.',
-      bridge:{q:'Entre (1 ; 2) et (3 ; 8), quel est le taux de variation ?',a:'3',
-        help:'(8 − 2)/(3 − 1) = 6/2 = 3.'}
-    },
-    {
-      hints:['Cherche d’abord le sens de variation de la fonction.',
-        'Une fonction croissante conserve l’ordre des images ; une fonction décroissante l’inverse.',
-        'Appuie-toi sur le signe du coefficient directeur ou sur le tableau de variations.'],
-      diagnose:'Attention : une fonction décroissante donne une image plus petite lorsque x augmente.',
-      bridge:{q:'Si f est croissante et que 2 < 5, quelle est la relation entre f(2) et f(5) ? (≤ ou ≥)',a:'≤',
-        help:'Pour une fonction croissante, f(2) ≤ f(5).'}
-    },
-    {
-      hints:['Commence par traduire les données en équation.',
-        'Pour résoudre ax + b = c, soustrais b puis divise par a (si a ≠ 0).',
-        'Vérifie ta solution en la remplaçant dans l’expression de départ.'],
-      diagnose:'Si le résultat est faux, vérifie le passage du terme constant de l’autre côté de l’égalité.',
-      bridge:{q:'Résous 2x + 3 = 11. Combien vaut x ?',a:'4',
-        help:'2x = 11 − 3 = 8, donc x = 4.'}
-    },
-    {
-      hints:['Un balayage consiste à tester des valeurs successives.',
-        'Compare le résultat de la fonction à la valeur cible et resserre l’intervalle.',
-        'Vérifie l’arrondi ou la précision demandée avant de répondre.'],
-      diagnose:'Une valeur approchée doit respecter la précision de l’énoncé : contrôle les valeurs voisines.',
-      bridge:{q:'Si f(2) = 3 et f(3) = 5, et si f est continue, 4 se situe-t-il entre ces deux images ? (oui/non)',a:'oui',
-        help:'Oui, car 3 < 4 < 5.'}
-    }
-  ];
-
-  function addCoaching(slide, form, index) {
-    if (slug !== 'fonctions' || !coaching[index]) return;
-    const data = coaching[index];
+  function addCoaching(slide, form, index, context) {
+    if (slug !== 'fonctions' || !window.FonctionsCoaching) return;
+    const data = window.FonctionsCoaching.build(index,
+      context || window.FonctionsCoaching.originals[index]);
+    if (!data) return;
     const statement = slide.querySelector('.exercise-statement');
     if (!statement) return;
     const panel = document.createElement('section');
@@ -266,7 +189,7 @@
     const intro = document.createElement('p');
     intro.textContent = 'Choisis une aide à ton rythme, sans afficher la correction.';
     panel.append(intro);
-    const hints = Array.isArray(data.hints[0]) ? data.hints[0] : data.hints;
+    const hints = data.hints;
     const names = ['Comprendre', 'Commencer', 'Méthode'];
     hints.forEach((hint, level) => {
       const details = document.createElement('details');
@@ -289,6 +212,8 @@
     bridge.hidden = true;
     const summary = document.createElement('summary');
     summary.textContent = 'Exercice tremplin · je reprends les bases';
+    const note = document.createElement('p');
+    note.textContent = 'Cet exemple indépendant est volontairement plus simple : ses nombres restent fixes.';
     const question = document.createElement('p');
     question.textContent = data.bridge.q;
     const answer = document.createElement('input');
@@ -303,17 +228,16 @@
     const result = document.createElement('p');
     result.setAttribute('role', 'status');
     check.addEventListener('click', () => {
-      const normalize = value => value.trim().toLowerCase().replace(/\\s+/g, '').replace(/,/g, '.');
+      const numeric = /^[+-]?\d+(?:[.,]\d+)?$/.test(data.bridge.a);
       const good = generator && generator.matchesAnswer
-        ? generator.matchesAnswer(answer.value, data.bridge.a,
-          /^[+-]?\\d+(?:[.,]\\d+)?$/.test(data.bridge.a) ? 'number' : 'text')
-        : normalize(answer.value) === normalize(data.bridge.a);
+        ? generator.matchesAnswer(answer.value, data.bridge.a, numeric ? 'number' : 'text')
+        : answer.value.trim().toLowerCase() === data.bridge.a.trim().toLowerCase();
       result.textContent = good
         ? 'Bravo ! Tu peux réessayer l’exercice principal.'
         : 'Pas encore. ' + data.bridge.help;
       result.classList.toggle('is-success',good);
     });
-    bridge.append(summary, question, answer, check, result);
+    bridge.append(summary, note, question, answer, check, result);
     panel.append(bridge);
     statement.append(panel);
     let failures = 0;
@@ -324,7 +248,9 @@
         const controls = Array.from(row.querySelectorAll('[data-expect]'));
         return controls.some(control => !isCorrect(control));
       });
-      if (wrong) {
+      const attempted = Array.from(form.querySelectorAll('[data-expect]'))
+        .some(control => control.value.trim());
+      if (wrong && attempted) {
         failures++;
         feedback.hidden = false;
         if (failures >= 2) bridge.hidden = false;
@@ -343,9 +269,9 @@
     });
   }
 
-  function wireSlide(slide, index) {
+  function wireSlide(slide, index, coachingContext) {
     const form = slide.querySelector('.exercise-form');
-    if (form) addCoaching(slide, form, index);
+    if (form) addCoaching(slide, form, index, coachingContext);
     if (!form) return;
     const reset = form.querySelector('[data-action="reset"]');
     const correction = form.querySelector('details.check');
