@@ -38,26 +38,53 @@
   }
 
   function revealAnswers(form) {
-    form.querySelectorAll('[data-expect]').forEach(control => {
-      const answer = (control.dataset.expect || '').split('|')[0].trim();
-      if (!answer) return;
-
-      if (control.tagName === 'SELECT') {
-        const match = Array.from(control.options)
-          .find(option => normalise(option.value) === normalise(answer));
-        if (match) control.value = match.value;
-      } else if (control.dataset.type === 'number') {
-        control.value = answer.replace(/\./g, ',');
-      } else {
-        control.value = answer.replace(/;/g, ' ; ');
-      }
-    });
-
     form.querySelectorAll('.answer-row').forEach(row => {
-      row.classList.remove('is-correct', 'is-wrong', 'is-revealed');
+      const controls = Array.from(row.querySelectorAll('[data-expect]'));
+      let correctCount = 0;
+      let answeredCount = 0;
+
+      controls.forEach(control => {
+        // Évaluer la réponse de l'élève AVANT de la remplacer par le corrigé.
+        const wasCorrect = isControlCorrect(control);
+        if (wasCorrect) correctCount += 1;
+        if (control.value.trim()) answeredCount += 1;
+
+        const answer = (control.dataset.expect || '').split('|')[0].trim();
+        if (control.tagName === 'SELECT') {
+          const match = Array.from(control.options)
+            .find(option => normalise(option.value) === normalise(answer));
+          if (match) control.value = match.value;
+          control.disabled = true;
+        } else {
+          control.value = control.dataset.type === 'number'
+            ? answer.replace(/\./g, ',')
+            : answer.replace(/;/g, ' ; ');
+          control.readOnly = true;
+        }
+
+        control.classList.toggle('answer-was-correct', wasCorrect);
+        control.classList.toggle('answer-was-wrong', !wasCorrect);
+      });
+
+      const allCorrect = controls.length > 0 && correctCount === controls.length;
+      row.classList.remove('is-correct', 'is-wrong');
       row.classList.add('is-revealed');
+      row.classList.toggle('was-correct', allCorrect);
+      row.classList.toggle('was-wrong', !allCorrect);
+
       const status = row.querySelector('.answer-status');
-      if (status) status.textContent = 'Réponse du corrigé';
+      if (status) {
+        if (allCorrect) {
+          status.textContent = '✓ Tu avais juste. Solution affichée.';
+        } else if (answeredCount === 0) {
+          status.textContent = '✗ Non répondu. Solution affichée.';
+        } else if (controls.length > 1) {
+          status.textContent = '✗ ' + correctCount + '/' + controls.length
+            + ' réponses justes avant correction. Solutions affichées.';
+        } else {
+          status.textContent = '✗ Ta réponse était fausse. Solution affichée.';
+        }
+      }
     });
   }
 
@@ -131,7 +158,7 @@
 
     if (correction) {
       correction.addEventListener('toggle', () => {
-        if (!correction.open) return;
+        if (!correction.open || form.dataset.revealed === 'true') return;
         form.dataset.revealed = 'true';
         revealAnswers(form);
         const summary = form.querySelector('.exercise-feedback');
@@ -141,6 +168,11 @@
 
     form.addEventListener('submit', event => {
       event.preventDefault();
+      if (form.dataset.revealed === 'true') {
+        const summary = form.querySelector('.exercise-feedback');
+        if (summary) summary.textContent = 'Le corrigé est affiché : clique sur Effacer pour reprendre et vérifier tes propres réponses.';
+        return;
+      }
       const rows = Array.from(form.querySelectorAll('.answer-row'));
       const results = rows.map(updateRow);
       const allCorrect = results.length > 0 && results.every(Boolean);
@@ -183,7 +215,12 @@
         delete form.dataset.revealed;
         if (correction) correction.open = false;
         completed.delete(index);
-        form.querySelectorAll('.answer-row').forEach(row => row.classList.remove('is-correct', 'is-wrong', 'is-revealed'));
+        form.querySelectorAll('[data-expect]').forEach(control => {
+          control.readOnly = false;
+          control.disabled = false;
+          control.classList.remove('answer-was-correct', 'answer-was-wrong');
+        });
+        form.querySelectorAll('.answer-row').forEach(row => row.classList.remove('is-correct', 'is-wrong', 'is-revealed', 'was-correct', 'was-wrong'));
         form.querySelectorAll('.answer-status').forEach(status => status.textContent = '');
         const summary = form.querySelector('.exercise-feedback');
         if (summary) summary.textContent = '';
