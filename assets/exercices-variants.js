@@ -44,7 +44,7 @@
         (typeof option === 'string' ? option : option.value) === field.answer)) {
         throw new Error('Choix correct absent : ' + slug + ', ' + field.label);
       }
-      if (!field.options && !Number.isFinite(Number(field.answer))) {
+      if (!field.options && field.type !== 'text' && !Number.isFinite(Number(field.answer))) {
         throw new Error('Réponse numérique non finie : ' + slug + ', ' + field.label);
       }
     }
