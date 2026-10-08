@@ -64,6 +64,11 @@ def main():
             expect(page.locator('details.check')).to_have_count(9)
             expect(page.locator('#exercice-1')).to_be_visible()
             expect(page.locator('#exercice-2')).to_be_hidden()
+            # L'aide initiale présente bien les données de l'énoncé affiché.
+            expect(page.locator('#exercice-1 .coaching-panel')).to_have_count(1)
+            expect(page.locator('#exercice-1 .coaching-hint')).to_have_count(3)
+            original_help = page.locator('#exercice-1 .coaching-hint').nth(2).text_content()
+            assert '3 × 4 − 5' in original_help and ' = 10' in original_help
             first_inputs = page.locator('#exercice-1 input[data-expect]')
             values = ['-11', '-5', '7', '5', '0']
             assert first_inputs.count() == len(values)
@@ -147,6 +152,17 @@ def main():
             assert new_statement != statement_before
             expect(page.locator('#exercise-score')).to_have_text('1/9')
             expect(page.locator('#exercice-1 .exercise-kicker')).to_contain_text('variante 2')
+            # Régression : la méthode réutilise le coefficient ET la cible de la variante.
+            changed_help = page.locator('#exercice-1 .coaching-hint').nth(2).text_content()
+            model_values = [float(c.get_attribute('data-expect')) for c in
+                            page.locator('#exercice-1 input[data-expect]').all()]
+            a_coefficient = (model_values[2] - model_values[1]) / 4
+            target = 5 * a_coefficient + model_values[1]
+            assert f'{int(a_coefficient)} × 4' in changed_help, changed_help
+            assert f' = {int(target)}' in changed_help, changed_help
+            assert '3 × 4 − 5' not in changed_help, changed_help
+            expect(page.locator('#exercice-1 .coaching-hint')).to_have_count(3)
+
             for control in page.locator('#exercice-1 input[data-expect]').all():
                 control.fill(control.get_attribute('data-expect').split('|')[0])
             page.locator('#exercice-1 button[type="submit"]').click()
@@ -157,6 +173,41 @@ def main():
             page.locator('#exercice-1 [data-action="new-variant"]').click()
             assert page.locator('#exercice-1 .exercise-statement > p').inner_text() != new_statement
             expect(page.locator('#exercice-1 .exercise-kicker')).to_contain_text('variante 4')
+
+
+            # Deux vraies tentatives erronées débloquent un exercice indépendant.
+            page.locator('#exercice-1 input[data-expect]').first.fill('99999')
+            page.locator('#exercice-1 button[type="submit"]').click()
+            expect(page.locator('#exercice-1 .coaching-diagnosis')).to_be_visible()
+            expect(page.locator('#exercice-1 .coaching-bridge')).to_be_hidden()
+            page.locator('#exercice-1 button[type="submit"]').click()
+            expect(page.locator('#exercice-1 .coaching-bridge')).to_be_visible()
+            page.locator('#exercice-1 .coaching-bridge summary').click()
+            page.locator('#exercice-1 .coaching-bridge-answer').fill('14/2')
+            page.locator('#exercice-1 .coaching-bridge button').click()
+            expect(page.locator('#exercice-1 .coaching-bridge p[role="status"]')).to_contain_text('Bravo')
+            expect(page.locator('#exercise-score')).to_have_text('1/9')
+            page.locator('#exercice-1 [data-action="reset"]').click()
+            expect(page.locator('#exercice-1 .coaching-bridge')).to_be_hidden()
+
+            # Sur les 9 exercices, l'indice n° 3 suit deux tirages successifs.
+            page.goto(base + 'exercices/fonctions.html')
+            for i in range(9):
+                page.locator(f'[data-step="{i}"]').click()
+                panel = page.locator(f'#exercice-{i+1} .coaching-panel')
+                expect(panel).to_have_count(1)
+                expect(panel.locator('.coaching-hint')).to_have_count(3)
+                help = panel.locator('.coaching-hint').nth(2)
+                form = page.locator(f'#exercice-{i+1} .exercise-form')
+                form.locator('button[type="submit"]').click()
+                form.locator('[data-action="new-variant"]').click()
+                first_generated = page.locator(f'#exercice-{i+1} .coaching-hint').nth(2).text_content()
+                form = page.locator(f'#exercice-{i+1} .exercise-form')
+                form.locator('button[type="submit"]').click()
+                form.locator('[data-action="new-variant"]').click()
+                second_generated = page.locator(f'#exercice-{i+1} .coaching-hint').nth(2).text_content()
+                assert first_generated != second_generated, f'Indice figé pour exercice {i+1}'
+                expect(page.locator(f'#exercice-{i+1} .coaching-hint')).to_have_count(3)
 
             # Tous les nouveaux parcours : valider, consulter, recommencer.
             extra_slugs = ['second-degre','suites','suites-arithmetiques','suites-geometriques','derivees','variations','statistiques-deux-variables','probabilites-conditionnelles','bernoulli','variables-aleatoires','calcul','evolutions','logique','statistiques-descriptives','python-tableur']
