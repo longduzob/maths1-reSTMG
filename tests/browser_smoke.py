@@ -24,7 +24,7 @@ def main():
     thread.start()
     base = f'http://127.0.0.1:{server.server_port}/{quote(ROOT.name)}/'
     errors, failed_responses = [], []
-    paths = sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))
+    paths = (sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))\n             + sorted((ROOT / 'exercices').glob('*.html')))
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch()
@@ -48,6 +48,11 @@ def main():
                         assert page.evaluate("Array.from(document.querySelectorAll('.lesson-toc nav a')).every(a => document.getElementById(decodeURIComponent(a.hash.slice(1))))"), name
                     checks += 1
             page.set_viewport_size({'width': 390, 'height': 844})
+            page.goto(base + 'exercices/fonctions.html')
+            expect(page.locator('.exercise-block')).to_have_count(9)
+            expect(page.locator('details.check')).to_have_count(9)
+            page.locator('#exercice-1 details.check summary').click()
+            assert page.locator('#exercice-1 details.check').evaluate('(el) => el.open')
             page.goto(base + 'lecons.html')
             expect(page.locator('.lesson-card:visible')).to_have_count(16)
             page.locator('#course-search').fill('derivee')
