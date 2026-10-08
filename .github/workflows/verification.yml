@@ -23,6 +23,15 @@ jobs:
           node --check assets/apprentissage.js
           node --check assets/exercices.js
           node --check assets/exercices-renderer.js
+          node --check assets/exercices-variants.js
+          node --check assets/variants-fonctions.js
+          node --check assets/variants-suites.js
+          node --check assets/variants-analyse.js
+          node --check assets/variants-probabilites.js
+          node --check assets/variants-reperes.js
+          node --check assets/variants-donnees.js
+      - name: Verifier les variantes mathematiques
+        run: node tests/test_variants.js
       - name: Installer le navigateur de test
         run: |
           python3 -m pip install playwright==1.55.0
