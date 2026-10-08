@@ -1,0 +1,64 @@
+/* Exercices - Premiere STMG */
+.exercise-page { --exercise: #246453; --exercise-soft: #e8f3ee; }
+.exercise-page .eyebrow,
+.exercise-page .title-dot,
+.exercise-page .lesson-content a,
+.exercise-page .check summary { color: var(--exercise); }
+.exercise-page .exercise-intro {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 18px; padding: 20px 22px; margin-bottom: 26px;
+  background: var(--exercise-soft); border: 1px solid #d4e8de; border-radius: 14px;
+}
+.exercise-page .exercise-intro p { margin: 0; max-width: 700px; }
+.exercise-page .exercise-count {
+  flex: 0 0 auto; padding: 6px 10px; border-radius: 999px;
+  background: white; border: 1px solid #c9dfd4; color: var(--exercise);
+  font-size: 12px; font-weight: 750;
+}
+.exercise-block {
+  padding: 24px; margin: 26px 0; border: 1px solid var(--line);
+  border-radius: 16px; background: #fff;
+}
+.exercise-block + .exercise-block { margin-top: 22px; }
+.exercise-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-bottom: 14px;
+}
+.exercise-number {
+  display: inline-grid; place-items: center; min-width: 36px; height: 36px;
+  padding-inline: 8px; border-radius: 10px; background: var(--exercise-soft);
+  color: var(--exercise); font-size: 12px; font-weight: 800;
+}
+.exercise-head h2 { margin: 0 !important; font-size: 21px !important; }
+.difficulty {
+  margin-left: auto; padding: 4px 9px; border-radius: 999px;
+  border: 1px solid #d7d4dd; background: #faf9fb; color: var(--muted);
+  font-size: 10px; font-weight: 750; letter-spacing: .4px; text-transform: uppercase;
+}
+.exercise-block ol { margin-bottom: 16px; }
+.hint {
+  border: 1px dashed #c7c1d1; border-radius: 10px; padding: 0 16px; margin: 14px 0;
+  background: #fbfafc;
+}
+.hint summary { cursor: pointer; padding: 12px 0; font-weight: 650; color: #5c5865; }
+.exercise-page .check { border-color: #cfe1d8; background: #fbfefc; }
+.exercise-page .check summary { font-weight: 750; }
+.exercise-page .formula { border-left-color: var(--exercise); background: #f0f7f3; }
+.exercise-page .button-primary { background: var(--exercise); box-shadow: 0 4px 9px #24645318; }
+.exercise-page .button-primary:hover { background: #1d5143; }
+.exercise-page .course-pagination a:hover { border-color: #9bc2af; color: var(--exercise); }
+.exercise-graph { margin-block: 18px; }
+.exercise-graph svg { width: 100%; height: auto; max-height: 340px; border: 1px solid var(--line); border-radius: 12px; background: #fcfdfc; }
+.score-guide { padding: 20px 22px; margin: 30px 0; border-radius: 14px; background: #f7f6f9; border: 1px solid var(--line); }
+.score-guide h2 { margin-top: 0 !important; font-size: 21px !important; }
+.score-guide ul { margin-bottom: 0; }
+@media (max-width: 520px) {
+  .exercise-block { padding: 20px 16px; }
+  .difficulty { margin-left: 0; }
+  .exercise-head { align-items: flex-start; }
+}
+@media print {
+  .hint { display: none; }
+  .exercise-block { break-inside: avoid; }
+  .exercise-page .check:not([open]) > *:not(summary) { display: block; }
+  .exercise-page .check summary { display: none; }
+}
