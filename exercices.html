@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Un espace pour appliquer les méthodes, essayer par toi-même et progresser à ton rythme.">
+  <meta name="description" content="Exercices corrigés de mathématiques pour la Première STMG.">
   <meta name="theme-color" content="#f8f7f3">
   <title>Les exercices | Maths · Première STMG</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23604bd1'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial' font-size='43' font-weight='bold' fill='white'%3Em%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23246453'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial' font-size='43' font-weight='bold' fill='white'%3Em%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/cours.css">
+  <link rel="stylesheet" href="assets/exercices.css">
 </head>
-<body>
+<body class="exercise-page">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <header class="site-header">
     <div class="container header-inner">
@@ -18,21 +20,37 @@
       <span class="level-badge">1<sup>re</sup> STMG</span>
     </div>
   </header>
-  <main id="contenu" class="container section-page exercises-page" tabindex="-1">
-    <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Les exercices</span></nav>
-    <section class="page-intro" aria-labelledby="page-title"><p class="eyebrow">02 / ESSAYER &amp; PROGRESSER</p><h1 id="page-title">Les exercices<span class="title-dot">.</span></h1><p>Un espace pour appliquer les méthodes, essayer par toi-même et progresser à ton rythme.</p></section>
-    <div class="section-grid">
-      <section class="empty-state" aria-labelledby="empty-title">
-        <span class="icon-box empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5.5 4 4M4 20l4.5-1L20 7.5a2.8 2.8 0 0 0-4-4L4.5 15Z"/><path d="m4.5 15 4 4M13 20h7"/></svg></span>
-        <p class="status-label">CONTENU À VENIR</p>
-        <h2 id="empty-title">Les premiers exercices<br>se préparent.</h2>
-        <p class="empty-description">Cet espace est prêt à accueillir les exercices du projet. Les énoncés et leurs corrections seront ajoutés dans les prochaines étapes.</p>
-        <a class="button button-primary" href="lecons.html">Revenir à l’espace leçons <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
-      </section>
-      <aside class="method-panel" aria-labelledby="method-title"><span class="method-spark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z"/></svg></span><h2 id="method-title">Les bons réflexes</h2><p class="method-intro">Une petite méthode pour tes futures séances.</p><ol class="method-steps"><li><span class="step-number" aria-hidden="true">01</span><div><h3>Relire la leçon</h3><p>Repérer la méthode dont tu as besoin.</p></div></li><li><span class="step-number" aria-hidden="true">02</span><div><h3>Essayer par toi-même</h3><p>Prendre le temps de chercher.</p></div></li><li><span class="step-number" aria-hidden="true">03</span><div><h3>Comprendre la correction</h3><p>Identifier ce que tu peux améliorer.</p></div></li></ol></aside>
-    </div>
+
+  <main id="contenu" class="container section-page" tabindex="-1">
+    <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a><span>/</span><span aria-current="page">Les exercices</span></nav>
+    <section class="page-intro" aria-labelledby="page-title">
+      <p class="eyebrow">02 / ESSAYER &amp; PROGRESSER</p>
+      <h1 id="page-title">Les exercices<span class="title-dot">.</span></h1>
+      <p>Des séries progressives pour appliquer les méthodes du cours et vérifier ce que tu maîtrises.</p>
+    </section>
+
+    <section class="catalog-group" aria-labelledby="available-title">
+      <h2 id="available-title">Disponible maintenant</h2>
+      <p>Pour cette première étape, seule la série du chapitre 1 est publiée.</p>
+      <div class="lesson-cards">
+        <a class="lesson-card" href="exercices/fonctions.html">
+          <span class="course-code">CHAPITRE 01 · 9 EXERCICES</span>
+          <h3>Fonctions, droites et lectures graphiques</h3>
+          <p>Images, antécédents, lecture graphique, fonctions affines, comparaison de tarifs, taux de variation, inverse proportionnalité et balayage.</p>
+          <span class="read-link">Commencer la série →</span>
+        </a>
+      </div>
+    </section>
+
+    <aside class="catalog-notice" aria-labelledby="next-title">
+      <h2 id="next-title">Les autres chapitres arrivent ensuite</h2>
+      <p>La banque d’exercices sera complétée chapitre par chapitre. Pour le moment, aucune fausse série vide n’est affichée : seul le chapitre 1 est actif.</p>
+      <p><a href="cours/fonctions.html">Revoir la leçon du chapitre 1</a> avant de commencer si nécessaire.</p>
+    </aside>
+
     <a class="back-link" href="index.html"><span aria-hidden="true">←</span> Retour à l’accueil</a>
   </main>
+
   <footer class="site-footer">
     <div class="container footer-inner"><p><strong>maths.</strong> Un peu de méthode, beaucoup de progrès.</p><p>Mathématiques · Première STMG</p></div>
   </footer>
