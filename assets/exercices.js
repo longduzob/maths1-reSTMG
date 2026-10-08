@@ -18,6 +18,7 @@
   const completed = new Set();
   const states = slides.map(slide => ({
     cycle: 0,
+    offset: Math.floor(Math.random() * 24),
     pending: null,
     original: {
       title: slide.querySelector('.exercise-head h2')?.textContent || 'Exercice',
@@ -153,7 +154,9 @@
     // consulte ensuite l'explication détaillée.
     if (force || !state.pending) {
       state.cycle++;
-      state.pending = generator.generate(slug, index, state.cycle, state.original);
+      // Chaque visite démarre à un paramétrage différent ; les cycles suivants
+      // progressent d'un pas, sans répéter la même variante juste après.
+      state.pending = generator.generate(slug, index, state.cycle + state.offset, state.original);
     }
     button.hidden = false;
     button.textContent = 'Nouvelle variante ↻';
