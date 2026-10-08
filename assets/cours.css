@@ -44,6 +44,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .lesson-content .objectives h2 { margin-top: 0; }
 .lesson-content .prerequisites { color: var(--muted); font-size: 13px; }
 .formula { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.15em; background: #f5f2fc; border-left: 3px solid var(--purple); padding: 15px 18px; margin: 18px 0; line-height: 1.9; overflow-wrap: anywhere; }
+.math-inline { display: inline-block; white-space: nowrap; overflow-wrap: normal; }
 .callout, .example, .warning, .recap { padding: 18px 22px; border-radius: 12px; margin: 24px 0; }
 .callout { background: #f5f2fc; border: 1px solid #e5dcf5; }
 .example { background: #eef6f2; border: 1px solid #d5e8dc; }
