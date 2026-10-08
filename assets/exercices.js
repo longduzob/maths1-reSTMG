@@ -148,8 +148,13 @@
   function queueVariant(index, form, button) {
     if (!generator || !renderer) return false;
     const state = states[index];
-    state.cycle++;
-    state.pending = generator.generate(slug, index, state.cycle, state.original);
+    // Ne pas consommer une autre variante lors de la simple ouverture du corrigé :
+    // l'élève doit voir "variante 2" après la première soumission, même s'il
+    // consulte ensuite l'explication détaillée.
+    if (!state.pending) {
+      state.cycle++;
+      state.pending = generator.generate(slug, index, state.cycle, state.original);
+    }
     button.hidden = false;
     button.textContent = 'Nouvelle variante ↻';
     return true;
