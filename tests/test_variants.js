@@ -9,6 +9,7 @@ const ROOT = path.resolve(__dirname, '..');
 const files = [
   'assets/exercices-variants.js',
   'assets/variants-fonctions.js',
+  'assets/fonctions-coaching.js',
   'assets/variants-suites.js',
   'assets/variants-analyse.js',
   'assets/variants-probabilites.js',
@@ -152,3 +153,92 @@ for (let cycle = 1; cycle <= 60; cycle++) {
 console.log('CONTROLE OK: 7 740 variantes, 21 réponses de régression et invariants indépendants.');
 
 console.log('VARIANTS OK: '+count+' generators x 36 cycles = '+(count*36)+' consistent variants; 8 targeted invariants.');
+
+// Prototype Fonctions : chaque indice doit correspondre aux valeurs de sa variante.
+const coaching = sandbox.window.FonctionsCoaching;
+assert.ok(coaching && typeof coaching.build === 'function');
+assert.equal(coaching.originals.length, 9);
+assert.match(coaching.build(0, coaching.originals[0]).hints[2], /3 × 4 − 5/);
+const bridgeSolutions = ['7', '11', '5', '3', '5', '3', '5', '2', '3'];
+let coachingModels = 0;
+for (let index = 0; index < 9; index++) {
+  const initial = coaching.build(index, coaching.originals[index]);
+  assert.equal(initial.hints.length, 3);
+  assert.equal(initial.bridge.a, bridgeSolutions[index]);
+  let previous = null;
+  for (let cycle = 1; cycle <= 60; cycle++) {
+    const ex = generate('fonctions', index, cycle, {});
+    const c = ex.coachingContext;
+    assert.ok(c && typeof c === 'object', 'Missing coaching context for '+index+'/'+cycle);
+    const help = coaching.build(index, c);
+    assert.equal(help.hints.length, 3);
+    assert.ok(help.hints.every(h => typeof h === 'string' && h.length > 45));
+    assert.ok(help.diagnose.length > 50);
+    assert.equal(help.bridge.a, bridgeSolutions[index]);
+    assert.equal(matchesAnswer(help.bridge.a, help.bridge.a, 'number'), true);
+    // Indice 3 : la substitution de la variante doit différer du tirage précédent.
+    if (previous) assert.notEqual(help.hints[2], previous, 'Stale hints '+index+'/'+cycle);
+    previous = help.hints[2];
+    const v = ex.fields.map(f => f.answer);
+    const num = i => Number(v[i]);
+    switch (index) {
+      case 0:
+        assert.equal(num(0), c.a * (-2) + c.b);
+        assert.equal(num(1), c.b);
+        assert.equal(num(2), c.a * 4 + c.b);
+        assert.equal(c.target, c.a * 5 + c.b);
+        assert.ok(help.hints[2].includes(c.a+' × 4'));
+        assert.ok(help.hints[2].includes(' = '+c.target));
+        break;
+      case 1:
+        assert.equal(num(0),c.fix);
+        assert.equal(num(1),c.rate);
+        assert.equal(num(2),c.fix+4*c.rate);
+        assert.equal(num(3),(c.total-c.fix)/c.rate);
+        assert.ok(help.hints[2].includes(String(c.total)));
+        break;
+      case 2:
+        assert.equal(v[2],c.lo+';'+c.hi);
+        assert.equal(num(4),c.h);
+        assert.equal(c.lo,c.h-1);
+        assert.equal(c.hi,c.h+1);
+        break;
+      case 3:
+        assert.equal(num(0),c.a);
+        assert.equal(num(1),c.b);
+        assert.equal(c.y1,c.a+c.b);
+        assert.equal(c.y2,4*c.a+c.b);
+        assert.equal(num(4),10*c.a+c.b);
+        break;
+      case 4:
+        assert.equal(num(0),c.fixed+2*c.rateA);
+        assert.equal(num(1),2*c.rateB);
+        assert.equal(num(2),c.k);
+        assert.equal(c.fixed,(c.rateB-c.rateA)*c.k);
+        break;
+      case 5:
+        assert.equal(num(0),7*c.a);
+        assert.equal(num(1),11*c.a);
+        break;
+      case 6:
+        assert.equal(num(1),c.root);
+        assert.equal(c.b,c.a*c.root);
+        assert.ok(c.max>c.root);
+        break;
+      case 7:
+        assert.equal(num(0),c.D/60);
+        assert.equal(num(1),c.D/80);
+        assert.equal(num(2),c.D/120);
+        break;
+      case 8:
+        assert.ok(c.low*c.low<c.n && c.high*c.high>c.n);
+        assert.ok(Math.abs(c.high-c.low-0.01)<1e-9);
+        assert.ok(Math.abs(num(0)-c.low*c.low)<1e-6);
+        assert.ok(Math.abs(num(1)-c.high*c.high)<1e-6);
+        assert.ok(help.hints[2].includes('√'+c.n));
+        break;
+    }
+    coachingModels++;
+  }
+}
+console.log('COACHING OK: '+coachingModels+' modeles contextualises, 9 parcours et tremplins verifies.');
