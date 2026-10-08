@@ -25,6 +25,7 @@ jobs:
           node --check assets/exercices-renderer.js
           node --check assets/exercices-variants.js
           node --check assets/variants-fonctions.js
+          node --check assets/fonctions-coaching.js
           node --check assets/variants-suites.js
           node --check assets/variants-analyse.js
           node --check assets/variants-probabilites.js
