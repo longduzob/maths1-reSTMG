@@ -51,6 +51,10 @@ def main():
                     if name.startswith('cours/'):
                         expect(page.locator('.lesson-toc')).to_be_visible()
                         expect(page.locator('.lesson-content')).to_be_visible()
+                        expect(page.locator('.support-scaffold')).to_have_count(1)
+                        expect(page.locator('.study-quiz')).to_have_count(2)
+                        expect(page.locator('.study-quiz form:visible')).to_have_count(2)
+                        expect(page.locator('.lesson-reading-controls')).to_be_visible()
                         assert page.locator('.lesson-toc nav a').count() >= 6
                         assert page.evaluate("Array.from(document.querySelectorAll('.lesson-toc nav a')).every(a => document.getElementById(decodeURIComponent(a.hash.slice(1))))"), name
                     checks += 1
@@ -152,6 +156,52 @@ def main():
                 page.locator('#exercice-2 [data-action="reset"]').click()
                 expect(page.locator('#exercice-2 .answer-row.is-revealed')).to_have_count(0)
 
+            # Questions actives et lecture accessible dans les 16 cours.
+            lesson_slugs = ['fonctions', 'second-degre', 'suites',
+                            'suites-arithmetiques', 'suites-geometriques',
+                            'derivees', 'variations', 'statistiques-deux-variables',
+                            'probabilites-conditionnelles', 'bernoulli',
+                            'variables-aleatoires', 'calcul', 'evolutions',
+                            'logique', 'statistiques-descriptives', 'python-tableur']
+            for slug in lesson_slugs:
+                page.goto(base + f'cours/{slug}.html')
+                quiz1, quiz2 = page.locator('.study-quiz').first, page.locator('.study-quiz').last
+                expected = quiz1.get_attribute('data-correct')
+                quiz1.locator(f'input[value="{expected}"]').check()
+                quiz1.locator('button[type="submit"]').click()
+                expect(quiz1.locator('.study-feedback')).to_contain_text('Bien joué')
+                assert quiz1.locator('.study-feedback').get_attribute('data-result') == 'correct'
+                wrong = next(value for value in ['a', 'b', 'c'] if value != quiz2.get_attribute('data-correct'))
+                quiz2.locator(f'input[value="{wrong}"]').check()
+                quiz2.locator('button[type="submit"]').click()
+                expect(quiz2.locator('.study-feedback')).to_contain_text('Pas encore')
+                quiz2.locator(f'input[value="{quiz2.get_attribute("data-correct")}"]').check()
+                quiz2.locator('button[type="submit"]').click()
+                expect(quiz2.locator('.study-feedback')).to_contain_text('Bien joué')
+                quiz2.locator('details summary').click()
+                expect(quiz2.locator('details.study-solution')).to_have_attribute('open', '')
+
+            # Ajustement de lecture et couleurs qui aident sans remplacer les mots.
+            page.goto(base + 'cours/second-degre.html')
+            initial_size = page.locator('.lesson-content').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
+            page.locator('#reading-large-toggle').click()
+            enlarged_size = page.locator('.lesson-content').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
+            assert enlarged_size > initial_size, (initial_size, enlarged_size)
+            expect(page.locator('#reading-large-toggle')).to_have_attribute('aria-pressed', 'true')
+            page.locator('#reading-focus-toggle').click()
+            expect(page.locator('.lesson-toc')).to_be_hidden()
+            expect(page.locator('.lesson-content')).to_be_visible()
+            page.locator('#reading-focus-toggle').click()
+            expect(page.locator('.lesson-toc')).to_be_visible()
+            visual_colors = page.evaluate("""() => ({
+                formula: getComputedStyle(document.querySelector('.lesson-content .formula')).backgroundColor,
+                example: getComputedStyle(document.querySelector('.lesson-content .example')).backgroundColor,
+                warning: getComputedStyle(document.querySelector('.lesson-content .warning')).backgroundColor
+            })""")
+            assert len(set(visual_colors.values())) == 3, visual_colors
+            page.locator('.support-scaffold summary').click()
+            expect(page.locator('.support-scaffold')).to_have_attribute('open', '')
+
             page.goto(base + 'lecons.html')
             expect(page.locator('.lesson-card:visible')).to_have_count(16)
             page.locator('#course-search').fill('derivee')
@@ -203,6 +253,11 @@ def main():
             expect(static.locator('.lesson-toc')).to_be_hidden()
             static.locator('details.check summary').click()
             assert static.locator('details.check').evaluate('(el) => el.open')
+            expect(static.locator('.study-quiz')).to_have_count(2)
+            expect(static.locator('.study-quiz form')).to_be_hidden()
+            static.locator('.study-solution').first.locator('summary').click()
+            expect(static.locator('.study-solution').first).to_have_attribute('open', '')
+            assert static.evaluate("document.querySelector('.lesson-content').getBoundingClientRect().width >= document.querySelector('.lesson-layout').getBoundingClientRect().width - 2")
             nojs.close()
             assert not errors, errors
             assert not failed_responses, failed_responses
