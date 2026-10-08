@@ -20,6 +20,7 @@ jobs:
       - name: Verifier JavaScript
         run: |
           node --check assets/cours.js
+          node --check assets/apprentissage.js
           node --check assets/exercices.js
           node --check assets/exercices-renderer.js
       - name: Installer le navigateur de test
