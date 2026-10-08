@@ -182,7 +182,8 @@ def main():
                 expect(quiz2.locator('details.study-solution')).to_have_attribute('open', '')
 
             # Ajustement de lecture et couleurs qui aident sans remplacer les mots.
-            page.goto(base + 'cours/second-degre.html')
+            # "Suites" possede les trois types de bloc : formule, exemple, avertissement.
+            page.goto(base + 'cours/suites.html')
             initial_size = page.locator('.lesson-content').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
             page.locator('#reading-large-toggle').click()
             enlarged_size = page.locator('.lesson-content').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
