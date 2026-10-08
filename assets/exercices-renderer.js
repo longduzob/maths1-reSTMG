@@ -2,12 +2,6 @@
   const root = document.querySelector('[data-interactive-exercises][data-generated-exercises]');
   const dataNode = document.getElementById('exercise-data');
   const mount = document.getElementById('exercise-mounted');
-  if (!root || !dataNode || !mount) return;
-
-  const chapter = JSON.parse(dataNode.textContent);
-  if (!chapter || !Array.isArray(chapter.exercises) || chapter.exercises.length === 0) {
-    throw new Error('Le chapitre doit contenir des exercices.');
-  }
 
   const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -62,10 +56,21 @@
       + '<div class="exercise-actions">'
       + '<button class="button button-primary" type="submit">Vérifier</button>'
       + '<button class="button button-secondary" type="button" data-action="reset">Effacer</button>'
+      + '<button class="button variant-refresh" type="button" data-action="new-variant" hidden>Nouvelle variante ↻</button>'
       + '</div><p class="exercise-feedback" role="status" aria-live="polite"></p>'
       + '<details class="check"><summary>Voir la correction détaillée</summary>'
       + paragraphs + '</details></form></div></article>';
   }
+
+  // Expose le même gabarit pour renouveler une question sans recharger la page.
+  window.ExerciseRenderer = {makeExercise};
+  if (!root || !dataNode || !mount) return;
+
+  const chapter = JSON.parse(dataNode.textContent);
+  if (!chapter || !Array.isArray(chapter.exercises) || chapter.exercises.length === 0) {
+    throw new Error('Le chapitre doit contenir des exercices.');
+  }
+  root.dataset.chapter = chapter.slug;
 
   const length = chapter.exercises.length;
   const steps = chapter.exercises.map((exercise, index) =>
