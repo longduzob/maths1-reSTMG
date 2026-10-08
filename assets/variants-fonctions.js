@@ -6,17 +6,17 @@
   register('fonctions', [
     (c,o) => {
       const k=pad(c), a=k+1, b=-(k+4), fn=x=>a*x+b, target=fn(5);
-      return E(o,`On considère <strong>f(x) = ${a}x − ${-b}</strong>. Calcule f(−2), f(0), f(4), puis les antécédents de ${target} et ${b}.`,
+      return {...E(o,`On considère <strong>f(x) = ${a}x − ${-b}</strong>. Calcule f(−2), f(0), f(4), puis les antécédents de ${target} et ${b}.`,
         [N('f(−2)',fn(-2)),N('f(0)',b),N('f(4)',fn(4)),N('Antécédent de '+target,5),N('Antécédent de '+b,0)],
         [`f(−2) = ${a} × (−2) − ${-b} = ${fn(-2)}, f(0) = ${b}, f(4) = ${fn(4)}.`,
-         `Pour f(x) = ${target}, ${a}x − ${-b} = ${target}, d'où x = 5. Pour f(x) = ${b}, x = 0.`]);
+         `Pour f(x) = ${target}, ${a}x − ${-b} = ${target}, d'où x = 5. Pour f(x) = ${b}, x = 0.`]), coachingContext: {a,b,target}};
     },
     (c,o) => {
       const k=pad(c), fix=12+2*k, rate=k+2, at4=fix+4*rate, total=fix+7*rate;
-      return E(o,`Une location coûte <strong>${fix} € de frais fixes</strong> et <strong>${rate} € par heure</strong>. Son coût est C(t) = frais fixes + tarif horaire × t. Calcule C(4) et détermine la durée facturée ${total} €.`,
+      return {...E(o,`Une location coûte <strong>${fix} € de frais fixes</strong> et <strong>${rate} € par heure</strong>. Son coût est C(t) = frais fixes + tarif horaire × t. Calcule C(4) et détermine la durée facturée ${total} €.`,
         [N('Frais fixes',fix),N('Prix par heure',rate),N('C(4), en €',at4),N('Durée pour '+total+' €, en h',7)],
         [`C(t) = ${fix} + ${rate}t ; C(4) = ${fix} + ${rate} × 4 = ${at4} €.`,
-         `${fix} + ${rate}t = ${total} donne ${rate}t = ${total-fix}, donc t = 7 h.`]);
+         `${fix} + ${rate}t = ${total} donne ${rate}t = ${total-fix}, donc t = 7 h.`]), coachingContext: {fix,rate,total}};
     },
     (c,o) => {
       const k=pad(c), h=k+2, lo=h-1, hi=h+1;
@@ -32,60 +32,60 @@
           <text x="510" y="240">${h+2}</text><text x="63" y="275">−1</text>
           <text x="64" y="75">3</text><text x="540" y="225">x</text>
         </g></svg>`;
-      return E(o,`Observe la parabole de <strong>g(x) = (x − ${h})² − 1</strong>, dessinée de x = ${h-2} à x = ${h+2}. Les graduations sont régulières.<br>${graph}`,
+      return {...E(o,`Observe la parabole de <strong>g(x) = (x − ${h})² − 1</strong>, dessinée de x = ${h-2} à x = ${h+2}. Les graduations sont régulières.<br>${graph}`,
         [N('g('+(h-2)+')',3),N('g('+h+')',-1),{label:'Antécédents de 0',type:'unordered-list',answer:`${lo};${hi}`},N('Minimum de g',-1),N('Atteint pour x',h),
         S('Solutions de g(x) < 0',`]${lo};${hi}[`,[`[${lo};${hi}]`,`]${lo};${hi}[`,`[${h-2};${lo}] ∪ [${hi};${h+2}]`])],
         [`g(${h-2}) = (${h-2} − ${h})² − 1 = 3, tandis que g(${h}) = −1, valeur minimale.`,
-         `Résoudre (x − ${h})² − 1 = 0 revient à chercher x = ${lo} ou x = ${hi}. La courbe est sous l’axe entre ces deux valeurs : ]${lo} ; ${hi}[.`]);
+         `Résoudre (x − ${h})² − 1 = 0 revient à chercher x = ${lo} ou x = ${hi}. La courbe est sous l’axe entre ces deux valeurs : ]${lo} ; ${hi}[.`]), coachingContext: {h,lo,hi}};
     },
     (c,o) => {
       const k=pad(c), a=k+1, b=k-2, y1=a+b, y2=4*a+b;
-      return E(o,`Une droite passe par <strong>A(1 ; ${y1})</strong> et <strong>B(4 ; ${y2})</strong>. Trouve les coefficients de h(x) = ax + b, puis calcule h(10).`,
+      return {...E(o,`Une droite passe par <strong>A(1 ; ${y1})</strong> et <strong>B(4 ; ${y2})</strong>. Trouve les coefficients de h(x) = ax + b, puis calcule h(10).`,
         [N('Coefficient a',a),N('Coefficient b',b),N('a dans h(x)',a),N('b dans h(x)',b),N('h(10)',a*10+b)],
         [`a = (${y2} − ${y1})/(4 − 1) = ${a} ; b = ${y1} − ${a} × 1 = ${b}.`,
-         `L'équation est h(x) = ${a}x + ${b}, donc h(10) = ${a*10+b}.`]);
+         `L'équation est h(x) = ${a}x + ${b}, donc h(10) = ${a*10+b}.`]), coachingContext: {a,b,y1,y2}};
     },
     (c,o) => {
       const k=pad(c), diff=2+k%4, r=5+k, fixed=diff*k, B=r+diff, costA=fixed+2*r,costB=2*B;
-      return E(o,`Deux offres de location : <strong>A(t) = ${fixed} + ${r}t</strong> et <strong>B(t) = ${B}t</strong>, t ≥ 0. Compare à t = 2, puis trouve le seuil de rentabilité.`,
+      return {...E(o,`Deux offres de location : <strong>A(t) = ${fixed} + ${r}t</strong> et <strong>B(t) = ${B}t</strong>, t ≥ 0. Compare à t = 2, puis trouve le seuil de rentabilité.`,
         [N('A(2), en €',costA),N('B(2), en €',costB),N('Durée d’égalité',k),
         S('A(t) ≤ B(t) lorsque',`t>=${k}`,[`t<${k}`,`t<=${k}`,`t>=${k}`,`t>${k}`])],
         [`À t = 2 : A(2) = ${fixed} + 2 × ${r} = ${costA} €, B(2) = ${B} × 2 = ${costB} €.`,
-         `${fixed} + ${r}t ≤ ${B}t ⇔ ${fixed} ≤ ${diff}t ⇔ t ≥ ${k}.`]);
+         `${fixed} + ${r}t ≤ ${B}t ⇔ ${fixed} ≤ ${diff}t ⇔ t ≥ ${k}.`]), coachingContext: {fixed,rateA:r,rateB:B,k}};
     },
     (c,o) => {
       const k=pad(c), a=k-1;
-      return E(o,`On considère <strong>q(x) = ${a}x²</strong>. Calcule les taux de variation entre 2 et 5, puis entre 5 et 6.`,
+      return {...E(o,`On considère <strong>q(x) = ${a}x²</strong>. Calcule les taux de variation entre 2 et 5, puis entre 5 et 6.`,
         [N('Entre 2 et 5',7*a),N('Entre 5 et 6',11*a),
         S('Conclusion','non-affine',['affine','non-affine','constante'])],
         [`Entre 2 et 5, le taux vaut [${a} × 25 − ${a} × 4]/3 = ${7*a}.`,
-         `Entre 5 et 6, il vaut [${a} × 36 − ${a} × 25]/1 = ${11*a}. Les taux diffèrent : q n'est pas affine.`]);
+         `Entre 5 et 6, il vaut [${a} × 36 − ${a} × 25]/1 = ${11*a}. Les taux diffèrent : q n'est pas affine.`]), coachingContext: {a}};
     },
     (c,o) => {
       const k=pad(c), a=k+1, root=k+2, b=a*root, max=root+3;
-      return E(o,`On considère <strong>p(x) = −${a}x + ${b}</strong> sur [0 ; ${max}]. Étudie ses variations et son signe.`,
+      return {...E(o,`On considère <strong>p(x) = −${a}x + ${b}</strong> sur [0 ; ${max}]. Étudie ses variations et son signe.`,
         [S('Sens de variation','Décroissante',['Croissante','Décroissante','Constante']),N('Solution de p(x) = 0',root),
          S('Solutions de p(x) ≥ 0',`[0;${root}]`,[`[0;${root}]`,`[${root};${max}]`,`]0;${root}[`])],
         [`Le coefficient directeur −${a} est négatif : p est décroissante.`,
-         `−${a}x + ${b} = 0 ⇔ x = ${root}. Sur [0 ; ${max}], p(x) ≥ 0 pour x ∈ [0 ; ${root}].`]);
+         `−${a}x + ${b} = 0 ⇔ x = ${root}. Sur [0 ; ${max}], p(x) ≥ 0 pour x ∈ [0 ; ${root}].`]), coachingContext: {a,b,root,max}};
     },
     (c,o) => {
       const k=pad(c), D=120*k;
-      return E(o,`La durée (en heures) pour parcourir <strong>${D} km</strong> à vitesse constante v est <strong>t(v) = ${D}/v</strong>.`,
+      return {...E(o,`La durée (en heures) pour parcourir <strong>${D} km</strong> à vitesse constante v est <strong>t(v) = ${D}/v</strong>.`,
         [N('t(60 km/h)',D/60),N('t(80 km/h)',D/80),N('t(120 km/h)',D/120),
          S('De 60 à 120 km/h','divisee-par-deux',['double','divisee-par-deux','ne-change-pas']),
          S('Type de modèle','inverse',['affine','inverse','constant'])],
         [`t(60) = ${D}/60 = ${D/60} h, t(80) = ${D}/80 = ${FR(D/80)} h et t(120) = ${D}/120 = ${D/120} h.`,
-         `Quand la vitesse double, la durée est divisée par deux. Ce modèle est inversement proportionnel.`]);
+         `Quand la vitesse double, la durée est divisée par deux. Ce modèle est inversement proportionnel.`]), coachingContext: {D}};
     },
     (c,o) => {
       const numbers=[2,3,5,6,7,8,10,11,13,14,15,17];
       const n=numbers[c%numbers.length], low=Math.floor(Math.sqrt(n)*100)/100, high=F(low+.01,2);
-      return E(o,`Cherche un encadrement au centième de la solution positive de <strong>x² = ${n}</strong>. Calcule les carrés de deux centièmes consécutifs, puis encadre √${n}.`,
+      return {...E(o,`Cherche un encadrement au centième de la solution positive de <strong>x² = ${n}</strong>. Calcule les carrés de deux centièmes consécutifs, puis encadre √${n}.`,
         [N(`${FR(low,2)}²`,F(low*low,4),0.00001),N(`${FR(high,2)}²`,F(high*high,4),0.00001),
          N('Borne inférieure',low),N('Borne supérieure',high)],
         [`${FR(low,2)}² = ${FR(low*low,4)} < ${n} et ${FR(high,2)}² = ${FR(high*high,4)} > ${n}.`,
-         `La fonction carré est croissante pour x ≥ 0 ; donc ${FR(low,2)} < √${n} < ${FR(high,2)}.`]);
+         `La fonction carré est croissante pour x ≥ 0 ; donc ${FR(low,2)} < √${n} < ${FR(high,2)}.`]), coachingContext: {n,low,high}};
     }
   ]);
 
