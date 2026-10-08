@@ -538,7 +538,7 @@ body.reading-focus .lesson-content { max-width: 880px; margin-inline: auto; widt
 @media print {
   .lesson-immersive .site-header, .lesson-immersive .site-footer,
   .lesson-immersive .lesson-toc, .lesson-reading-controls, .learning-path,
-  .study-quiz form, .study-solution, .study-review .review-cta { display: none !important; }
+  .study-quiz form, .study-review .review-cta { display: none !important; }
   .lesson-immersive .lesson-heading { padding: 0; border: none; background: white; box-shadow: none; }
   .lesson-immersive .lesson-content { border: 0; box-shadow: none; padding: 0; }
   .lesson-immersive .lesson-content > h2 { background: #eee; }
@@ -546,4 +546,66 @@ body.reading-focus .lesson-content { max-width: 880px; margin-inline: auto; widt
   .lesson-immersive .lesson-content .example { break-inside: avoid; }
   .support-scaffold:not([open]) > *:not(summary) { display: block !important; }
   .support-scaffold summary { display: none; }
+}
+/* Catalogue des lecons : les 16 cartes restent filtrables comme avant. */
+.lessons-page .page-intro {
+  position: relative;
+  border: 1px solid #e1d9ef;
+  border-radius: 23px;
+  padding: clamp(24px, 3.5vw, 38px);
+  background: linear-gradient(115deg, #fff, #f2edff 72%, #eaf7f3);
+  overflow: hidden;
+}
+.lessons-page .page-intro h1 { color: #282440; }
+.lessons-page .page-intro > p:last-child { max-width: 760px; color: #47445a; line-height: 1.75; }
+.catalog-learning-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+  margin: 26px 0;
+}
+.catalog-learning-guide article {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 21px;
+  border: 1px solid #dcd7e7;
+  border-top: 4px solid #5745a8;
+  border-radius: 14px;
+  background: #fff;
+}
+.catalog-learning-guide article:nth-child(2) { border-top-color: #0c7664; background: #f9fdfa; }
+.catalog-learning-guide article:nth-child(3) { border-top-color: #a3651a; background: #fffdf9; }
+.catalog-learning-guide h2 { font-size: 16px; color: #29253e; margin: 0; }
+.catalog-learning-guide p { font-size: 13px; line-height: 1.65; color: #535366; }
+.catalog-learning-guide .guide-number {
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 850;
+  color: #5d50a8;
+}
+.catalog-learning-guide article:nth-child(2) .guide-number { color: #0d6755; }
+.catalog-learning-guide article:nth-child(3) .guide-number { color: #86500e; }
+.lessons-page .catalog-group > h2 { color: #29263d; }
+.lessons-page .lesson-card {
+  border-top: 4px solid var(--card-color, #604bd1);
+  box-shadow: 0 10px 24px rgba(42, 33, 80, .04);
+  transition: transform .16s, box-shadow .16s, border-color .16s;
+}
+.lessons-page .lesson-card[data-category="analyse"] { --card-color: #5844bd; }
+.lessons-page .lesson-card[data-category="statistiques"] { --card-color: #0c746b; }
+.lessons-page .lesson-card[data-category="probabilites"] { --card-color: #99517b; }
+.lessons-page .lesson-card[data-category="reperes"] { --card-color: #2a649b; }
+.lessons-page .lesson-card .course-code,
+.lessons-page .lesson-card .read-link { color: var(--card-color); }
+.lessons-page .lesson-card:hover { box-shadow: 0 17px 30px rgba(42, 33, 80, .08); }
+.lessons-page .lesson-card h3 { font-size: 19px; }
+.lessons-page .catalog-notice a { color: #493197; }
+@media (max-width: 740px) {
+  .catalog-learning-guide { grid-template-columns: minmax(0, 1fr); }
+  .catalog-learning-guide article { padding: 17px 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lessons-page .lesson-card { transition: none; }
 }
