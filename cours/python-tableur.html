@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Python, listes et tableur | Maths · Première STMG</title><meta name="description" content="Variables, fonctions, listes, boucles, accumulateurs, lecture d’un CSV réel et tableau croisé à deux critères."><link rel="stylesheet" href="../assets/styles.css"><link rel="stylesheet" href="../assets/cours.css"><script src="../assets/cours.js" defer></script></head><body data-course="python-tableur"><a class="skip-link" href="#contenu">Aller au contenu</a><header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html">maths<span class="brand-dot">.</span></a><nav class="main-nav" aria-label="Navigation principale"><a href="../index.html">Accueil</a><a href="../lecons.html" aria-current="location">Leçons</a><a href="../exercices.html">Exercices</a></nav><span class="level-badge">1<sup>re</sup> STMG</span></div></header><main id="contenu" class="container lesson-page" tabindex="-1"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="../lecons.html">Toutes les leçons</a><span>/</span><span aria-current="page">Repère R5</span></nav><header class="lesson-heading"><p class="eyebrow">R5 / ALGORITHMIQUE</p><h1>Python, listes et tableur</h1><p class="lead">Automatiser un calcul, traiter des données et expliquer ce que fait un programme, ligne après ligne.</p></header><div class="lesson-layout"><aside class="lesson-toc" hidden><h2>Dans cette leçon</h2><nav aria-label="Sommaire de la leçon"></nav><button class="print-button" type="button">Imprimer le cours</button></aside><article class="lesson-content"><section class="objectives"><h2>À mobiliser toute l’année</h2><p>Les programmes présentés sont destinés à Python 3. Le site ne les exécute pas dans la page : ils se copient dans un environnement Python. Seul le simulateur du <a href="variables-aleatoires.html">chapitre 11</a> s’exécute directement dans le navigateur.</p><p>Les exemples utilisent des listes, des fonctions et la bibliothèque standard ; les graphiques Python facultatifs du chapitre 11 utilisent Matplotlib.</p></section>
+<h2>1. Variables, affectation et conditions</h2><p>Une variable donne un nom à une valeur. Dans un algorithme écrit en français, on note « capital ← 200 ». En Python, <code>capital = 200</code> est une <strong>affectation</strong>, pas une équation à résoudre. L’instruction <code>capital = capital + 50</code> lit l’ancienne valeur, ajoute 50, puis stocke le résultat.</p><p>Un entier est de type <code>int</code>, un nombre décimal approché de type <code>float</code>, un texte de type <code>str</code>, une valeur vraie ou fausse de type <code>bool</code>. En Python, on écrit <code>0.25</code> avec un point. L’opérateur de puissance est <code>**</code>, pas <code>^</code>. Le test d’égalité s’écrit <code>==</code>, différent de <code>=</code>.</p><pre><code>capital = 200
+capital = capital + 50
+if capital &gt;= 240:
+    message = "Seuil atteint"
+else:
+    message = "Seuil non atteint"
+print(message)</code></pre><p>L’indentation délimite les blocs. <code>and</code>, <code>or</code> et <code>not</code> traduisent « et », « ou », « non ». Pour tester l’intervalle [0 ; 1], on peut écrire <code>0 &lt;= p &lt;= 1</code>. Un test qui porte sur des décimaux calculés doit tenir compte des arrondis de la machine.</p>
+<h2>2. Fonctions : entrées, sortie et réutilisation</h2><p>Une fonction regroupe des instructions. Ses paramètres sont les entrées ; <code>return</code> transmet le résultat. <code>print</code> affiche un texte mais ne remplace pas le retour d’une valeur.</p><pre><code>def valeur_finale(initiale, taux):
+    return initiale * (1 + taux)
+
+def taux_evolution(initiale, finale):
+    if initiale &lt;= 0:
+        raise ValueError("La valeur initiale doit etre positive")
+    return (finale - initiale) / initiale
+
+prix = valeur_finale(200, 0.15)
+print(prix)                         # environ 230
+print(taux_evolution(200, prix))    # environ 0.15</code></pre><p>On peut appeler une fonction dans une autre : c’est la programmation <strong>modulaire</strong>. Décomposer « lire les données », « calculer » et « afficher » rend un programme plus facile à vérifier. Tester quelques cas simples dont le résultat est connu, puis les cas limites autorisés.</p>
+<h2>3. Construire et modifier des listes</h2><p>Une liste rassemble des valeurs dans un ordre donné. Les indices commencent à 0 : pour une liste de longueur n, les indices usuels vont de 0 à n − 1. Accéder à l’indice n provoquerait une erreur.</p><pre><code># En extension : on ecrit les elements.
+notes = [8, 12, 15]
+print(notes[0])       # 8
+notes[1] = 13        # remplace 12 par 13
+notes.append(16)     # ajoute a la fin
+valeur = notes.pop() # retire et renvoie 16
+del notes[0]         # supprime la premiere valeur
+# notes vaut maintenant [13, 15]
+
+# Par ajouts successifs :
+carres = []
+for n in range(5):
+    carres.append(n ** 2)
+
+# En comprehension, meme resultat :
+carres = [n ** 2 for n in range(5)]
+# [0, 1, 4, 9, 16]
+positifs = [x for x in [-2, 0, 3, 5] if x &gt; 0]</code></pre><p><code>len(notes)</code> donne la longueur de la liste. Pour lire ses valeurs, utiliser <code>for note in notes</code>. Pour avoir besoin de leurs positions, utiliser <code>for i in range(len(notes))</code>. Attention : <code>copie = notes</code> ne crée pas une liste indépendante ; <code>copie = notes.copy()</code> crée une nouvelle liste pour une liste simple de nombres.</p>
+<h2>4. Boucles, compteurs et accumulateurs</h2><p>Une boucle <code>for</code> répète un nombre connu de fois. <code>range(5)</code> fournit 0, 1, 2, 3, 4. Une boucle <code>while</code> continue tant qu’une condition est vraie ; il faut que son corps fasse évoluer cette condition vers l’arrêt.</p><pre><code>valeurs = [3, 7, 2, 10]
+total = 0
+produit = 1
+compteur = 0
+for x in valeurs:
+    total += x
+    produit *= x
+    if x &gt;= 5:
+        compteur += 1
+# total = 22 ; produit = 420 ; compteur = 2</code></pre><p>Une somme commence à 0, un produit à 1. Un compteur augmente lorsqu’un critère est satisfait. Pour construire les termes d’une suite, conserver le terme courant et le mettre à jour à chaque étape. Les cours sur les <a href="suites-arithmetiques.html">suites arithmétiques</a> et <a href="suites-geometriques.html">géométriques</a> proposent les programmes complets de calcul et de seuil.</p><div class="warning"><h3>Éviter la boucle infinie</h3><p>Avant un <code>while</code>, vérifier que le seuil peut être atteint et que la variable change effectivement. Ajouter une limite d’itérations peut protéger un programme général, mais il faut alors signaler quand cette limite est atteinte au lieu d’inventer un résultat.</p></div>
+<h2>5. Traiter un fichier de données réelles</h2><p>Télécharge le <a href="../donnees/naissances-france-2018-2023.csv" download>CSV des naissances en France, 2018–2023</a> et place-le dans le dossier depuis lequel tu exécutes Python. Source : <a href="https://www.insee.fr/fr/statistiques/8282356">Insee Focus 339, figure 1</a>. Il contient six totaux annuels, France y compris Mayotte, et aucune donnée individuelle.</p><pre><code>import csv
+from statistics import mean
+
+nom = "naissances-france-2018-2023.csv"
+with open(nom, encoding="utf-8", newline="") as fichier:
+    lecteur = csv.reader(fichier)
+    entete = next(lecteur)
+    if entete != ["annee", "naissances"]:
+        raise ValueError("Colonnes inattendues")
+    donnees = []
+    for ligne in lecteur:
+        if len(ligne) != 2:
+            raise ValueError("Chaque ligne doit avoir deux colonnes")
+        annee, nombre = int(ligne[0]), int(ligne[1])
+        if nombre &lt; 0:
+            raise ValueError("Nombre de naissances negatif")
+        donnees.append([annee, nombre])
+
+if not donnees:
+    raise ValueError("Fichier sans observations")
+naissances = [ligne[1] for ligne in donnees]
+print(mean(naissances))  # environ 732170.17
+selection = [ligne for ligne in donnees
+             if ligne[0] &gt;= 2020 and ligne[1] &lt; 740000]
+print(selection)
+# [[2020, 735196], [2022, 725997], [2023, 677803]]</code></pre><p>Le fichier contient du texte : <code>int</code> transforme les champs en nombres. Chaque sous-liste conserve une année et sa valeur ensemble. L’absence du fichier provoque une erreur explicite ; on vérifie alors son nom et son dossier, sans remplacer les données par des valeurs inventées.</p><p>La moyenne calculée est une moyenne de six <em>totaux annuels</em>, pas une moyenne par habitant. Pour l’évolution de 2022 à 2023, (677 803 − 725 997)/725 997 ≈ −0,06638, soit environ −6,64 %. Ces données décrivent une période historique, pas les chiffres de l’année en cours.</p>
+<h2>6. Construire un tableau croisé à partir de données brutes</h2><p>On dispose cette fois de huit observations <strong>fictives</strong>. Chaque ligne indique le canal de commande et l’adhésion. Ce petit jeu de données est distinct du tableau de 200 clients du chapitre 09.</p><pre><code>clients = [
+    ["ligne", "oui"], ["ligne", "oui"],
+    ["ligne", "oui"], ["ligne", "non"],
+    ["magasin", "oui"], ["magasin", "non"],
+    ["magasin", "non"], ["magasin", "non"]
+]
+canaux = ["ligne", "magasin"]
+adhesions = ["oui", "non"]
+tableau = [[0, 0], [0, 0]]
+for client in clients:
+    i = canaux.index(client[0])
+    j = adhesions.index(client[1])
+    tableau[i][j] += 1
+print(tableau)  # [[3, 1], [1, 3]]
+print([sum(ligne) for ligne in tableau])  # totaux : [4, 4]
+print([sum(tableau[i][j] for i in range(2))
+       for j in range(2)])               # colonnes : [4, 4]</code></pre><p>La cellule [0][0] compte les clients en ligne et adhérents. Leur fréquence dans l’ensemble est 3/8 ; leur fréquence parmi les clients en ligne est 3/4. Le tableau croisé est construit par comptage de deux critères, pas saisi directement sous forme de résultats.</p>
+<h2>7. Organiser une feuille de calcul</h2><p>Une cellule peut contenir un nombre, un texte ou une formule commençant par <code>=</code>. En recopiant une formule, une référence <strong>relative</strong> change avec la position : <code>=B2*1,04</code> devient <code>=B3*1,04</code> à la ligne suivante. Une référence <strong>absolue</strong> garde sa position : <code>$E$1</code>. Les références mixtes <code>$A2</code> et <code>A$2</code> ne fixent qu’une dimension.</p><p>Pour une suite de raison stockée en E1, <code>=B2*$E$1</code> permet de recopier la relation sans déplacer la raison. Pour une moyenne, utiliser <code>=MOYENNE(B2:B7)</code>. Pour un total, <code>=SOMME(B2:B7)</code>. Afficher les unités dans l’en-tête, pas à l’intérieur des cellules numériques.</p><p>Si les canaux fictifs sont en A2:A9 et les adhésions en B2:B9, la cellule croisée « ligne et oui » peut se calculer avec <code>=NB.SI.ENS($A$2:$A$9;"ligne";$B$2:$B$9;"oui")</code>. Un tableau croisé dynamique réalise aussi ces regroupements, en choisissant l’un des critères en lignes et l’autre en colonnes, puis un comptage en valeurs. Les noms de fonctions et les séparateurs dépendent de la langue du tableur.</p>
+<h2>8. Lire, tester et expliquer un programme</h2><p>Pour vérifier un algorithme, dresser un tableau de suivi : valeur initiale, condition, valeurs après chaque passage, sortie. Comparer un petit exemple calculé à la main avec le résultat du programme, puis tester le cas n = 0 si celui-ci est autorisé, les bornes de probabilité 0 et 1, et les entrées non valides.</p><p>Que valent u et total après ce programme ?</p><pre><code>u = 2
+total = 0
+for _ in range(3):
+    total += u
+    u *= 2</code></pre><details class="check"><summary>Afficher la correction</summary><p>Au départ : u = 2, total = 0. Après le premier passage : total = 2, u = 4. Après le deuxième : total = 6, u = 8. Après le troisième : total = 14, u = 16. La somme contient 2 + 4 + 8 ; le terme 16 a été préparé mais pas ajouté. Inverser les deux instructions dans la boucle changerait la somme.</p></details><div class="recap"><h2>À retenir</h2><p>Définir les entrées et les sorties, choisir la bonne initialisation, compter les itérations et préserver les couples de données. Un programme correct ne remplace pas l’interprétation mathématique de son résultat.</p></div><footer class="course-footer"><p>Référence : programme 2026, annexe p. 5 et activités algorithmiques p. 7–10 ; <a href="https://docs.python.org/fr/3/tutorial/">documentation officielle Python</a>. <a href="../programme.html">Sources et couverture du programme</a>.</p><nav class="course-pagination" aria-label="Leçons précédente et suivante"></nav></footer></article></div></main><footer class="site-footer"><div class="container footer-inner"><p><strong>maths.</strong> Comprendre, puis pratiquer.</p><p>Première STMG · Programme 2026</p></div></footer></body></html>

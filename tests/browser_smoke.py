@@ -1,0 +1,114 @@
+"""End-to-end checks against the actual static site at a project subdirectory URL.
+Development dependencies: playwright==1.55.0 and its Chromium browser.
+Run python3 tests/browser_smoke.py from any directory.
+"""
+from __future__ import annotations
+import functools
+import threading
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import quote
+from playwright.sync_api import sync_playwright, expect
+
+ROOT = Path(__file__).resolve().parents[1]
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
+
+
+def main():
+    handler = functools.partial(QuietHandler, directory=str(ROOT.parent))
+    server = ThreadingHTTPServer(('127.0.0.1', 0), handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    base = f'http://127.0.0.1:{server.server_port}/{quote(ROOT.name)}/'
+    errors, failed_responses = [], []
+    paths = sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            context = browser.new_context()
+            page = context.new_page()
+            page.on('pageerror', lambda error: errors.append(str(error)))
+            page.on('response', lambda response: failed_responses.append(response.url) if response.status >= 400 else None)
+            checks = 0
+            for width in [320, 390, 768, 1440]:
+                page.set_viewport_size({'width': width, 'height': 900})
+                for path in paths:
+                    name = path.relative_to(ROOT).as_posix()
+                    response = page.goto(base + name, wait_until='networkidle')
+                    assert response.status == 200, name
+                    expect(page.locator('h1')).to_be_visible()
+                    assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), (name, width, 'horizontal overflow')
+                    if name.startswith('cours/'):
+                        expect(page.locator('.lesson-toc')).to_be_visible()
+                        expect(page.locator('.lesson-content')).to_be_visible()
+                        assert page.locator('.lesson-toc nav a').count() >= 6
+                        assert page.evaluate("Array.from(document.querySelectorAll('.lesson-toc nav a')).every(a => document.getElementById(decodeURIComponent(a.hash.slice(1))))"), name
+                    checks += 1
+            page.set_viewport_size({'width': 390, 'height': 844})
+            page.goto(base + 'lecons.html')
+            expect(page.locator('.lesson-card:visible')).to_have_count(16)
+            page.locator('#course-search').fill('derivee')
+            expect(page.locator('.lesson-card:visible')).to_have_count(2)
+            page.locator('#course-search').fill('')
+            page.locator('#course-category').select_option('probabilites')
+            expect(page.locator('.lesson-card:visible')).to_have_count(3)
+            page.locator('#course-search').fill('xyznotfound')
+            expect(page.locator('#no-results')).to_be_visible()
+            expect(page.locator('.lesson-card:visible')).to_have_count(0)
+            page.locator('#course-search').fill('')
+            page.locator('#course-category').select_option('')
+            page.locator('a.lesson-card[href="cours/fonctions.html"]').click()
+            expect(page).to_have_url(base + 'cours/fonctions.html')
+            check = page.locator('details.check').first
+            check.locator('summary').click()
+            assert check.evaluate('(el) => el.open')
+            page.evaluate("window.dispatchEvent(new Event('beforeprint'))")
+            assert page.locator('details:not([open])').count() == 0
+            page.evaluate("window.dispatchEvent(new Event('afterprint'))")
+            assert check.evaluate('(el) => el.open')
+            page.locator('.course-pagination a').last.click()
+            expect(page).to_have_url(base + 'cours/second-degre.html')
+            page.goto(base + 'cours/variables-aleatoires.html')
+            for probability in ['0', '1', '0.3']:
+                page.locator('[name="p"]').fill(probability)
+                page.locator('[name="n"]').fill('20')
+                page.locator('[name="N"]').fill('40')
+                page.locator('#simulation-form button').click()
+                expect(page.locator('#simulation-output table tbody tr')).to_have_count(3)
+                assert page.locator('.sim-bars span').count() == 10
+                assert '40' in page.locator('#simulation-output').inner_text()
+                if probability in ['0', '1']:
+                    counts = page.locator('#simulation-output tbody tr td:nth-child(2)').all_text_contents()
+                    assert counts == ['40', '40', '40'], (probability, counts)
+                bins = page.locator('#simulation-output details li').all_text_contents()
+                assert sum(int(item.split(':')[-1].strip().split()[0]) for item in bins) == 40
+                assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
+            page.locator('[name="n"]').fill('0')
+            page.evaluate("document.querySelector('#simulation-form').dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}))")
+            assert 'Choisir' in page.locator('#simulation-output').inner_text()
+            nojs = browser.new_context(java_script_enabled=False, viewport={'width': 390, 'height': 844})
+            static = nojs.new_page()
+            static.goto(base + 'lecons.html')
+            expect(static.locator('.lesson-card:visible')).to_have_count(16)
+            expect(static.locator('.catalog-tools')).to_be_hidden()
+            static.locator('a.lesson-card[href="cours/calcul.html"]').click()
+            expect(static.locator('.lesson-content')).to_be_visible()
+            expect(static.locator('.lesson-toc')).to_be_hidden()
+            static.locator('details.check summary').click()
+            assert static.locator('details.check').evaluate('(el) => el.open')
+            nojs.close()
+            assert not errors, errors
+            assert not failed_responses, failed_responses
+            browser.close()
+            print(f'BROWSER OK: {checks} page/width combinations (320, 390, 768, 1440 px); search, filters, TOCs, corrections, print events, navigation, simulation and no-JavaScript fallback.')
+            print('No JavaScript exceptions, no HTTP errors, no global horizontal overflow.')
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=3)
+
+if __name__ == '__main__':
+    main()

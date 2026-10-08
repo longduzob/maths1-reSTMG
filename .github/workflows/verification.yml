@@ -1,0 +1,27 @@
+name: Verification du site
+on:
+  push:
+    branches: [main, cours-programme-2026]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Lire le depot
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verifier les pages et les exemples
+        run: python3 tests/validate_site.py
+      - name: Verifier JavaScript
+        run: node --check assets/cours.js
+      - name: Installer le navigateur de test
+        run: |
+          python3 -m pip install playwright==1.55.0
+          python3 -m playwright install --with-deps chromium
+      - name: Tester le site dans Chromium
+        run: python3 tests/browser_smoke.py
