@@ -102,9 +102,19 @@ def main():
             links_checked += 1
         if path.parent.name == 'cours':
             assert page.classes['lesson-content'] == 1, name
+            assert page.classes['lesson-immersive'] == 1, name
+            assert page.classes['lesson-reading-controls'] == 1, name
+            assert page.classes['learning-path'] == 1, name
+            assert page.classes['support-scaffold'] == 1, name
+            assert page.classes['study-quiz'] == 2, name
+            assert page.classes['study-solution'] == 2, name
+            assert page.classes['study-review'] == 1, name
             assert page.classes['check'] >= 1 and page.tags['summary'] >= 1, name
             assert page.tags['h2'] >= 6, name
             assert '../programme.html' in page.links, name
+            assert '../pedagogie.html' in page.links, name
+            assert any(link.startswith('../assets/apprentissage.css') for link in page.links), name
+            assert any(link.startswith('../assets/apprentissage.js') for link in page.links), name
             words = len(re.findall(r'\w+', ' '.join(page.text)))
             assert words >= 550, (name, 'lesson too short', words)
             for i, block in enumerate(page.pre_blocks):
@@ -112,6 +122,8 @@ def main():
                 snippets += 1
     catalog = pages[(ROOT / 'lecons.html').resolve()]
     assert catalog.classes['lesson-card'] == 16
+    assert catalog.classes['catalog-learning-guide'] == 1
+    assert 'pedagogie.html' in catalog.links
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(catalog.links)
     sources = pages[(ROOT / 'programme.html').resolve()]
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(sources.links)
