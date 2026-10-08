@@ -239,6 +239,10 @@
     });
     bridge.append(summary, note, question, answer, check, result);
     panel.append(bridge);
+    // Éviter de présenter en plus un indice générique, parfois inadapté.
+    // Il reste dans le HTML si JavaScript est désactivé.
+    const oldHint = statement.querySelector('details.hint');
+    if (oldHint) oldHint.hidden = true;
     statement.append(panel);
     let failures = 0;
     form.addEventListener('submit', () => {
