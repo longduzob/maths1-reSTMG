@@ -131,6 +131,29 @@ def main():
             for control, expected in zip(last_inputs.all(), ['4,9729', '5,0176', '2,23', '2,24']):
                 expect(control).to_have_value(expected)
             expect(page.locator('#exercise-score')).to_have_text('2/9')
+
+            # Chapitre 1 : la validation prépare une nouvelle question sans
+            # effacer le résultat avant l'action de l'élève.
+            page.locator('[data-step="0"]').click()
+            statement_before = page.locator('#exercice-1 .exercise-statement > p').inner_text()
+            expect(page.locator('#exercice-1 [data-action="new-variant"]')).to_be_visible()
+            page.locator('#exercice-1 [data-action="new-variant"]').click()
+            expect(page.locator('.exercise-block')).to_have_count(9)
+            new_statement = page.locator('#exercice-1 .exercise-statement > p').inner_text()
+            assert new_statement != statement_before
+            expect(page.locator('#exercise-score')).to_have_text('1/9')
+            expect(page.locator('#exercice-1 .exercise-kicker')).to_contain_text('variante 2')
+            for control in page.locator('#exercice-1 input[data-expect]').all():
+                control.fill(control.get_attribute('data-expect').split('|')[0])
+            page.locator('#exercice-1 button[type="submit"]').click()
+            expect(page.locator('#exercise-score')).to_have_text('2/9')
+            page.locator('#exercice-1 input[data-expect]').first.fill('99999')
+            page.locator('#exercice-1 button[type="submit"]').click()
+            expect(page.locator('#exercise-score')).to_have_text('1/9')
+            page.locator('#exercice-1 [data-action="new-variant"]').click()
+            assert page.locator('#exercice-1 .exercise-statement > p').inner_text() != new_statement
+            expect(page.locator('#exercice-1 .exercise-kicker')).to_contain_text('variante 4')
+
             # Tous les nouveaux parcours : valider, consulter, recommencer.
             extra_slugs = ['second-degre','suites','suites-arithmetiques','suites-geometriques','derivees','variations','statistiques-deux-variables','probabilites-conditionnelles','bernoulli','variables-aleatoires','calcul','evolutions','logique','statistiques-descriptives','python-tableur']
             for slug in extra_slugs:
@@ -148,6 +171,20 @@ def main():
                 expect(page.locator('#exercise-score')).to_have_text('1/8')
                 page.locator('#exercice-1 details.check summary').click()
                 expect(page.locator('#exercice-1 .answer-row.was-correct')).to_have_count(first.count())
+                expect(page.locator('#exercice-1 [data-action="new-variant"]')).to_be_visible()
+                old_question = page.locator('#exercice-1 .exercise-statement > p').inner_text()
+                page.locator('#exercice-1 [data-action="new-variant"]').click()
+                expect(page.locator('#exercice-1')).to_be_visible()
+                assert page.locator('#exercice-1 .exercise-statement > p').inner_text() != old_question, slug
+                expect(page.locator('#exercise-score')).to_have_text('0/8')
+                for control in page.locator('#exercice-1 [data-expect]').all():
+                    value = control.get_attribute('data-expect').split('|')[0]
+                    if control.evaluate('(el) => el.tagName === "SELECT"'):
+                        control.select_option(value=value)
+                    else:
+                        control.fill(value)
+                page.locator('#exercice-1 button[type="submit"]').click()
+                expect(page.locator('#exercise-score')).to_have_text('1/8')
                 page.locator('[data-nav="next"]').click()
                 expect(page.locator('#exercice-2')).to_be_visible()
                 page.locator('#exercice-2 details.check summary').click()
@@ -155,6 +192,10 @@ def main():
                 expect(page.locator('#exercise-score')).to_have_text('1/8')
                 page.locator('#exercice-2 [data-action="reset"]').click()
                 expect(page.locator('#exercice-2 .answer-row.is-revealed')).to_have_count(0)
+                # Après une erreur ou une correction, le score ne progresse pas.
+                page.locator('#exercice-2 button[type="submit"]').click()
+                expect(page.locator('#exercice-2 [data-action="new-variant"]')).to_be_visible()
+                expect(page.locator('#exercise-score')).to_have_text('1/8')
 
             # Questions actives et lecture accessible dans les 16 cours.
             lesson_slugs = ['fonctions', 'second-degre', 'suites',
