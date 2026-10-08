@@ -2,9 +2,11 @@
 
 Site pédagogique en français, en HTML/CSS/JavaScript statiques.
 
-**Site : https://longduzob.github.io/maths1-reSTMG/**  
-**Leçons : https://longduzob.github.io/maths1-reSTMG/lecons.html**  
-**Exercices : https://longduzob.github.io/maths1-reSTMG/exercices.html**
+**[Ouvrir le site de maths](https://parzival733.github.io/maths1-reSTMG/)**  
+**[Consulter les leçons](https://parzival733.github.io/maths1-reSTMG/lecons.html)**  
+**[Faire les exercices interactifs](https://parzival733.github.io/maths1-reSTMG/exercices.html)**
+
+Dépôt GitHub : [parzival733/maths1-reSTMG](https://github.com/parzival733/maths1-reSTMG).
 
 ## Programme de référence
 
