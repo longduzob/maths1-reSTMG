@@ -4,9 +4,10 @@
 (() => {
   'use strict';
   const factories = new Map();
-  const N = (label, value, tolerance) => ({
+  const N = (label, value, tolerance, rounding) => ({
     label, answer: String(value),
-    ...(tolerance === undefined ? {} : {tolerance: String(tolerance)})
+    ...(tolerance === undefined ? {} : {tolerance: String(tolerance)}),
+    ...(rounding === undefined ? {} : {rounding: String(rounding)})
   });
   const S = (label, answer, options) => ({label, answer, options});
   const F = (value, digits = 4) => Number(value.toFixed(digits));
@@ -23,6 +24,74 @@
     correction: Array.isArray(correction) ? correction : [correction],
     hint: options.hint || 'Repère les données de l’énoncé et la méthode du cours. Effectue le calcul avant de consulter la correction.'
   });
+
+  // Convertir des nombres français et des fractions de manière contrôlée.
+  // Number() seul accepterait aussi Infinity ou des formats hexadécimaux.
+  const decimalPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
+
+  function readNumber(value) {
+    const input = String(value).trim().replace(/[−–—]/g, '-')
+      .replace(/\s+/g, '').replace(/,/g, '.');
+    const parts = input.split('/');
+    if (parts.length === 1 && decimalPattern.test(parts[0])) {
+      const n = Number(parts[0]);
+      return Number.isFinite(n) ? n : NaN;
+    }
+    if (parts.length === 2 && parts.every(part => decimalPattern.test(part))) {
+      const numerator = Number(parts[0]), denominator = Number(parts[1]);
+      const n = numerator / denominator;
+      return denominator !== 0 && Number.isFinite(n) ? n : NaN;
+    }
+    return NaN;
+  }
+
+  function unorderedValues(value) {
+    const input = String(value).trim().replace(/^\{|\}$/g, '')
+      .replace(/\bx\s*=\s*/gi, '');
+    const tokens = input.split(/\s*(?:;|,|\bet\b)\s*/i);
+    if (tokens.length < 2 || tokens.some(token => !token.trim())) return null;
+    const numbers = tokens.map(readNumber);
+    return numbers.every(Number.isFinite) ? numbers.sort((a, b) => a - b) : null;
+  }
+
+  // Comparaison utilisée avant et pendant la révélation des corrections.
+  function matchesAnswer(value, expected, type = 'text', tolerance, rounding) {
+    if (!String(value).trim()) return false;
+    const answers = String(expected).split('|');
+
+    if (type === 'number') {
+      const actual = readNumber(value);
+      if (!Number.isFinite(actual)) return false;
+      const threshold = tolerance === '' || tolerance == null
+        ? 0.000001 : Number(tolerance);
+      if (!Number.isFinite(threshold) || threshold < 0 || threshold > 1) return false;
+      return answers.some(item => {
+        const target = readNumber(item);
+        if (!Number.isFinite(target)) return false;
+        if (Math.abs(actual - target) <= threshold + Number.EPSILON * Math.max(1, Math.abs(target))) return true;
+        if (rounding == null || rounding === '') return false;
+        const digits = Number(rounding);
+        if (!Number.isInteger(digits) || digits < 0 || digits > 6) return false;
+        const scale = 10 ** digits;
+        const rounded = Math.sign(target) * Math.round(Math.abs(target) * scale + 1e-9) / scale;
+        return Math.abs(actual - rounded) <= 1e-9;
+      });
+    }
+
+    if (type === 'unordered-list') {
+      const actual = unorderedValues(value);
+      if (!actual) return false;
+      return answers.some(item => {
+        const target = unorderedValues(item);
+        return target && target.length === actual.length
+          && actual.every((number, index) => Math.abs(number - target[index]) < 1e-9);
+      });
+    }
+
+    const normal = text => String(text).trim().toLowerCase()
+      .replace(/[−–—]/g, '-').replace(/,/g, '.').replace(/\s+/g, '');
+    return answers.some(item => normal(value) === normal(item));
+  }
 
   function register(slug, generators) {
     if (factories.has(slug) || !Array.isArray(generators) || !generators.every(g => typeof g === 'function')) {
@@ -46,7 +115,7 @@
         (typeof option === 'string' ? option : option.value) === field.answer)) {
         throw new Error('Choix correct absent : ' + slug + ', ' + field.label);
       }
-      if (!field.options && field.type !== 'text' && !Number.isFinite(Number(field.answer))) {
+      if (!field.options && field.type !== 'text' && field.type !== 'unordered-list' && !Number.isFinite(readNumber(field.answer))) {
         throw new Error('Réponse numérique non finie : ' + slug + ', ' + field.label);
       }
     }
@@ -56,5 +125,5 @@
     return result;
   }
 
-  window.ExerciseVariants = {register, generate, N, S, F, FR, pad, E};
+  window.ExerciseVariants = {register, generate, N, S, F, FR, pad, E, matchesAnswer};
 })();
