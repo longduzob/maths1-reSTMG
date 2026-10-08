@@ -76,7 +76,8 @@ def load_functions(page: Page) -> dict:
 
 
 def main():
-    paths = (sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))\n             + sorted((ROOT / 'exercices').glob('*.html')))
+    paths = (sorted(ROOT.glob('*.html')) + sorted((ROOT / 'cours').glob('*.html'))
+             + sorted((ROOT / 'exercices').glob('*.html')))
     pages = {path.resolve(): Page(path.read_text(encoding='utf-8')) for path in paths}
     assert {p.stem for p in (ROOT / 'cours').glob('*.html')} == set(COURSES)
     links_checked = 0
