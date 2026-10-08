@@ -654,3 +654,16 @@
 @media print {
   .variant-refresh { display: none !important; }
 }
+
+/* Prototype pédagogique du chapitre Fonctions uniquement. */
+.coaching-panel { margin-top: 20px; padding: 18px; border: 1px solid #b9d8cc; border-radius: 14px; background: #f1f8f4; }
+.coaching-panel h3 { margin: 0 0 8px; color: #17543f; font-size: 17px; }
+.coaching-panel > p { margin: 0 0 12px; line-height: 1.6; }
+.coaching-hint, .coaching-bridge { margin: 9px 0; padding: 11px 13px; background: #fff; border: 1px solid #c4d9cf; border-radius: 10px; }
+.coaching-hint summary, .coaching-bridge summary { cursor: pointer; font-weight: 750; color: #174e3b; }
+.coaching-hint p, .coaching-bridge p { margin: 10px 0 0; line-height: 1.65; }
+.coaching-diagnosis { padding: 11px; border-left: 4px solid #ae7022; background: #fff5e7; color: #71470d; }
+.coaching-bridge-answer { display: block; width: 100%; min-height: 44px; margin: 10px 0; padding: 10px; border: 2px solid #769e8a; border-radius: 8px; font: inherit; }
+.coaching-bridge-answer:focus-visible { outline: 3px solid #17543f; outline-offset: 2px; }
+.coaching-bridge .is-success { color: #145c40; font-weight: 750; }
+@media print { .coaching-panel { display: none !important; } }
