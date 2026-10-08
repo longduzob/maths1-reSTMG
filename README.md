@@ -34,6 +34,14 @@ Les recherches par mot et domaine, le sommaire des leçons, les liens précéden
 
 **Exercices interactifs : 129 exercices en 16 parcours**, couvrant les 11 chapitres et les 5 repères. Chaque série propose des réponses saisies et des choix, un score, des indices et des corrections détaillées qui remplissent les cases en vert (réponse initiale juste) ou en rouge (réponse fausse ou manquante). Le corrigé ne rapporte pas de point et le bouton Effacer permet de recommencer. La progression se réinitialise au rechargement.
 
+### Générateur de variantes procédurales
+
+**Les 129 exercices disposent chacun d'un modèle paramétrable.** Après chaque clic sur Vérifier (même lorsque la réponse est fausse), une nouvelle variante est calculée à partir de nouveaux paramètres numériques. L'élève conserve l'écran de correction et le feedback jusqu'à ce qu'il clique sur **Nouvelle variante ↻**, pour ne pas perdre le temps de comprendre ses erreurs. Ouvrir une correction prépare également une nouvelle variante si elle n'est pas déjà prête. Il est toujours possible de corriger l'essai actuel.
+
+Le moteur recalcule **ensemble** les données de l'énoncé, les réponses numériques, les options correctes et les corrections détaillées : aucun simple remplacement arbitraire de nombres dans un texte fixe. Le score correspond aux exercices actuellement validés ; renouveler une question remet sa validation à zéro afin d'éviter de créditer une réponse antérieure. La correction révélée continue d'indiquer en vert ce qui était juste et en rouge ce qui était faux avant la révélation.
+
+Les variations sont déterministes par numéro d'essai (cycle de difficulté borné) et peuvent être répétées indéfiniment ; elles ne sont pas garanties inédites sur toute la vie du site. Elles changent d'une validation à la suivante. La génération est locale au navigateur, sans transmission ni stockage des réponses.
+
 ## Données et confidentialité
 
 `donnees/naissances-france-2018-2023.csv` contient six totaux annuels issus de l'Insee Focus 339, figure 1 : https://www.insee.fr/fr/statistiques/8282356. Le champ, l'unité et la période sont décrits dans `donnees/README.md`.
@@ -51,7 +59,9 @@ exercices.html          Catalogue des 16 séries d'exercices
 exercices/              16 pages d'exercices (15 parcours déclaratifs)
 assets/exercices.css    Styles des parcours interactifs
 assets/exercices.js     Validation, score et corrections colorées
-assets/exercices-renderer.js  Rendu des 15 parcours
+assets/exercices-renderer.js  Rendu et renouvellement des fiches
+assets/exercices-variants.js  Moteur de génération et contrôle
+assets/variants-*.js      6 modules de générateurs par notion
 cours/                  16 pages de cours statiques
 assets/styles.css       Thème partagé du site
 assets/cours.css         Catalogue, lecture, tableaux et impression
@@ -84,6 +94,8 @@ node --check assets/cours.js
 node --check assets/apprentissage.js
 node --check assets/exercices.js
 node --check assets/exercices-renderer.js
+node --check assets/exercices-variants.js
+node tests/test_variants.js
 ```
 
 Les tests de navigateur utilisent Playwright uniquement comme dépendance de développement :
@@ -94,7 +106,7 @@ python3 -m playwright install chromium
 python3 tests/browser_smoke.py
 ```
 
-La vérification porte sur les liens et ancres statiques, la présence des 16 cours, des 32 mini-tests et de leurs corrections, des 129 exercices, la syntaxe des exemples Python, des exemples numériques représentatifs, le rendu sans débordement global, la recherche, les sommaires, les corrections, le fonctionnement sans JavaScript et les cas limites du simulateur. Elle ne constitue pas une certification pédagogique exhaustive.
+La vérification porte sur les liens et ancres statiques, la présence des 16 cours, des 32 mini-tests et de leurs corrections, des 129 exercices et de leurs 4 644 variantes de test, la syntaxe des exemples Python, des exemples numériques représentatifs, le rendu sans débordement global, la recherche, les sommaires, les corrections, le fonctionnement sans JavaScript et les cas limites du simulateur. Elle ne constitue pas une certification pédagogique exhaustive.
 
 ## Publication
 
