@@ -11,7 +11,9 @@
   const S = (label, answer, options) => ({label, answer, options});
   const F = (value, digits = 4) => Number(value.toFixed(digits));
   const FR = (value, digits = 4) => String(F(value, digits)).replace('.', ',');
-  const pad = cycle => 2 + (cycle % 9);
+  // Période 24 : les bornes voisines restent distinctes même pour les exercices
+  // dont le modèle utilise des restes modulo 2, 3, 4, 5 ou 7.
+  const pad = cycle => 2 + (cycle % 24);
   const E = (original, statement, fields, correction, options = {}) => ({
     title: options.title || original?.title || 'Nouvelle variante',
     level: original?.level || 'Entraînement',
