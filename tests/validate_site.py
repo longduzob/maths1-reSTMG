@@ -137,6 +137,13 @@ def main():
         lesson = pages[(ROOT / 'cours' / f'{slug}.html').resolve()]
         assert f'../exercices/{slug}.html' in lesson.links, slug
 
+        # Toutes les séries disposent du même moteur et des variantes par thème.
+        for filename in ('exercices-renderer.js','exercices-variants.js',
+                         'variants-fonctions.js','variants-suites.js',
+                         'variants-analyse.js','variants-probabilites.js',
+                         'variants-reperes.js','variants-donnees.js','exercices.js'):
+            assert any(link.startswith('../assets/' + filename) for link in page.links), (slug, filename)
+
         if slug == 'fonctions':
             assert page.classes['exercise-block'] == 9
             assert page.classes['check'] == 9
@@ -149,9 +156,6 @@ def main():
         info = json.loads(match.group(1))
         assert info['slug'] == slug
         assert len(info['exercises']) == 8, (slug, len(info['exercises']))
-        assert '../assets/exercices-renderer.js' in page.links, slug
-        assert '../assets/exercices.js' in page.links, slug
-
         for number, exercise in enumerate(info['exercises'], start=1):
             assert exercise['title'] and exercise['statement'], (slug, number, 'missing text')
             assert len(exercise['tasks']) >= 1, (slug, number, 'missing tasks')
