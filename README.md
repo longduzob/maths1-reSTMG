@@ -22,6 +22,14 @@ Source principale : https://www.education.gouv.fr/bo/2026/Hebdo14/MENE2602918A
 
 Chaque leçon contient objectifs, explications, méthodes, exemples chiffrés, application corrigée et bilan. Les formules sont en HTML, sans chargement d'une bibliothèque distante.
 
+### Parcours pédagogique accessible
+
+Les 16 leçons disposent d'une présentation à codes visuels **toujours accompagnés de mots** : objectifs en bleu, formules en violet, exemples guidés en vert, erreurs fréquentes en ambre. Elles proposent un chemin en trois temps, un **coup de pouce facultatif en trois étapes**, deux **mini-tests de rappel actif** par leçon (32 au total) et une routine de révision différée. Les réponses des mini-tests sont vérifiables sans note ; en cas d'erreur, l'élève reçoit un indice et peut réessayer.
+
+Une barre facultative permet d'agrandir le texte et de masquer le sommaire en **lecture concentrée**. Les fonctions interactives ne sont jamais nécessaires pour consulter le texte principal : sans JavaScript, les coups de pouce et les corrigés des mini-tests restent ouverts par des éléments HTML `details`. Aucun suivi nominatif ni score de lecture n'est stocké.
+
+`pedagogie.html` explique les choix retenus, leurs limites et les sources académiques (synthèses couvrant notamment 317 expériences d'apprentissage espacé, 435 études sur le feedback, 225 sur l'apprentissage actif et 181 sur la conception multimédia). Il ne s'agit pas d'une certification de l'efficacité du site pour chaque élève ; une évaluation de terrain reste nécessaire.
+
 Les recherches par mot et domaine, le sommaire des leçons, les liens précédent/suivant et le simulateur de Bernoulli sont des améliorations JavaScript. Les cours, le catalogue, les liens principaux et les corrections natives `details` restent consultables sans JavaScript. L'impression via le bouton ouvre les corrections et restaure ensuite leur état.
 
 **Exercices interactifs : 129 exercices en 16 parcours**, couvrant les 11 chapitres et les 5 repères. Chaque série propose des réponses saisies et des choix, un score, des indices et des corrections détaillées qui remplissent les cases en vert (réponse initiale juste) ou en rouge (réponse fausse ou manquante). Le corrigé ne rapporte pas de point et le bouton Effacer permet de recommencer. La progression se réinitialise au rechargement.
@@ -38,6 +46,7 @@ Les autres situations numériques sont fictives. Aucune donnée personnelle, pol
 index.html              Accueil et deux espaces
 lecons.html             Catalogue des 16 leçons
 programme.html          Sources, version et correspondance au programme
+pedagogie.html           Méthodes d'apprentissage et sources
 exercices.html          Catalogue des 16 séries d'exercices
 exercices/              16 pages d'exercices (15 parcours déclaratifs)
 assets/exercices.css    Styles des parcours interactifs
@@ -47,6 +56,8 @@ cours/                  16 pages de cours statiques
 assets/styles.css       Thème partagé du site
 assets/cours.css         Catalogue, lecture, tableaux et impression
 assets/cours.js          Améliorations progressives et simulation
+assets/apprentissage.css  Couleurs sémantiques et options de lecture
+assets/apprentissage.js   Mini-tests et outils de lecture
 donnees/                CSV réel et provenance
 tests/                  Vérifications du site et des exemples
 .github/workflows/      Vérifications automatisées
@@ -70,6 +81,7 @@ Les contrôles structurels et numériques utilisent seulement Python standard et
 ```sh
 python3 tests/validate_site.py
 node --check assets/cours.js
+node --check assets/apprentissage.js
 node --check assets/exercices.js
 node --check assets/exercices-renderer.js
 ```
@@ -82,7 +94,7 @@ python3 -m playwright install chromium
 python3 tests/browser_smoke.py
 ```
 
-La vérification porte sur les liens et ancres statiques, la présence des 16 cours et de leurs corrections, des 129 exercices, la syntaxe des exemples Python, des exemples numériques représentatifs, le rendu sans débordement global, la recherche, les sommaires, les corrections, le fonctionnement sans JavaScript et les cas limites du simulateur. Elle ne constitue pas une certification pédagogique exhaustive.
+La vérification porte sur les liens et ancres statiques, la présence des 16 cours, des 32 mini-tests et de leurs corrections, des 129 exercices, la syntaxe des exemples Python, des exemples numériques représentatifs, le rendu sans débordement global, la recherche, les sommaires, les corrections, le fonctionnement sans JavaScript et les cas limites du simulateur. Elle ne constitue pas une certification pédagogique exhaustive.
 
 ## Publication
 
@@ -92,4 +104,4 @@ Le workflow de vérification ne déploie pas et ne reçoit que des permissions d
 
 ## Continuer
 
-Modifier les HTML de `cours/`, puis maintenir le catalogue, le tableau de couverture et `courseOrder` dans `assets/cours.js`. Exécuter les tests avant publication. Les couleurs se trouvent dans les variables CSS du thème partagé.
+Modifier les HTML de `cours/`, puis maintenir le catalogue, le tableau de couverture et `courseOrder` dans `assets/cours.js`. Exécuter les tests avant publication. Les couleurs des leçons sont dans `assets/apprentissage.css`, celles des exercices dans `assets/exercices.css`. Maintenir les indications textuelles lorsque l'on change un code couleur ; éviter tout effet qui reposerait exclusivement sur une teinte.
