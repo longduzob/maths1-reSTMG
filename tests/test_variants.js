@@ -20,7 +20,7 @@ vm.createContext(sandbox);
 for (const filename of files) {
   vm.runInContext(fs.readFileSync(path.join(ROOT,filename), 'utf8'), sandbox, {filename});
 }
-const {generate} = sandbox.window.ExerciseVariants;
+const {generate, matchesAnswer} = sandbox.window.ExerciseVariants;
 const slugs = [
   'fonctions','second-degre','suites','suites-arithmetiques',
   'suites-geometriques','derivees','variations',
@@ -48,7 +48,7 @@ for (const slug of slugs) {
       for (const f of variant.fields) {
         if (f.options) {
           assert.ok(f.options.includes(f.answer), 'correct answer not listed');
-        } else if (f.type !== 'text') {
+        } else if (f.type !== 'text' && f.type !== 'unordered-list') {
           assert.ok(Number.isFinite(Number(f.answer)), 'non-finite '+slug+'/'+index);
           if (f.tolerance != null) assert.ok(Number(f.tolerance) >= 0);
         } else {
@@ -81,4 +81,74 @@ const basic = fields('calcul',0,2);
 assert.notEqual(basic[0],basic[1]);
 const csv = fields('python-tableur',7,2);
 assert.equal(Number(csv[1])/Number(csv[0]),Number(csv[2]));
+// Régression du correcteur : accepter la forme exacte et refuser un arrondi voisin.
+const positive = [
+  ['0,833','0.8333','number','0.000051','3'],
+  ['0,8333','0.8333','number','0.000051','3'],
+  ['5/6','0.8333','number','0.000051','3'],
+  ['1,41421356','1.41','number','0.0049'],
+  ['5/12','0.417','number','0.00049'],
+  ['1/2','0.5','number'],
+  ['2/4','0.5','number'],
+  ['5;3','3;5','unordered-list'],
+  ['3,5','3;5','unordered-list'],
+  ['x = 5 et x = 3','3;5','unordered-list'],
+  ['t>=4','t>=4','text']
+];
+const negative = [
+  ['0,834','0.8333','number','0.000051','3'],
+  ['0,334','0.3333','number','0.000051','3'],
+  ['1,42','1.41','number','0.0049'],
+  ['0,418','0.417','number','0.00049'],
+  ['2/0','0.5','number'],
+  ['0x10','16','number'],
+  ['Infinity','1','number'],
+  ['3;3','3;5','unordered-list'],
+  ['3;5;7','3;5','unordered-list'],
+  ['t ≥ 4','t>=4','text']
+];
+for (const params of positive) assert.equal(matchesAnswer(...params),true,
+  'Correct answer rejected: '+params.join(' / '));
+for (const params of negative) assert.equal(matchesAnswer(...params),false,
+  'Incorrect answer accepted: '+params.join(' / '));
+
+let cases = 0;
+for (const slug of slugs) {
+  const length = slug === 'fonctions' ? 9 : 8;
+  for (let index = 0; index < length; index++) {
+    for (let cycle = 1; cycle <= 60; cycle++) {
+      const exercise = generate(slug,index,cycle,{});
+      for (const f of exercise.fields) {
+        const type = f.options ? 'text' : (f.type || 'number');
+        assert.equal(matchesAnswer(f.answer,f.answer,type,f.tolerance,f.rounding),true,
+          slug+'/'+index+'/'+cycle+'/'+f.label+' solution rejected');
+        if (type === 'number' && f.tolerance != null) {
+          assert.ok(Number(f.tolerance) <= 0.0049,
+            slug+'/'+index+'/'+cycle+' threshold too wide: '+f.label);
+        }
+      }
+      cases++;
+    }
+  }
+}
+
+// Vérifications indépendantes d'identités et de valeurs de référence, par chapitre.
+for (let cycle = 1; cycle <= 60; cycle++) {
+  const roots = generate('fonctions',2,cycle,{}).fields[2];
+  assert.equal(roots.type,'unordered-list');
+  assert.equal(matchesAnswer(roots.answer.split(';').reverse().join(';'),
+    roots.answer,roots.type),true);
+  const quad = generate('second-degre',3,cycle,{}).fields;
+  assert.equal(Number(quad[2].answer)+Number(quad[3].answer),2*Number(quad[0].answer));
+  const cond = generate('probabilites-conditionnelles',3,cycle,{}).fields;
+  assert.ok(Math.abs(+cond[0].answer + +cond[1].answer - +cond[2].answer) < 0.00015);
+  const bern = generate('bernoulli',2,cycle,{}).fields;
+  assert.ok(Math.abs(+bern[1].answer + +bern[2].answer-1) < 0.00015);
+  const stat = generate('statistiques-descriptives',3,cycle,{}).fields;
+  assert.equal(+stat[3].answer,+stat[2].answer-+stat[1].answer);
+  assert.match(generate('variables-aleatoires',3,cycle,{}).statement,
+    /On note X la variable qui vaut 1 en cas de succès/);
+}
+console.log('CONTROLE OK: 7 740 variantes, 21 réponses de régression et invariants indépendants.');
+
 console.log('VARIANTS OK: '+count+' generators x 36 cycles = '+(count*36)+' consistent variants; 8 targeted invariants.');
