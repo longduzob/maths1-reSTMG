@@ -18,7 +18,10 @@ jobs:
       - name: Verifier les pages et les exemples
         run: python3 tests/validate_site.py
       - name: Verifier JavaScript
-        run: node --check assets/cours.js
+        run: |
+          node --check assets/cours.js
+          node --check assets/exercices.js
+          node --check assets/exercices-renderer.js
       - name: Installer le navigateur de test
         run: |
           python3 -m pip install playwright==1.55.0

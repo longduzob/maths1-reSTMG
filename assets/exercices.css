@@ -71,7 +71,7 @@
 
 .exercise-stepper {
   display: grid;
-  grid-template-columns: repeat(9, minmax(42px, 1fr));
+  grid-template-columns: repeat(var(--exercise-steps, 9), minmax(42px, 1fr));
   gap: 8px;
   margin-top: 16px;
 }
@@ -615,3 +615,8 @@
     border-top: 1px solid #ccc;
   }
 }
+.exercise-category-nav { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 28px; }
+.exercise-category-nav a { display: inline-flex; align-items: center; border: 1px solid #c5dcd0; padding: 10px 15px; min-height: 44px; border-radius: 999px; background: var(--exercise-soft); font-size: 12px; font-weight: 750; color: var(--exercise-dark); }
+.exercise-category-nav a:hover { border-color: var(--exercise); }
+.exercise-page .lesson-card:hover { border-color: var(--exercise); }
+.exercise-page .lesson-card .course-code, .exercise-page .lesson-card .read-link { color: var(--exercise); }
