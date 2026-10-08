@@ -12,6 +12,7 @@
     const expected = escapeHtml(answer);
     const label = escapeHtml(field.label);
     const tolerance = field.tolerance == null ? '' : ' data-tolerance="' + escapeHtml(field.tolerance) + '"';
+    const rounding = field.rounding == null ? '' : ' data-rounding="' + escapeHtml(field.rounding) + '"';
 
     if (field.options) {
       const options = field.options.map(option => {
@@ -24,11 +25,12 @@
         + '<small class="answer-status" aria-live="polite"></small></label>';
     }
 
-    const numeric = field.type !== 'text';
+    const numeric = field.type !== 'text' && field.type !== 'unordered-list';
     return '<label class="answer-row"><span>' + label + '</span>'
       + '<input type="text" autocomplete="off"'
-      + (numeric ? ' inputmode="decimal" data-type="number"' : ' inputmode="text"')
-      + ' data-expect="' + expected + '"' + tolerance
+      + (numeric ? ' inputmode="decimal" data-type="number"'
+        : field.type === 'unordered-list' ? ' inputmode="text" data-type="unordered-list"' : ' inputmode="text"')
+      + ' data-expect="' + expected + '"' + tolerance + rounding
       + ' aria-label="' + label + '" placeholder="Ta réponse">'
       + '<small class="answer-status" aria-live="polite"></small></label>';
   }

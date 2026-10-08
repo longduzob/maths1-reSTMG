@@ -27,27 +27,12 @@
   }));
   let current = 0;
 
-  const normalise = value => String(value)
-    .trim()
-    .toLowerCase()
-    .replace(/,/g, '.')
-    .replace(/\s+/g, '')
-    .replace(/[−–—]/g, '-');
-
+  // Validation identique avant et pendant la révélation des corrections.
   function isCorrect(control) {
-    const expected = (control.dataset.expect || '').split('|').map(normalise);
-    const actual = normalise(control.value);
-    if (!actual) return false;
-    if (control.dataset.type === 'number') {
-      const parsed = Number(actual);
-      if (!Number.isFinite(parsed)) return false;
-      const tolerance = Number(control.dataset.tolerance || '0.000001');
-      return expected.some(item => {
-        const target = Number(item);
-        return Number.isFinite(target) && Math.abs(parsed - target) <= tolerance;
-      });
-    }
-    return expected.includes(actual);
+    return !!generator && generator.matchesAnswer(
+      control.value, control.dataset.expect || '', control.dataset.type || 'text',
+      control.dataset.tolerance, control.dataset.rounding
+    );
   }
 
   function revealAnswers(form) {
@@ -64,7 +49,8 @@
         const answer = (control.dataset.expect || '').split('|')[0].trim();
         if (control.tagName === 'SELECT') {
           const match = Array.from(control.options)
-            .find(option => normalise(option.value) === normalise(answer));
+            .find(option => option.value === answer
+              || option.value.replace(/\s+/g, '') === answer.replace(/\s+/g, ''));
           if (match) control.value = match.value;
           control.disabled = true;
         } else {

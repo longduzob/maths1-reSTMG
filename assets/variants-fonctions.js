@@ -33,7 +33,7 @@
           <text x="64" y="75">3</text><text x="540" y="225">x</text>
         </g></svg>`;
       return E(o,`Observe la parabole de <strong>g(x) = (x − ${h})² − 1</strong>, dessinée de x = ${h-2} à x = ${h+2}. Les graduations sont régulières.<br>${graph}`,
-        [N('g('+(h-2)+')',3),N('g('+h+')',-1),{label:'Antécédents de 0',type:'text',answer:`${lo};${hi}`},N('Minimum de g',-1),N('Atteint pour x',h),
+        [N('g('+(h-2)+')',3),N('g('+h+')',-1),{label:'Antécédents de 0',type:'unordered-list',answer:`${lo};${hi}`},N('Minimum de g',-1),N('Atteint pour x',h),
         S('Solutions de g(x) < 0',`]${lo};${hi}[`,[`[${lo};${hi}]`,`]${lo};${hi}[`,`[${h-2};${lo}] ∪ [${hi};${h+2}]`])],
         [`g(${h-2}) = (${h-2} − ${h})² − 1 = 3, tandis que g(${h}) = −1, valeur minimale.`,
          `Résoudre (x − ${h})² − 1 = 0 revient à chercher x = ${lo} ou x = ${hi}. La courbe est sous l’axe entre ces deux valeurs : ]${lo} ; ${hi}[.`]);
