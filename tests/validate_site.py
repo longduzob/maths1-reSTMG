@@ -196,8 +196,12 @@ def main():
     print(f'EXERCISES OK: {len(COURSES)} chapters; {count_exercises} exercises validated.')
     print(f'STATIC OK: {len(pages)} HTML pages; 16 lessons; {links_checked} local links; {snippets} Python blocks compiled.')
 
+    # Les fonctions de test restent disponibles dans la bibliothèque Python
+    # facultative, mais ne figurent plus dans les cours de mathématiques.
+    archived_functions = load_functions(optional)
     def funcs(slug):
-        return load_functions(pages[(ROOT / 'cours' / f'{slug}.html').resolve()])
+        assert slug in COURSES
+        return archived_functions
 
     f = funcs('fonctions')
     lo, hi = f['encadrement_racine2']()
