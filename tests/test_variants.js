@@ -10,6 +10,13 @@ const files = [
   'assets/exercices-variants.js',
   'assets/variants-fonctions.js',
   'assets/fonctions-coaching.js',
+  'assets/coaching-general.js',
+  'assets/coaching-algebre.js',
+  'assets/coaching-suites.js',
+  'assets/coaching-analyse.js',
+  'assets/coaching-probabilites.js',
+  'assets/coaching-reperes.js',
+  'assets/coaching-donnees.js',
   'assets/variants-suites.js',
   'assets/variants-analyse.js',
   'assets/variants-probabilites.js',
@@ -242,3 +249,59 @@ for (let index = 0; index < 9; index++) {
   }
 }
 console.log('COACHING OK: '+coachingModels+' modeles contextualises, 9 parcours et tremplins verifies.');
+
+
+// 120 autres exercices : trois aides conçues par modèle, variables et tremplins.
+const allCoaching = sandbox.window.ExerciseCoaching;
+assert.ok(allCoaching && typeof allCoaching.build === 'function');
+const expectedBridges = {
+  'second-degre': ['-3','2','1','4','1','8','4','-1'],
+  'suites': ['10','11','2.5','6','3','3','7','20'],
+  'suites-arithmetiques': ['4','14','5','4','30','9','3','30'],
+  'suites-geometriques': ['3','80','20','110','3','30','14.4','64'],
+  'derivees': ['4','6','4','4','5','100.8','5','10'],
+  'variations': ['6','4','-5','3','2','5','1.4','20'],
+  'statistiques-deux-variables': ['4','2','14','2','oui','11','oui','3'],
+  'probabilites-conditionnelles': ['7','0.5','0.375','0.2','0.1','0.5','0.4','0.09'],
+  'bernoulli': ['0.3','0.25','0.5','0.375','0.875','0.0625','0.0625','0.5'],
+  'variables-aleatoires': ['0.5','1.3','1','3','0.4','0.3','0.2','0.1'],
+  'calcul': ['23','0.75','32','5','90','7','4','4'],
+  'evolutions': ['20','99','96','121','0.8','100','20','25'],
+  'logique': ['2','3','6','oui','oui','3','5','3'],
+  'statistiques-descriptives': ['0.3','5','10','8','2','12','4','4'],
+  'python-tableur': ['20','accepté','11','7','9','5','110','2021']
+};
+assert.equal(Object.keys(expectedBridges).length, 15);
+let otherCases = 0;
+for (const [slug, solutions] of Object.entries(expectedBridges)) {
+  const page = fs.readFileSync(path.join(ROOT, 'exercices', slug+'.html'), 'utf8');
+  const embedded = page.match(/<script type="application\/json" id="exercise-data">([\s\S]*?)<\/script>/);
+  assert.ok(embedded, 'Missing original exercises for '+slug);
+  const initial = JSON.parse(embedded[1]).exercises;
+  assert.equal(initial.length, 8);
+  for (let index = 0; index < 8; index++) {
+    let previous = null;
+    for (let cycle = 0; cycle <= 60; cycle++) {
+      const ex = cycle ? generate(slug,index,cycle,initial[index]) : initial[index];
+      const help = allCoaching.build(slug,index,ex);
+      assert.ok(help, 'Missing coaching for '+slug+'/'+index+'/'+cycle);
+      assert.equal(help.hints.length,3);
+      assert.ok(help.hints.every(h => h.length >= 35),
+        'Hint too short '+slug+'/'+index+'/'+cycle);
+      const facts = allCoaching.context(ex);
+      assert.ok(facts.length > 0,'No contextual facts');
+      assert.ok(help.hints[2].includes(facts),'Incorrect statement facts '+slug+'/'+index+'/'+cycle);
+      if(previous) assert.notEqual(help.hints[2], previous,
+        'Frozen method hint '+slug+'/'+index+'/'+cycle);
+      previous = help.hints[2];
+      assert.equal(help.bridge.a, solutions[index], 'Incorrect bridge answer '+slug+'/'+index);
+      assert.ok(help.bridge.q.startsWith('Exemple indépendant : '));
+      assert.ok(help.bridge.help.length > 20);
+      assert.ok(help.diagnose.includes('Piste à vérifier'));
+      assert.equal(matchesAnswer(help.bridge.a, solutions[index],
+        /^[+-]?\d+(?:\.\d+)?$/.test(solutions[index]) ? 'number' : 'text'), true);
+      otherCases++;
+    }
+  }
+}
+console.log('AIDES OK : '+otherCases+' situations testées, 120 modèles et 120 tremplins.');
