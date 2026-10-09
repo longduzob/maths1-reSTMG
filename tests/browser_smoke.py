@@ -123,6 +123,46 @@ def main():
                 expect(controller).to_have_value(initial_setting)
                 expect(lab.locator('.math-lab__readout')).to_have_text(details_before)
                 expect(response.locator('.math-lab__feedback')).to_have_text('')
+            # Cas limites : droite constante, trois cas de racines, tangente horizontale.
+            page.goto(base + 'cours/fonctions.html')
+            lab = page.locator('.math-lab')
+            lab.locator('[data-parameter="a"]').evaluate("""input => {
+                input.value = '0'; input.dispatchEvent(new Event('input', {bubbles: true}));
+            }""")
+            expect(lab.locator('.math-lab__readout')).to_contain_text('constante')
+            lab.locator('[data-parameter="b"]').evaluate("""input => {
+                input.value = '0'; input.dispatchEvent(new Event('input', {bubbles: true}));
+            }""")
+            expect(lab.locator('.math-lab__readout')).to_contain_text('Tous les réels sont antécédents de 0')
+            lab.locator('[data-parameter="b"]').evaluate("""input => {
+                input.value = '1'; input.dispatchEvent(new Event('input', {bubbles: true}));
+            }""")
+            expect(lab.locator('.math-lab__readout')).to_contain_text('zéro n’a pas d’antécédent')
+            page.goto(base + 'cours/second-degre.html')
+            lab = page.locator('.math-lab')
+            lab.locator('[data-parameter="a"]').select_option('-1')
+            expect(lab.locator('.math-lab__readout')).to_contain_text('Aucune racine réelle')
+            lab.locator('[data-parameter="a"]').select_option('1')
+            expect(lab.locator('.math-lab__readout')).to_contain_text('Racines')
+            expect(lab.locator('.math-lab__readout')).to_contain_text('entre les racines')
+            lab.locator('[data-parameter="k"]').evaluate("""input => {
+                input.value = '0'; input.dispatchEvent(new Event('input', {bubbles: true}));
+            }""")
+            expect(lab.locator('.math-lab__readout')).to_contain_text('La courbe touche l’axe')
+            page.goto(base + 'cours/derivees.html')
+            lab = page.locator('.math-lab')
+            lab.locator('[data-parameter="t"]').evaluate("""input => {
+                input.value = '1'; input.dispatchEvent(new Event('input', {bubbles: true}));
+            }""")
+            expect(lab.locator('.math-lab__readout')).to_contain_text('La tangente est horizontale')
+            page.goto(base + 'cours/suites.html')
+            lab = page.locator('.math-lab')
+            lab.locator('[data-parameter="q"]').evaluate("""input => {
+                input.value = '1.6'; input.dispatchEvent(new Event('input', {bubbles: true}));
+            }""")
+            expect(lab.locator('.math-lab__readout')).to_contain_text('v₄ ≈')
+            expect(lab.locator('svg circle')).to_have_count(14)
+
             print('GRAPH BROWSER OK : 5 pages, 4 types, souris/clavier, quiz et réinitialisation.')
 
             # Extension : parcourir les 15 chapitres (hors Fonctions).
@@ -492,6 +532,10 @@ def main():
             static.locator('.study-solution').first.locator('summary').click()
             expect(static.locator('.study-solution').first).to_have_attribute('open', '')
             assert static.evaluate("document.querySelector('.lesson-content').getBoundingClientRect().width >= document.querySelector('.lesson-layout').getBoundingClientRect().width - 2")
+            static.goto(base + 'cours/fonctions.html')
+            expect(static.locator('.math-lab h3')).to_be_visible()
+            expect(static.locator('.math-lab__plot')).to_have_count(0)
+            expect(static.locator('.math-lab')).to_contain_text('Active JavaScript')
             nojs.close()
             assert not errors, errors
             assert not failed_responses, failed_responses
