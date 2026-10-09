@@ -41,7 +41,13 @@
         return 'f(x) = ' + fmt(p.a) + 'x ' + sign(p.b) + '. f(2) = ' +
           fmt(affine(p, 2)) + '. La fonction est ' + direction + '. ' + antecedent;
       },
-      question: p => ({text: 'Calcule l’image f(2) avec ces paramètres.', answer: affine(p, 2)}),
+      questions: p => [
+        {text: 'Calcule l’image f(2) avec ces paramètres.', answer: affine(p, 2)},
+        {text: 'Quelle est l’image de 0, c’est-à-dire f(0) ?', answer: p.b},
+        p.a === 0
+          ? {text: 'La droite est horizontale. Quelle est l’image de −1 ?', answer: affine(p, -1)}
+          : {text: 'Quel est l’antécédent de 0 ? (au centième si nécessaire)', answer: -p.b/p.a}
+      ],
       markers: p => [{x: 2, y: affine(p, 2), label: 'f(2)'}]
         .concat(p.a !== 0 ? [{x: -p.b / p.a, y: 0, label: 'zéro'}] : [])
     },
@@ -70,7 +76,11 @@
         return 'Sommet S(' + fmt(p.h) + ' ; ' + fmt(p.k) + '). La fonction atteint ' +
           direction + ' égal à ' + fmt(p.k) + '. ' + rootText + ' ' + signInfo;
       },
-      question: p => ({text: 'Quelle est l’ordonnée du sommet de la parabole ?', answer: p.k}),
+      questions: p => [
+        {text: 'Quelle est l’ordonnée du sommet de la parabole ?', answer: p.k},
+        {text: 'Quelle est l’abscisse du sommet ?', answer: p.h},
+        {text: 'Calcule l’image f(0) pour cette parabole.', answer: quadratic(p, 0)}
+      ],
       markers: p => [{x: p.h, y: p.k, label: 'S'}].concat(roots(p).map(x => ({x, y: 0, label: 'racine'})))
     },
     suites: {
@@ -88,7 +98,11 @@
         'ⁿ : on multiplie toujours par ' + fmt(p.q) +
         '. Au rang 4 : u₄ = ' + fmt(arithmetic(p, 4)) +
         ' et v₄ ≈ ' + fmt(geometric(p, 4)) + '.',
-      question: p => ({text: 'Calcule u₂, le terme de rang 2 de la suite arithmétique.', answer: arithmetic(p, 2)})
+      questions: p => [
+        {text: 'Calcule u₂, le terme de rang 2 de la suite arithmétique.', answer: arithmetic(p, 2)},
+        {text: 'Calcule v₂ pour la suite géométrique (au centième si nécessaire).', answer: geometric(p, 2)},
+        {text: 'Calcule u₄ pour la suite arithmétique.', answer: arithmetic(p, 4)}
+      ]
     },
     derivee: {
       title: 'Faire glisser une tangente', description: 'Sur f(x) = (x − 1)² − 2, déplace le point A. La droite orange touche la courbe en A.',
@@ -102,7 +116,11 @@
             m > 0 ? 'La fonction croît en ce point : la pente est positive.' :
               'La tangente est horizontale : le point est au minimum.');
       },
-      question: p => ({text: 'Quelle est la pente f′(t) de la tangente ?', answer: slope(p.t)}),
+      questions: p => [
+        {text: 'Quelle est la pente f′(t) de la tangente ?', answer: slope(p.t)},
+        {text: 'Quelle est l’ordonnée f(t) du point de tangence ?', answer: curve(p.t)},
+        {text: 'Quand x augmente de 0,5 sur la tangente, de combien y varie-t-il ?', answer: .5*slope(p.t)}
+      ],
       markers: p => [{x: p.t, y: curve(p.t), label: 'A'}]
     }
   };
@@ -228,6 +246,7 @@
     root.dataset.initialized = 'true';
     const id = 'math-lab-' + index;
     const p = {};
+    let questionIndex = 0;
     config.parameters.forEach(parameter => {p[parameter.key] = parameter.value;});
     const title = el('h3', 'math-lab__title', config.title);
     title.id = id + '-title';
@@ -272,6 +291,7 @@
       input.setAttribute('aria-label', parameter.label);
       input.dataset.parameter = parameter.key;
       input.addEventListener('input', () => {
+        questionIndex = 0;
         p[parameter.key] = Number(input.value);
         output.textContent = fmt(p[parameter.key]);
         update();
@@ -284,6 +304,7 @@
     const reset = el('button', '', 'Réinitialiser le graphique');
     reset.type = 'button';
     reset.addEventListener('click', () => {
+      questionIndex = 0;
       config.parameters.forEach(parameter => {
         p[parameter.key] = parameter.value;
         const control = inputs.get(parameter.key);
@@ -308,10 +329,16 @@
     answer.setAttribute('aria-label', 'Ta réponse numérique');
     const check = el('button', '', 'Vérifier ma réponse');
     check.type = 'submit';
+    const next = el('button', '', 'Question suivante →');
+    next.type = 'button';
+    next.addEventListener('click', () => {
+      questionIndex = (questionIndex + 1) % config.questions(p).length;
+      update();
+    });
     const feedback = el('p', 'math-lab__feedback');
     feedback.setAttribute('role', 'status');
     feedback.setAttribute('aria-live', 'polite');
-    exercise.append(question, answer, check, feedback);
+    exercise.append(question, answer, check, next, feedback);
     exercise.addEventListener('submit', event => {
       event.preventDefault();
       const raw = answer.value.trim().replace(/\s+/g,'').replace(',', '.');
@@ -319,7 +346,7 @@
         feedback.textContent = 'Entre un nombre, avec un point ou une virgule.';
         return;
       }
-      const expected = config.question(p).answer;
+      const expected = config.questions(p)[questionIndex].answer;
       if (Math.abs(Number(raw) - expected) < 0.011) {
         feedback.textContent = 'Bravo ! Tu as trouvé la bonne réponse.';
         feedback.dataset.result = 'correct';
@@ -332,7 +359,8 @@
     function update() {
       draw({svg, title:svgTitle, desc:svgDesc}, key, p, config, id);
       values.textContent = config.explanation(p);
-      question.textContent = config.question(p).text;
+      question.textContent = 'Question ' + (questionIndex + 1) + '/' +
+        config.questions(p).length + ' : ' + config.questions(p)[questionIndex].text;
       answer.value = '';
       feedback.textContent = '';
       delete feedback.dataset.result;
