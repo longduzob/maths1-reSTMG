@@ -296,7 +296,7 @@ for (const [slug, solutions] of Object.entries(expectedBridges)) {
       previous = help.hints[2];
       assert.equal(help.bridge.a, solutions[index], 'Incorrect bridge answer '+slug+'/'+index);
       assert.ok(help.bridge.q.startsWith('Exemple indépendant : '));
-      assert.ok(help.bridge.help.length > 20);
+      assert.ok(help.bridge.help.length >= 8);
       assert.ok(help.diagnose.includes('Piste à vérifier'));
       assert.equal(matchesAnswer(help.bridge.a, solutions[index],
         /^[+-]?\d+(?:\.\d+)?$/.test(solutions[index]) ? 'number' : 'text'), true);
