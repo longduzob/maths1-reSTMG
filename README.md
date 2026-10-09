@@ -20,7 +20,9 @@ Source principale : https://www.education.gouv.fr/bo/2026/Hebdo14/MENE2602918A
 
 **11 chapitres développés** : fonctions et droites ; second degré ; suites ; suites arithmétiques ; suites géométriques ; nombre dérivé et tangente ; dérivées et optimisation ; statistiques à deux variables ; probabilités conditionnelles et indépendance ; répétitions de Bernoulli ; variables aléatoires et simulation.
 
-**5 repères transversaux** : calcul et proportions ; évolutions en pourcentage ; ensembles et logique ; statistiques descriptives ; Python et tableur. Ils accompagnent les chapitres, sans constituer une séquence obligatoire de révision.
+**4 repères de mathématiques** : calcul et proportions ; évolutions en pourcentage ; ensembles et logique ; statistiques descriptives. Ils accompagnent les 11 chapitres dans un parcours centré sur les raisonnements et calculs sur papier.
+
+**1 atelier numérique facultatif** : [Python et tableur](https://parzival733.github.io/maths1-reSTMG/cours/python-tableur.html), clairement isolé des 15 leçons de mathématiques. Les 13 programmes Python des autres cours ont été déplacés dans [sa bibliothèque](https://parzival733.github.io/maths1-reSTMG/cours/python-tableur.html#bibliotheque-code), et leurs anciennes explications ont été remplacées par des calculs et tableaux réalisés sans programmation. L'atelier conserve aussi [ses 8 exercices spécifiques](https://parzival733.github.io/maths1-reSTMG/exercices/python-tableur.html). Cette séparation est une décision pédagogique, pas une suppression de l'algorithmique du programme officiel.
 
 Chaque leçon contient objectifs, explications, méthodes, exemples chiffrés, application corrigée et bilan. Les formules sont en HTML, sans chargement d'une bibliothèque distante.
 
@@ -34,7 +36,7 @@ Une barre facultative permet d'agrandir le texte et de masquer le sommaire en **
 
 Les recherches par mot et domaine, le sommaire des leçons, les liens précédent/suivant et le simulateur de Bernoulli sont des améliorations JavaScript. Les cours, le catalogue, les liens principaux et les corrections natives `details` restent consultables sans JavaScript. L'impression via le bouton ouvre les corrections et restaure ensuite leur état.
 
-**Exercices interactifs : 129 exercices en 16 parcours**, couvrant les 11 chapitres et les 5 repères. Chaque série propose des réponses saisies et des choix, un score, des indices et des corrections détaillées qui remplissent les cases en vert (réponse initiale juste) ou en rouge (réponse fausse ou manquante). Le corrigé ne rapporte pas de point et le bouton Effacer permet de recommencer. La progression se réinitialise au rechargement.
+**Exercices interactifs : 121 exercices de mathématiques en 15 parcours + 8 exercices dans un atelier facultatif**, soit 129 exercices et 16 parcours au total. Chaque série propose des réponses saisies et des choix, un score, des indices et des corrections détaillées qui remplissent les cases en vert (réponse initiale juste) ou en rouge (réponse fausse ou manquante). Le corrigé ne rapporte pas de point et le bouton Effacer permet de recommencer. La progression se réinitialise au rechargement.
 
 ### Générateur de variantes procédurales
 
@@ -48,7 +50,7 @@ Les variations sont déterministes par numéro d'essai (cycle de difficulté bor
 
 `donnees/naissances-france-2018-2023.csv` contient six totaux annuels issus de l'Insee Focus 339, figure 1 : https://www.insee.fr/fr/statistiques/8282356. Le champ, l'unité et la période sont décrits dans `donnees/README.md`.
 
-Les autres situations numériques sont fictives. Aucune donnée personnelle, police distante, publicité ou traceur. La simulation s'exécute dans le navigateur, sans transmission ni stockage. Les programmes Python des cours sont des exemples à exécuter séparément ; le site n'embarque pas d'interpréteur Python.
+Les autres situations numériques sont fictives. Aucune donnée personnelle, police distante, publicité ou traceur. La simulation s'exécute dans le navigateur, sans transmission ni stockage. Tous les programmes Python sont regroupés dans l'atelier numérique facultatif ; le site n'embarque pas d'interpréteur Python.
 
 ## Structure
 
