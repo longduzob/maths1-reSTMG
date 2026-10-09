@@ -174,6 +174,14 @@
     const clip = id + '-clip';
     parts.push('<defs><clipPath id="' + clip + '"><rect x="' + left +
       '" y="' + top + '" width="' + plotW + '" height="' + plotH + '"/></clipPath></defs>');
+    if (key === 'second') {
+      // Le vert correspond aux ordonnées positives, l'orange aux négatives.
+      const zeroY = yPixel(0);
+      parts.push('<rect x="' + left + '" y="' + top + '" width="' + plotW +
+        '" height="' + (zeroY - top) + '" fill="#edf9f3" aria-hidden="true"/>');
+      parts.push('<rect x="' + left + '" y="' + zeroY + '" width="' + plotW +
+        '" height="' + (height - bottom - zeroY) + '" fill="#fff3ea" aria-hidden="true"/>');
+    }
     for (let i = 0; i <= 4; i++) {
       const y = yMin + (yMax - yMin) * i / 4;
       const sy = yPixel(y);
@@ -254,7 +262,13 @@
     const layout = el('div', 'math-lab__layout');
     const visual = el('div', 'math-lab__visual');
     const {svg, title: svgTitle, desc: svgDesc} = makeSvg(visual, id);
-    const note = el('p', 'math-lab__note', 'Lecture du tracé : bleu pour la fonction ou la suite arithmétique, orange pour la tangente ou la suite géométrique.');
+    const legends = {
+      affine: 'Courbe bleue : droite de la fonction. Le point vert indique une image ou une racine.',
+      second: 'Courbe bleue : parabole. Fond vert : y positif ; fond orange clair : y négatif. Les racines sont sur l’axe horizontal.',
+      suites: 'Points bleus : suite arithmétique. Points orange : suite géométrique. Les points restent séparés.',
+      derivee: 'Courbe bleue : fonction. Droite orange : tangente au point vert.'
+    };
+    const note = el('p', 'math-lab__note', legends[key]);
     visual.append(note);
     const controls = el('div', 'math-lab__controls');
     const values = el('div', 'math-lab__readout');
