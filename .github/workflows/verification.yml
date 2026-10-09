@@ -1,7 +1,7 @@
 name: Verification du site
 on:
   push:
-    branches: [main, cours-programme-2026]
+    branches: [main, cours-programme-2026, feature/graphiques-interactifs-2026-10-09]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -21,6 +21,7 @@ jobs:
         run: |
           node --check assets/cours.js
           node --check assets/apprentissage.js
+          node --check assets/graphiques-interactifs.js
           node --check assets/exercices.js
           node --check assets/exercices-renderer.js
           node --check assets/exercices-variants.js
@@ -40,6 +41,8 @@ jobs:
           node --check assets/variants-donnees.js
       - name: Verifier les variantes mathematiques
         run: node tests/test_variants.js
+      - name: Verifier les calculs des graphiques
+        run: node tests/test_graphiques.js
       - name: Installer le navigateur de test
         run: |
           python3 -m pip install playwright==1.55.0
