@@ -90,6 +90,20 @@ def main():
                 response.locator('input').fill(expected_answer)
                 response.locator('button[type="submit"]').click()
                 expect(response.locator('[data-result="correct"]')).to_contain_text('Bravo')
+                expected_second = {'fonctions':'1', 'second-degre':'1',
+                    'suites':'2,88', 'derivees':'-1', 'variations':'-1'}[slug]
+                response.locator('button[type="button"]').click()
+                expect(response.locator('label')).to_contain_text('Question 2/3')
+                response.locator('input').fill(expected_second)
+                response.locator('button[type="submit"]').click()
+                expect(response.locator('[data-result="correct"]')).to_contain_text('Bravo')
+                expected_third = {'fonctions':'-1', 'second-degre':'-1',
+                    'suites':'6', 'derivees':'1', 'variations':'1'}[slug]
+                response.locator('button[type="button"]').click()
+                expect(response.locator('label')).to_contain_text('Question 3/3')
+                response.locator('input').fill(expected_third)
+                response.locator('button[type="submit"]').click()
+                expect(response.locator('[data-result="correct"]')).to_contain_text('Bravo')
                 controller = lab.locator(f'[data-parameter="{param}"]')
                 if kind == 'second':
                     controller.select_option('-1')
@@ -100,6 +114,7 @@ def main():
                 assert details_before != details_after, slug + ': explication inchangée'
                 assert description_before != lab.locator('svg desc').text_content(), slug + ': svg inchangé'
                 expect(response.locator('input')).to_have_value('')
+                expect(response.locator('label')).to_contain_text('Question 1/3')
                 expect(response.locator('.math-lab__feedback')).to_have_text('')
                 response.locator('input').fill('abc')
                 response.locator('button[type="submit"]').click()
