@@ -1,7 +1,7 @@
 name: Verification du site
 on:
   push:
-    branches: [main, cours-programme-2026]
+    branches: [main, cours-programme-2026, feature/annexe-python-2026-10-09]
   pull_request:
   workflow_dispatch:
 permissions:
