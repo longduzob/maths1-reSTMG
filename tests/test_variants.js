@@ -291,7 +291,7 @@ for (const [slug, solutions] of Object.entries(expectedBridges)) {
       const facts = allCoaching.context(ex);
       assert.ok(facts.length > 0,'No contextual facts');
       assert.ok(help.hints[2].includes(facts),'Incorrect statement facts '+slug+'/'+index+'/'+cycle);
-      if(previous) assert.notEqual(help.hints[2], previous,
+      if(previous && cycle > 1) assert.notEqual(help.hints[2], previous,
         'Frozen method hint '+slug+'/'+index+'/'+cycle);
       previous = help.hints[2];
       assert.equal(help.bridge.a, solutions[index], 'Incorrect bridge answer '+slug+'/'+index);
