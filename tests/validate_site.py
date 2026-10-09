@@ -125,6 +125,25 @@ def main():
     assert catalog.classes['catalog-learning-guide'] == 1
     assert 'pedagogie.html' in catalog.links
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(catalog.links)
+    # L'atelier numérique est isolé des quinze leçons principales.
+    # Les 13 programmes déplacés s'ajoutent aux 7 exemples d'origine.
+    optional = pages[(ROOT / 'cours' / 'python-tableur.html').resolve()]
+    assert len(optional.pre_blocks) == 20, ('atelier', len(optional.pre_blocks))
+    assert 'bibliotheque-code' in optional.ids
+    catalog_raw = (ROOT / 'lecons.html').read_text(encoding='utf-8')
+    exercises_raw = (ROOT / 'exercices.html').read_text(encoding='utf-8')
+    assert 'data-category="atelier"' in catalog_raw
+    assert 'option value="atelier"' in catalog_raw
+    assert '121 exercices de mathématiques dans 15 séries' in exercises_raw
+    assert '8 exercices de programmation facultatifs' in exercises_raw
+    for slug in COURSES:
+        if slug == 'python-tableur':
+            continue
+        lesson_html = (ROOT / 'cours' / (slug + '.html')).read_text(encoding='utf-8')
+        assert '<pre' not in lesson_html.lower(), ('programme affiche dans la lecon', slug)
+        assert '<code' not in lesson_html.lower(), ('instruction affichee dans la lecon', slug)
+    assert 'Calcul des pentes près de 2' in (ROOT / 'cours' / 'derivees.html').read_text(encoding='utf-8')
+    assert 'Suivre les rangs à la main' in (ROOT / 'cours' / 'suites.html').read_text(encoding='utf-8')
     sources = pages[(ROOT / 'programme.html').resolve()]
     assert {f'cours/{slug}.html' for slug in COURSES}.issubset(sources.links)
     exercises_catalog = pages[(ROOT / 'exercices.html').resolve()]
