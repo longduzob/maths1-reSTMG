@@ -59,9 +59,16 @@
           r.length === 1 ? 'La courbe touche l’axe en x = ' + fmt(r[0]) + '.' :
           'Racines : x ≈ ' + fmt(r[0]) + ' et x ≈ ' + fmt(r[1]) + '.';
         const direction = p.a > 0 ? 'un minimum' : 'un maximum';
+        const outside = p.a > 0 ? 'positive' : 'négative';
+        const inside = p.a > 0 ? 'négative' : 'positive';
+        const signInfo = r.length === 0
+          ? 'La fonction garde un signe ' + outside + ' partout.'
+          : r.length === 1
+            ? 'Elle vaut zéro au sommet et reste ' + outside + ' ailleurs.'
+            : 'Elle est ' + inside + ' entre les racines et ' + outside +
+              ' à l’extérieur ; elle vaut zéro aux racines.';
         return 'Sommet S(' + fmt(p.h) + ' ; ' + fmt(p.k) + '). La fonction atteint ' +
-          direction + ' égal à ' + fmt(p.k) + '. ' + rootText +
-          ' Lorsque a est positif, la parabole est tournée vers le haut ; sinon, vers le bas.';
+          direction + ' égal à ' + fmt(p.k) + '. ' + rootText + ' ' + signInfo;
       },
       question: p => ({text: 'Quelle est l’ordonnée du sommet de la parabole ?', answer: p.k}),
       markers: p => [{x: p.h, y: p.k, label: 'S'}].concat(roots(p).map(x => ({x, y: 0, label: 'racine'})))
