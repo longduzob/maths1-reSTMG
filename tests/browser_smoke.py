@@ -63,6 +63,53 @@ def main():
                     checks += 1
             page.set_viewport_size({'width': 390, 'height': 844})
 
+
+            # Graphiques interactifs : rendu, clavier, calcul, retour au réglage initial.
+            # Le module de la tangente est aussi présent dans la leçon Variations.
+            graph_cases = [
+                ('fonctions','affine','a','3','1'),
+                ('second-degre','second','a','-2','1'),
+                ('suites','suites','r','4','1'),
+                ('derivees','derivee','t','2','2'),
+                ('variations','variations','t','2','2'),
+            ]
+            for slug, kind, param, expected_answer, initial_setting in graph_cases:
+                page.goto(base + f'cours/{slug}.html')
+                lab = page.locator(f'.math-lab[data-lab="{kind}"]')
+                expect(lab).to_be_visible()
+                expect(lab.locator('svg[role="img"]')).to_be_visible()
+                expect(lab.locator('svg title')).to_have_count(1)
+                expect(lab.locator('svg desc')).to_have_count(1)
+                assert lab.locator('svg path').count() >= 1 if kind != 'suites' else lab.locator('svg circle').count() >= 14
+                assert lab.locator('svg').get_attribute('aria-labelledby')
+                assert lab.locator('[data-parameter]').count() >= 1
+                assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), (slug,'graph overflow')
+                description_before = lab.locator('svg desc').text_content()
+                details_before = lab.locator('.math-lab__readout').text_content()
+                response = lab.locator('.math-lab__question')
+                response.locator('input').fill(expected_answer)
+                response.locator('button[type="submit"]').click()
+                expect(response.locator('[data-result="correct"]')).to_contain_text('Bravo')
+                controller = lab.locator(f'[data-parameter="{param}"]')
+                if kind == 'second':
+                    controller.select_option('-1')
+                else:
+                    controller.focus()
+                    controller.press('ArrowRight')
+                details_after = lab.locator('.math-lab__readout').text_content()
+                assert details_before != details_after, slug + ': explication inchangée'
+                assert description_before != lab.locator('svg desc').text_content(), slug + ': svg inchangé'
+                expect(response.locator('input')).to_have_value('')
+                expect(response.locator('.math-lab__feedback')).to_have_text('')
+                response.locator('input').fill('abc')
+                response.locator('button[type="submit"]').click()
+                expect(response.locator('.math-lab__feedback')).to_contain_text('Entre un nombre')
+                lab.locator('.math-lab__actions button').click()
+                expect(controller).to_have_value(initial_setting)
+                expect(lab.locator('.math-lab__readout')).to_have_text(details_before)
+                expect(response.locator('.math-lab__feedback')).to_have_text('')
+            print('GRAPH BROWSER OK : 5 pages, 4 types, souris/clavier, quiz et réinitialisation.')
+
             # Extension : parcourir les 15 chapitres (hors Fonctions).
             # L'aide est présente avant la première vérification et suit la variante.
             other_chapters = [
