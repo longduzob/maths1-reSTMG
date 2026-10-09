@@ -32,6 +32,8 @@
   const completed = new Set();
   const states = slides.map(slide => ({
     cycle: 0,
+    variantsShown: 0,
+    shown: null,
     offset: Math.floor(Math.random() * 24),
     pending: null,
     original: {
@@ -146,17 +148,33 @@
     }
   }
 
+  // Compare les données réellement montrées à l'élève, pas seulement
+  // le numéro du tirage : un premier tirage peut recopier l'énoncé initial.
+  function pedagogicalSignature(index, exercise) {
+    if (slug === 'fonctions' && window.FonctionsCoaching) {
+      const c = (exercise && exercise.coachingContext)
+        || window.FonctionsCoaching.originals[index];
+      return window.FonctionsCoaching.build(index, c)?.hints?.[2] || '';
+    }
+    return window.ExerciseCoaching && exercise
+      ? window.ExerciseCoaching.context(exercise) : '';
+  }
+
   function queueVariant(index, form, button, force = false) {
     if (!generator || !renderer) return false;
     const state = states[index];
-    // Ne pas consommer une autre variante lors de la simple ouverture du corrigé :
-    // l'élève doit voir "variante 2" après la première soumission, même s'il
-    // consulte ensuite l'explication détaillée.
     if (force || !state.pending) {
-      state.cycle++;
-      // Chaque visite démarre à un paramétrage différent ; les cycles suivants
-      // progressent d'un pas, sans répéter la même variante juste après.
-      state.pending = generator.generate(slug, index, state.cycle + state.offset, state.original);
+      const shown = state.shown || originalExercises[index];
+      const previous = pedagogicalSignature(index, shown);
+      let candidate, attempts = 0;
+      do {
+        state.cycle++;
+        candidate = generator.generate(slug, index,
+          state.cycle + state.offset, state.original);
+        attempts++;
+      } while (attempts < 24 && previous
+        && pedagogicalSignature(index, candidate) === previous);
+      state.pending = candidate;
     }
     button.hidden = false;
     button.textContent = 'Nouvelle variante ↻';
@@ -176,9 +194,11 @@
       throw new Error('Impossible de construire la variante ' + (index + 1));
     }
     const kicker = slide.querySelector('.exercise-kicker');
-    if (kicker) kicker.textContent += ' · variante ' + (state.cycle + 1);
+    if (kicker) kicker.textContent += ' · variante ' + (state.variantsShown + 2);
     slides[index].replaceWith(slide);
     slides[index] = slide;
+    state.shown = state.pending;
+    state.variantsShown++;
     state.pending = null;
     completed.delete(index);
     updateProgress();
