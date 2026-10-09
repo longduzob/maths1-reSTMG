@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Python, listes et tableur | Maths · Première STMG</title><meta name="description" content="Variables, fonctions, listes, boucles, accumulateurs, lecture d’un CSV réel et tableau croisé à deux critères."><link rel="stylesheet" href="../assets/styles.css"><link rel="stylesheet" href="../assets/cours.css"><link rel="stylesheet" href="../assets/apprentissage.css?v=20261008-1"><script src="../assets/cours.js" defer></script><script src="../assets/apprentissage.js?v=20261008-1" defer></script></head><body class="lesson-immersive" data-course="python-tableur" data-domain="reperes"><a class="skip-link" href="#contenu">Aller au contenu</a><header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html">maths<span class="brand-dot">.</span></a><nav class="main-nav" aria-label="Navigation principale"><a href="../index.html">Accueil</a><a href="../lecons.html" aria-current="location">Leçons</a><a href="../exercices.html">Exercices</a></nav><span class="level-badge">1<sup>re</sup> STMG</span></div></header><main id="contenu" class="container lesson-page" tabindex="-1"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="../lecons.html">Toutes les leçons</a><span>/</span><span aria-current="page">Repère R5</span></nav><header class="lesson-heading"><p class="eyebrow">R5 / ALGORITHMIQUE</p><h1>Python, listes et tableur</h1><p class="lead">Automatiser un calcul, traiter des données et expliquer ce que fait un programme, ligne après ligne.</p><div class="learning-path" aria-label="Les étapes du chapitre"><span><b>1</b> Je comprends</span><span><b>2</b> Je vérifie</span><span><b>3</b> Je m’entraîne</span></div></header><div class="lesson-reading-controls" hidden aria-label="Options de lecture"><span>Mon confort de lecture</span><button id="reading-large-toggle" type="button" aria-pressed="false">Agrandir le texte</button><button id="reading-focus-toggle" type="button" aria-pressed="false">Lecture concentrée</button><a class="research-link" href="../pedagogie.html">Pourquoi ces méthodes ?</a></div><div class="lesson-layout"><aside class="lesson-toc" hidden><h2>Dans cette leçon</h2><nav aria-label="Sommaire de la leçon"></nav><button class="print-button" type="button">Imprimer le cours</button></aside><article class="lesson-content"><section class="objectives"><h2>À mobiliser toute l’année</h2><p>Les programmes présentés sont destinés à Python 3. Le site ne les exécute pas dans la page : ils se copient dans un environnement Python. Seul le simulateur du <a href="variables-aleatoires.html">chapitre 11</a> s’exécute directement dans le navigateur.</p><p>Les exemples utilisent des listes, des fonctions et la bibliothèque standard ; les graphiques Python facultatifs du chapitre 11 utilisent Matplotlib.</p></section><details class="support-scaffold"><summary>Besoin d’un coup de pouce ? La méthode en 3 étapes</summary><p><strong>En clair :</strong> Un programme exécute des instructions dans un ordre précis. Pour comprendre le résultat, suis les valeurs des variables ligne par ligne.</p><ol><li>Trace les affectations au brouillon : une variable peut changer de valeur pendant le programme.</li><li>Pour une liste, commence à l’indice 0 ; distingue un indice de l’élément stocké.</li><li>Pour une boucle ou un tableur, regarde à chaque tour ou ligne ce qui est ajouté, remplacé ou conservé.</li></ol></details>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Python, listes et tableur | Maths · Première STMG</title><meta name="description" content="Variables, fonctions, listes, boucles, accumulateurs, lecture d’un CSV réel et tableau croisé à deux critères."><link rel="stylesheet" href="../assets/styles.css"><link rel="stylesheet" href="../assets/cours.css"><link rel="stylesheet" href="../assets/apprentissage.css?v=20261008-1"><script src="../assets/cours.js" defer></script><script src="../assets/apprentissage.js?v=20261008-1" defer></script></head><body class="lesson-immersive" data-course="python-tableur" data-domain="reperes"><a class="skip-link" href="#contenu">Aller au contenu</a><header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html">maths<span class="brand-dot">.</span></a><nav class="main-nav" aria-label="Navigation principale"><a href="../index.html">Accueil</a><a href="../lecons.html" aria-current="location">Leçons</a><a href="../exercices.html">Exercices</a></nav><span class="level-badge">1<sup>re</sup> STMG</span></div></header><main id="contenu" class="container lesson-page" tabindex="-1"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="../lecons.html">Toutes les leçons</a><span>/</span><span aria-current="page">Repère R5</span></nav><header class="lesson-heading"><p class="eyebrow">ATELIER FACULTATIF / ALGORITHMIQUE</p><h1>Atelier facultatif : Python, listes et tableur</h1><p class="lead">À consulter uniquement pour approfondir la programmation et le tableur. Le parcours principal de révision privilégie les méthodes sans calculatrice.</p><div class="learning-path" aria-label="Les étapes du chapitre"><span><b>1</b> Je comprends</span><span><b>2</b> Je vérifie</span><span><b>3</b> Je m’entraîne</span></div></header><div class="lesson-reading-controls" hidden aria-label="Options de lecture"><span>Mon confort de lecture</span><button id="reading-large-toggle" type="button" aria-pressed="false">Agrandir le texte</button><button id="reading-focus-toggle" type="button" aria-pressed="false">Lecture concentrée</button><a class="research-link" href="../pedagogie.html">Pourquoi ces méthodes ?</a></div><div class="lesson-layout"><aside class="lesson-toc" hidden><h2>Dans cette leçon</h2><nav aria-label="Sommaire de la leçon"></nav><button class="print-button" type="button">Imprimer le cours</button></aside><article class="lesson-content"><section class="objectives"><h2>Un approfondissement facultatif</h2><p>Les programmes présentés sont destinés à Python 3. Le site ne les exécute pas dans la page : ils se copient dans un environnement Python. Seul le simulateur du <a href="variables-aleatoires.html">chapitre 11</a> s’exécute directement dans le navigateur.</p><p>Les exemples utilisent des listes, des fonctions et la bibliothèque standard ; les graphiques Python facultatifs du chapitre 11 utilisent Matplotlib.</p></section><details class="support-scaffold"><summary>Besoin d’un coup de pouce ? La méthode en 3 étapes</summary><p><strong>En clair :</strong> Un programme exécute des instructions dans un ordre précis. Pour comprendre le résultat, suis les valeurs des variables ligne par ligne.</p><ol><li>Trace les affectations au brouillon : une variable peut changer de valeur pendant le programme.</li><li>Pour une liste, commence à l’indice 0 ; distingue un indice de l’élément stocké.</li><li>Pour une boucle ou un tableur, regarde à chaque tour ou ligne ce qui est ajouté, remplacé ou conservé.</li></ol></details>
 <h2>1. Variables, affectation et conditions</h2><p>Une variable donne un nom à une valeur. Dans un algorithme écrit en français, on note « capital ← 200 ». En Python, <code>capital = 200</code> est une <strong>affectation</strong>, pas une équation à résoudre. L’instruction <code>capital = capital + 50</code> lit l’ancienne valeur, ajoute 50, puis stocke le résultat.</p><p>Un entier est de type <code>int</code>, un nombre décimal approché de type <code>float</code>, un texte de type <code>str</code>, une valeur vraie ou fausse de type <code>bool</code>. En Python, on écrit <code>0.25</code> avec un point. L’opérateur de puissance est <code>**</code>, pas <code>^</code>. Le test d’égalité s’écrit <code>==</code>, différent de <code>=</code>.</p><pre><code>capital = 200
 capital = capital + 50
 if capital &gt;= 240:
@@ -107,4 +107,135 @@ for _ in range(3):
 <form hidden><fieldset><legend>Choisis une réponse.</legend><div class="study-choices"><label><input type="radio" name="mini-python-tableur-2" value="a"><span>5 fois</span></label><label><input type="radio" name="mini-python-tableur-2" value="b"><span>6 fois</span></label><label><input type="radio" name="mini-python-tableur-2" value="c"><span>4 fois</span></label></div></fieldset>
 <button class="study-submit" type="submit">Vérifier ma réponse</button><p class="study-feedback" role="status" aria-live="polite"></p></form>
 <details class="study-solution"><summary>Voir le raisonnement et la réponse</summary><p>Il y a cinq valeurs de i : 0, 1, 2, 3, 4. La valeur 5 n’est pas incluse.</p></details></section>
-<div class="recap"><h2>À retenir</h2><p>Définir les entrées et les sorties, choisir la bonne initialisation, compter les itérations et préserver les couples de données. Un programme correct ne remplace pas l’interprétation mathématique de son résultat.</p></div><div class="callout"><h3>À toi de jouer !</h3><p>Retrouve 8 exercices interactifs liés à cette leçon, avec vérification des réponses et corrigés détaillés.</p><p><a href="../exercices/python-tableur.html"><strong>Faire les exercices de ce repère →</strong></a></p></div><section class="study-review" aria-label="Routine de révision"><h3>La bonne routine pour retenir</h3><p>Pas besoin de tout réussir du premier coup : reviens à la notion à plusieurs moments, sans relire immédiatement la correction.</p><ol><li><strong>Maintenant :</strong> réponds à une pause mémoire sans regarder le cours.</li><li><strong>Après une pause :</strong> refais une question et explique les étapes à voix haute ou par écrit.</li><li><strong>Dans quelques jours :</strong> mélange cet exercice avec d’autres chapitres pour retrouver la bonne méthode.</li></ol></section><footer class="course-footer"><p>Référence : programme 2026, annexe p. 5 et activités algorithmiques p. 7–10 ; <a href="https://docs.python.org/fr/3/tutorial/">documentation officielle Python</a>. <a href="../programme.html">Sources et couverture du programme</a>.</p><nav class="course-pagination" aria-label="Leçons précédente et suivante"></nav></footer></article></div></main><footer class="site-footer"><div class="container footer-inner"><p><strong>maths.</strong> Comprendre, puis pratiquer.</p><p>Première STMG · Programme 2026</p></div></footer></body></html>
+<section class="python-library" aria-labelledby="bibliotheque-code"><h2 id="bibliotheque-code">9. Bibliothèque de programmes issus des autres chapitres (facultative)</h2><p><strong>Pour aller plus loin seulement :</strong> ces exemples Python ont été retirés des cours principaux pour privilégier les calculs sur papier. Ils restent ici à disposition pour des activités spécifiques d’algorithmique. Aucun n’est nécessaire pour travailler les 15 séries de révision mathématique.</p><p>Les blocs utilisent Python 3 ; certains exemples de simulation nécessitent les bibliothèques indiquées. <strong>Les commandes ne s’exécutent pas directement sur ce site.</strong></p><h3>Depuis le cours « fonctions »</h3><p>Voir le <a href="fonctions.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Encadrer √2 par balayage</summary><pre><code>def encadrement_racine2():
+    x = 1
+    pas = 0.01
+
+    while (x + pas) ** 2 &lt; 2:
+        x = x + pas
+
+    return round(x, 2), round(x + pas, 2)
+
+print(encadrement_racine2())
+# Affiche : (1.41, 1.42)</code></pre></details><h3>Depuis le cours « suites »</h3><p>Voir le <a href="suites.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Calculer un stock défini par récurrence</summary><pre><code>def stock(n):
+    if not isinstance(n, int) or n &lt; 0:
+        raise ValueError("n doit etre un entier positif ou nul")
+    v = 200
+    for _ in range(n):
+        v = 0.8 * v + 50
+    return v
+
+# stock(0) = 200 ; stock(2) = 218</code></pre></details><h3>Depuis le cours « suites arithmetiques »</h3><p>Voir le <a href="suites-arithmetiques.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Chercher le premier rang d’un seuil</summary><pre><code>def premier_mois(seuil):
+    n = 0
+    capital = 200
+    while capital &lt; seuil:
+        capital += 50
+        n += 1
+    return n
+
+# premier_mois(1025) renvoie 17</code></pre></details><details class="check"><summary>Additionner une suite arithmétique</summary><pre><code>def somme_arithmetique(u0, raison, m):
+    if not isinstance(m, int) or m &lt; 0:
+        raise ValueError("m doit etre un entier positif ou nul")
+    terme = u0
+    total = 0
+    for _ in range(m + 1):
+        total += terme
+        terme += raison
+    return total
+
+# 100 + 120 + 140 + 160 + 180 + 200 = 900
+# somme_arithmetique(100, 20, 5) renvoie 900</code></pre></details><h3>Depuis le cours « suites geometriques »</h3><p>Voir le <a href="suites-geometriques.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Franchir un seuil avec une suite géométrique</summary><pre><code>def seuil_capital(seuil):
+    n, capital = 0, 1000
+    while capital &lt;= seuil:
+        capital *= 1.04
+        n += 1
+    return n, capital
+
+# seuil_capital(1500) donne n = 11</code></pre></details><details class="check"><summary>Comparer deux évolutions</summary><pre><code>def premier_depassement():
+    # n = 0 donne une egalite : on commence au rang 1.
+    n = 1
+    a, g = 1050, 1040
+    while g &lt;= a and n &lt; 10000:
+        n += 1
+        a += 50
+        g *= 1.04
+    if g &lt;= a:
+        return None  # limite de recherche atteinte
+    return n
+
+# Renvoie 12</code></pre></details><details class="check"><summary>Sommer des termes géométriques</summary><pre><code>def somme_geometrique(u0, q, m):
+    if not isinstance(m, int) or m &lt; 0:
+        raise ValueError("m doit etre un entier positif ou nul")
+    terme, total = u0, 0
+    for _ in range(m + 1):
+        total += terme
+        terme *= q
+    return total
+
+# somme_geometrique(100, 0.5, 3) = 187.5</code></pre></details><h3>Depuis le cours « derivees »</h3><p>Voir le <a href="derivees.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Calculer la pente d’une sécante</summary><pre><code>def pente_secante(f, a, h):
+    if h == 0:
+        raise ValueError("h ne doit pas etre nul")
+    return (f(a + h) - f(a)) / h
+
+for h in [0.1, 0.01, -0.01, -0.1]:
+    print(h, pente_secante(lambda x: x*x, 2, h))</code></pre></details><h3>Depuis le cours « bernoulli »</h3><p>Voir le <a href="bernoulli.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Simuler des épreuves de Bernoulli</summary><pre><code>from random import random
+
+def succes(p):
+    if not 0 &lt;= p &lt;= 1:
+        raise ValueError("p doit etre entre 0 et 1")
+    return 1 if random() &lt; p else 0
+
+def nombre_succes(n, p):
+    if not isinstance(n, int) or n &lt; 1:
+        raise ValueError("n doit etre un entier positif")
+    total = 0
+    for _ in range(n):
+        total += succes(p)
+    return total
+
+# Une simulation d'un groupe de quatre essais :
+print(nombre_succes(4, 0.3))</code></pre></details><h3>Depuis le cours « variables aleatoires »</h3><p>Voir le <a href="variables-aleatoires.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Échantillons aléatoires et fréquences</summary><pre><code>from random import random
+from statistics import mean, pstdev
+
+def echantillon(n, p):
+    if not isinstance(n, int) or n &lt; 1 or not 0 &lt;= p &lt;= 1:
+        raise ValueError("n entier positif, p entre 0 et 1")
+    return [1 if random() &lt; p else 0 for _ in range(n)]
+
+def simuler_frequences(N, n, p):
+    if not isinstance(N, int) or N &lt; 2:
+        raise ValueError("N doit etre au moins egal a 2")
+    return [sum(echantillon(n, p)) / n for _ in range(N)]
+
+p, n, N = 0.3, 100, 400
+frequences = simuler_frequences(N, n, p)
+s = pstdev(frequences)
+print("Moyenne :", mean(frequences), "Ecart-type :", s)
+for k in [1, 2, 3]:
+    effectif = sum(1 for f in frequences if abs(f - p) &lt;= k*s)
+    print(k, effectif, 100 * effectif / N)</code></pre></details><details class="check"><summary>Tracer les graphiques avec Matplotlib</summary><pre><code>import matplotlib.pyplot as plt
+
+plt.figure()
+plt.hist(frequences, bins=20)
+plt.xlabel("Frequence des succes")
+plt.ylabel("Nombre d'echantillons")
+plt.show()
+
+plt.figure()
+plt.scatter(range(N), frequences, s=10)
+plt.axhline(p, linestyle="--")
+plt.xlabel("Numero de l'echantillon")
+plt.ylabel("Frequence des succes")
+plt.show()</code></pre></details><details class="check"><summary>Comparer les dispersions selon la taille</summary><pre><code>from math import sqrt
+
+tailles = [25, 100, 400, 1600]
+abscisses = [1 / sqrt(n) for n in tailles]
+dispersions = [pstdev(simuler_frequences(400, n, 0.3))
+               for n in tailles]
+# Dans un nuage de points, placer abscisses en x
+# et dispersions en y ; ou exporter ces deux listes.</code></pre></details><h3>Depuis le cours « statistiques descriptives »</h3><p>Voir le <a href="statistiques-descriptives.html">cours mathématique sans programmation</a>.</p><details class="check"><summary>Calculer moyenne, médiane et écart-type</summary><pre><code>from statistics import mean, median, pstdev
+
+durees = [8, 10, 10, 12, 14, 16, 18, 20]
+print(mean(durees))    # 13.5
+print(median(durees))  # 13.0
+print(pstdev(durees))  # environ 3.9686</code></pre></details><p>Pour la révision sans calculatrice, reviens aux <a href="../lecons.html">leçons</a> et aux <a href="../exercices.html">exercices de mathématiques</a>.</p></section><div class="recap"><h2>À retenir</h2><p>Définir les entrées et les sorties, choisir la bonne initialisation, compter les itérations et préserver les couples de données. Un programme correct ne remplace pas l’interprétation mathématique de son résultat.</p></div><div class="callout"><h3>À toi de jouer !</h3><p>Retrouve 8 exercices interactifs liés à cette leçon, avec vérification des réponses et corrigés détaillés.</p><p><a href="../exercices/python-tableur.html"><strong>Faire les exercices de ce repère →</strong></a></p></div><section class="study-review" aria-label="Routine de révision"><h3>La bonne routine pour retenir</h3><p>Pas besoin de tout réussir du premier coup : reviens à la notion à plusieurs moments, sans relire immédiatement la correction.</p><ol><li><strong>Maintenant :</strong> réponds à une pause mémoire sans regarder le cours.</li><li><strong>Après une pause :</strong> refais une question et explique les étapes à voix haute ou par écrit.</li><li><strong>Dans quelques jours :</strong> mélange cet exercice avec d’autres chapitres pour retrouver la bonne méthode.</li></ol></section><footer class="course-footer"><p>Référence : programme 2026, annexe p. 5 et activités algorithmiques p. 7–10 ; <a href="https://docs.python.org/fr/3/tutorial/">documentation officielle Python</a>. <a href="../programme.html">Sources et couverture du programme</a>.</p><nav class="course-pagination" aria-label="Leçons précédente et suivante"></nav></footer></article></div></main><footer class="site-footer"><div class="container footer-inner"><p><strong>maths.</strong> Comprendre, puis pratiquer.</p><p>Première STMG · Programme 2026</p></div></footer></body></html>
