@@ -15,6 +15,20 @@
   const slug = root.dataset.chapter || 'fonctions';
   const generator = window.ExerciseVariants;
   const renderer = window.ExerciseRenderer;
+  // Les énoncés initiaux des 15 autres chapitres sont dans leur JSON intégré.
+  // La même fiche et ses variantes alimentent les indices sans lire les solutions.
+  const originalExercises = (() => {
+    const node = document.getElementById('exercise-data');
+    if (!node) return [];
+    try {
+      const chapter = JSON.parse(node.textContent);
+      return chapter.slug === slug && Array.isArray(chapter.exercises)
+        ? chapter.exercises : [];
+    } catch (error) {
+      console.error('Données de départ illisibles pour les aides pédagogiques', error);
+      return [];
+    }
+  })();
   const completed = new Set();
   const states = slides.map(slide => ({
     cycle: 0,
@@ -152,7 +166,7 @@
   function activateVariant(index) {
     const state = states[index];
     if (!state.pending || !renderer) return;
-    const coachingContext = state.pending.coachingContext;
+    const coachingContext = state.pending;
 
     // Remplacer seulement l'exercice : la navigation et les scores restent intacts.
     const template = document.createElement('template');
@@ -172,12 +186,18 @@
     showSlide(index, true);
   }
 
-  // Prototype pédagogique limité au chapitre Fonctions.
+  // Le prototype Fonctions est conservé ; les autres chapitres utilisent
+  // leurs fiches de méthodes spécifiques, avec les valeurs de la variante en cours.
   function addCoaching(slide, form, index, context) {
-    if (slug !== 'fonctions' || !window.FonctionsCoaching) return;
-    const data = window.FonctionsCoaching.build(index,
-      context || window.FonctionsCoaching.originals[index]);
-    if (!data) return;
+    let data = null;
+    if (slug === 'fonctions' && window.FonctionsCoaching) {
+      data = window.FonctionsCoaching.build(index,
+        (context && context.coachingContext) || window.FonctionsCoaching.originals[index]);
+    } else if (slug !== 'fonctions' && window.ExerciseCoaching) {
+      data = window.ExerciseCoaching.build(
+        slug, index, context && context.fields ? context : originalExercises[index]);
+    }
+    if (!data || !Array.isArray(data.hints) || data.hints.length !== 3 || !data.bridge) return;
     const statement = slide.querySelector('.exercise-statement');
     if (!statement) return;
     const panel = document.createElement('section');
