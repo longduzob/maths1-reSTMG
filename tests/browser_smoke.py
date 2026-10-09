@@ -64,6 +64,44 @@ def main():
             page.set_viewport_size({'width': 390, 'height': 844})
 
 
+
+            # Parcours papier : aucun bloc de code dans les 15 leçons de mathématiques.
+            # Les 13 programmes déplacés restent disponibles dans l'atelier séparé.
+            core_lessons = [
+                'fonctions', 'second-degre', 'suites', 'suites-arithmetiques',
+                'suites-geometriques', 'derivees', 'variations', 'statistiques-deux-variables',
+                'probabilites-conditionnelles', 'bernoulli', 'variables-aleatoires',
+                'calcul', 'evolutions', 'logique', 'statistiques-descriptives'
+            ]
+            for slug in core_lessons:
+                page.goto(base + 'cours/' + slug + '.html')
+                expect(page.locator('.lesson-content pre')).to_have_count(0)
+                expect(page.locator('.lesson-content code')).to_have_count(0)
+            page.goto(base + 'cours/derivees.html')
+            expect(page.get_by_text('Calcul des pentes près de 2')).to_be_visible()
+            page.goto(base + 'cours/python-tableur.html')
+            expect(page.locator('.python-library')).to_have_count(1)
+            expect(page.locator('.python-library details.check')).to_have_count(13)
+            expect(page.locator('.lesson-content pre')).to_have_count(20)
+            lib = page.locator('.python-library details.check').filter(has_text='Calculer la pente')
+            lib.locator('summary').click()
+            expect(lib.locator('pre')).to_contain_text('pente_secante')
+            page.goto(base + 'lecons.html')
+            page.locator('#course-category').select_option('atelier')
+            expect(page.locator('.lesson-card:visible')).to_have_count(1)
+            expect(page.locator('.lesson-card:visible')).to_contain_text('Python')
+            page.locator('#course-category').select_option('reperes')
+            expect(page.locator('.lesson-card:visible')).to_have_count(4)
+            page.locator('#course-category').select_option('')
+            expect(page.locator('.lesson-card:visible')).to_have_count(16)
+            page.goto(base + 'exercices.html')
+            expect(page.locator('#atelier .lesson-card')).to_have_count(1)
+            expect(page.locator('#reperes .lesson-card')).to_have_count(4)
+            page.goto(base + 'exercices/python-tableur.html')
+            expect(page.locator('h1')).to_contain_text('Atelier facultatif')
+            expect(page.locator('.exercise-block')).to_have_count(8)
+            print('PARCOURS PAPIER OK: 15 leçons sans code, atelier facultatif, 13 programmes transférés, 121 + 8 exercices.')
+
             # Graphiques interactifs : rendu, clavier, calcul, retour au réglage initial.
             # Le module de la tangente est aussi présent dans la leçon Variations.
             graph_cases = [
