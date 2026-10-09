@@ -48,6 +48,9 @@ def main():
                         expect(page.locator('.exercise-stepper button')).to_have_count(expected)
                         expect(page.locator('#exercice-1')).to_be_visible()
                         expect(page.locator('#exercice-2')).to_be_hidden()
+                        expect(page.locator('.coaching-panel')).to_have_count(expected)
+                        expect(page.locator('.coaching-hint')).to_have_count(expected * 3)
+                        expect(page.locator('.coaching-bridge')).to_have_count(expected)
                     if name.startswith('cours/'):
                         expect(page.locator('.lesson-toc')).to_be_visible()
                         expect(page.locator('.lesson-content')).to_be_visible()
@@ -59,6 +62,55 @@ def main():
                         assert page.evaluate("Array.from(document.querySelectorAll('.lesson-toc nav a')).every(a => document.getElementById(decodeURIComponent(a.hash.slice(1))))"), name
                     checks += 1
             page.set_viewport_size({'width': 390, 'height': 844})
+
+            # Extension : parcourir les 15 chapitres (hors Fonctions).
+            # L'aide est présente avant la première vérification et suit la variante.
+            other_chapters = [
+                'second-degre', 'suites', 'suites-arithmetiques', 'suites-geometriques',
+                'derivees', 'variations', 'statistiques-deux-variables',
+                'probabilites-conditionnelles', 'bernoulli', 'variables-aleatoires',
+                'calcul', 'evolutions', 'logique',
+                'statistiques-descriptives', 'python-tableur'
+            ]
+            mini_answers = {
+                'second-degre': '-3', 'suites': '10', 'suites-arithmetiques': '4',
+                'suites-geometriques': '3', 'derivees': '4', 'variations': '6',
+                'statistiques-deux-variables': '4',
+                'probabilites-conditionnelles': '7', 'bernoulli': '0.3',
+                'variables-aleatoires': '0.5', 'calcul': '23',
+                'evolutions': '20', 'logique': '2',
+                'statistiques-descriptives': '0.3', 'python-tableur': '20'
+            }
+            for slug in other_chapters:
+                page.goto(base + 'exercices/' + slug + '.html')
+                panel = page.locator('#exercice-1 .coaching-panel')
+                expect(panel).to_be_visible()
+                expect(panel.locator('.coaching-hint')).to_have_count(3)
+                summary = panel.locator('.coaching-hint summary').first
+                summary.click()
+                expect(panel.locator('.coaching-hint').first.locator('p')).to_be_visible()
+                original_method = panel.locator('.coaching-hint').nth(2).text_content()
+                form = page.locator('#exercice-1 .exercise-form')
+                form.locator('input[data-expect]').first.fill('99999')
+                form.locator('button[type="submit"]').click()
+                expect(panel.locator('.coaching-diagnosis')).to_be_visible()
+                expect(panel.locator('.coaching-bridge')).to_be_hidden()
+                form.locator('button[type="submit"]').click()
+                expect(panel.locator('.coaching-bridge')).to_be_visible()
+                panel.locator('.coaching-bridge summary').click()
+                panel.locator('.coaching-bridge-answer').fill(mini_answers[slug])
+                panel.locator('.coaching-bridge button').click()
+                expect(panel.locator('.coaching-bridge p[role="status"]')).to_contain_text('Bravo')
+                expect(page.locator('#exercise-score')).to_have_text('0/8')
+                form.locator('[data-action="new-variant"]').click()
+                new_panel = page.locator('#exercice-1 .coaching-panel')
+                expect(new_panel).to_be_visible()
+                updated_method = new_panel.locator('.coaching-hint').nth(2).text_content()
+                assert updated_method != original_method, slug + ' : dernier indice non actualisé'
+                expect(new_panel.locator('.coaching-bridge')).to_be_hidden()
+                expect(page.locator('#exercice-1 .coaching-hint')).to_have_count(3)
+            print('COACHING BROWSER OK : 15 chapitres, aides et tremplins vérifiés.')
+
             page.goto(base + 'exercices/fonctions.html')
             expect(page.locator('.exercise-block')).to_have_count(9)
             expect(page.locator('details.check')).to_have_count(9)
