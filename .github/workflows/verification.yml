@@ -1,7 +1,7 @@
 name: Verification du site
 on:
   push:
-    branches: [main, cours-programme-2026]
+    branches: [main, cours-programme-2026, feature/aides-exercices-2026-10-09]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -26,6 +26,13 @@ jobs:
           node --check assets/exercices-variants.js
           node --check assets/variants-fonctions.js
           node --check assets/fonctions-coaching.js
+          node --check assets/coaching-general.js
+          node --check assets/coaching-algebre.js
+          node --check assets/coaching-suites.js
+          node --check assets/coaching-analyse.js
+          node --check assets/coaching-probabilites.js
+          node --check assets/coaching-reperes.js
+          node --check assets/coaching-donnees.js
           node --check assets/variants-suites.js
           node --check assets/variants-analyse.js
           node --check assets/variants-probabilites.js
