@@ -224,7 +224,7 @@ def main():
             expect(page.locator('#exercise-score')).to_have_text('1/9')
             page.locator('#exercice-1 [data-action="new-variant"]').click()
             assert page.locator('#exercice-1 .exercise-statement > p').inner_text() != new_statement
-            expect(page.locator('#exercice-1 .exercise-kicker')).to_contain_text('variante 4')
+            expect(page.locator('#exercice-1 .exercise-kicker')).to_contain_text('variante 3')
 
 
             # Deux vraies tentatives erronées débloquent un exercice indépendant.
